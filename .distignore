@@ -1,0 +1,6 @@
+.*
+.*/
+*.lock
+*.md
+*.zip
+composer.*

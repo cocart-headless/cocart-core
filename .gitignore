@@ -1,0 +1,13 @@
+# Languages
+/languages/*
+!/languages/*.pot
+!/languages/README.md
+
+# Composer
+/vendor/
+
+# Various file types to ignore when exporting.
+.gitconfig
+*.zip
+*.yml
+*.xml
