@@ -6,7 +6,12 @@
 # Composer
 /vendor/
 
-# Various file types to ignore when exporting.
+# Packages
+/packages/*
+!/packages/README.md
+
+# Various folders and file types to ignore when exporting.
+.github/*
 .gitconfig
 *.zip
 *.yml
