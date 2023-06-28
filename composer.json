@@ -24,28 +24,6 @@
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
 	},
-	"autoload": {
-		"exclude-from-classmap": [
-			"includes/classes/legacy",
-			"includes/classes/rest-api/legacy"
-		],
-		"classmap": [
-			"includes",
-			"packages/admin/includes",
-			"packages/compatibility/includes",
-			"packages/products-api/includes",
-			"packages/session-api/includes",
-			"packages/third-party/includes"
-		],
-		"psr-4": {
-			"CoCart\\": "src/",
-			"CoCart\\Admin\\": "packages/admin/includes/",
-			"CoCart\\Compatibility\\Modules\\": "packages/compatibility/includes/modules/",
-			"CoCart\\ProductsAPI\\": "packages/products-api/includes/",
-			"CoCart\\SessionAPI\\": "packages/session-api/includes/",
-			"CoCart\\ThirdParty\\": "packages/third-party/includes/"
-		}
-	},
 	"require": {
 		"php": ">=7.4",
 		"composer/installers": "^1.0 || ^2.0"
