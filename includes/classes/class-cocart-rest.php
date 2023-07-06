@@ -50,6 +50,19 @@ class REST {
 	 * @global WP $wp Current WordPress environment instance.
 	 */
 	public function rest_api_init() {
+		/**
+		 * Filter checks if we are to register the CoCart route?
+		 *
+		 * Set as false to allow routes to register.
+		 *
+		 * @since 4.0.0 Introduced.
+		 *
+		 * @return bool
+		 */
+		if ( apply_filters( 'cocart_disable_register_route', true ) ) {
+			return false;
+		}
+
 		self::rest_api_register_rewrites();
 
 		global $wp;
