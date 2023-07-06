@@ -35,7 +35,7 @@ We have different channels at your disposal where you can find information about
 
 ## Contributing to CoCart
 
-If you have a patch or have stumbled upon an issue with CoCart (Core), you can contribute this back to the code. Please read our [contributor guidelines](https://github.com/co-cart/co-cart/blob/trunk/.github/CONTRIBUTING.md) for more information how you can do this.
+If you have a patch or have stumbled upon an issue with CoCart (Core), you can contribute this back to the code. Please read our [contributor guidelines](https://github.com/co-cart/cocart-core/blob/master/.github/CONTRIBUTING.md) for more information how you can do this.
 
 ---
 
