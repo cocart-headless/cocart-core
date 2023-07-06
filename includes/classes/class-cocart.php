@@ -142,6 +142,7 @@ final class Core {
 		self::define( 'COCART_DB_VERSION', self::$db_version );
 		self::define( 'COCART_SLUG', 'cart-rest-api-for-woocommerce' );
 		self::define( 'COCART_CART_CACHE_GROUP', 'cocart_cart_id' );
+		self::define( 'COCART_DOC_URL', 'https://docs.cocart.xyz/' );
 		self::define( 'COCART_NEXT_VERSION', '5.0.0' );
 	} // END setup_constants()
 
