@@ -385,6 +385,27 @@ final class Core {
 			return;
 		}
 
+		// Check which pages are still accessible.
+		$cart_id     = get_option( 'woocommerce_cart_page_id' );
+		$checkout_id = get_option( 'woocommerce_checkout_page_id' );
+
+		$current_page_id = get_the_ID();
+
+		/**
+		 * Filter controls which pages are accessible when WordPress is denied access.
+		 *
+		 * Both the cart and checkout pages are accessible by default.
+		 *
+		 * @since 4.0.0 Introduced.
+		 *
+		 * @return array Page ID's that are accessible.
+		 */
+		$accessible_pages = apply_filters( 'cocart_accessible_page_ids', array( $cart_id, $checkout_id ) );
+
+		if ( $current_page_id > 0 && in_array( $current_page_id, $accessible_pages ) ) {
+			return;
+		}
+
 		// Check if user is not administrator.
 		$current_user = get_userdata( get_current_user_id() );
 
