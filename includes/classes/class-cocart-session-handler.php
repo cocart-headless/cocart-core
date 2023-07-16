@@ -134,19 +134,13 @@ class Handler extends Session {
 			$this->_has_cookie      = true;
 			$this->_data            = $this->get_cart_data();
 
-			Logger::log( __( 'Cart session cookie found.', 'cart-rest-api-for-woocommerce' ), 'info' );
-
 			if ( ! $this->is_session_cookie_valid() ) {
-				Logger::log( __( 'Cart session not valid.', 'cart-rest-api-for-woocommerce' ), 'info' );
-
 				$this->destroy_session();
 				$this->set_session_expiration();
 			}
 
 			// If the user logged in, update cart.
 			if ( is_user_logged_in() && strval( get_current_user_id() ) !== $this->_cart_user_id ) {
-				Logger::log( __( 'Converting cart session.', 'cart-rest-api-for-woocommerce' ), 'info' );
-
 				// Generate new cart key after caching old cart key.
 				$guest_cart_key  = $this->_cart_key;
 				$this->_cart_key = $this->generate_key();
@@ -167,15 +161,11 @@ class Handler extends Session {
 
 			// Update cart if its close to expiring.
 			if ( time() > $this->_cart_expiring || empty( $this->_cart_expiring ) ) {
-				Logger::log( __( 'Cart session expiration updated.', 'cart-rest-api-for-woocommerce' ), 'info' );
-
 				$this->set_session_expiration();
 				$this->update_cart_timestamp( $this->_cart_key, $this->_cart_expiration );
 			}
 		} else {
 			// New guest customer.
-			Logger::log( __( 'New cart session created.', 'cart-rest-api-for-woocommerce' ), 'info' );
-
 			$this->set_session_expiration();
 			$this->_cart_user_id = strval( get_current_user_id() );
 			$this->_customer_id  = strval( get_current_user_id() );

@@ -143,13 +143,6 @@ class WooCommerce {
 			}
 		}
 
-		/*
-		if ( $this->_cart_user_id === 0 && $this->_customer_id > 0 ) {
-			$error = new \WP_Error( 'cocart_session_cannot_load_as_guest', __( 'Cart session cannot be loaded as a guest. Requires user to login.', 'cart-rest-api-for-woocommerce' ), array( 'status' => 403 ) );
-			wp_send_json_error( $error, 403 );
-			exit;
-		}*/
-
 		// Do nothing if the cart key is empty.
 		if ( empty( $cart_key ) ) {
 			return;
