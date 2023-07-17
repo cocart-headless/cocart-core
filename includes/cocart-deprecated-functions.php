@@ -30,11 +30,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @uses Logger::log() to log the deprecation.
  *
  * @param string $hook        The hook that was used.
- * @param string $version     The version of WordPress that deprecated the hook.
+ * @param string $version     The version of CoCart that deprecated the hook.
  * @param string $replacement The hook that should have been used.
  * @param string $message     A message regarding the change.
  */
-function cocart_deprecated_hook( $hook, $version, $replacement = null, $message = null ) {
+function cocart_deprecated_hook( $hook, $version = '', $replacement = null, $message = null ) {
 	if ( wp_doing_ajax() || Authentication::is_rest_api_request() ) {
 		do_action( 'deprecated_hook_run', $hook, $replacement, $version, $message );
 
@@ -63,7 +63,7 @@ function cocart_deprecated_hook( $hook, $version, $replacement = null, $message 
  *
  * @param string $filter      The filter that was used.
  * @param array  $args        Array of additional function arguments to be passed to apply_filters().
- * @param string $version     The version of WordPress that deprecated the filter.
+ * @param string $version     The version of CoCart that deprecated the filter.
  * @param string $replacement The filter that should have been used.
  * @param string $message     A message regarding the change.
  *
@@ -95,11 +95,11 @@ function cocart_deprecated_filter( $filter, $args = array(), $version = '', $rep
  * @uses Authentication::is_rest_api_request() to check if the request is a REST API request.
  * @uses Logger::log() to log the deprecation.
  *
- * @param string $function Function used.
- * @param string $version Version the message was added in.
+ * @param string $function    Function used.
+ * @param string $version     The version of CoCart the message was added in.
  * @param string $replacement Replacement for the called function.
  */
-function cocart_deprecated_function( $function, $version, $replacement = null ) {
+function cocart_deprecated_function( $function, $version = '', $replacement = null ) {
 	if ( wp_doing_ajax() || Authentication::is_rest_api_request() ) {
 		do_action( 'deprecated_function_run', $function, $replacement, $version );
 
