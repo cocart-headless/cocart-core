@@ -18,6 +18,50 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Runs a deprecated action with notice only if used.
+ *
+ * @since 4.0.0 Introduced.
+ *
+ * @uses cocart_deprecated_hook()
+ *
+ * @param string $tag         The name of the action hook.
+ * @param array  $args        Array of additional function arguments to be passed to do_action().
+ * @param string $version     The version of CoCart that deprecated the hook.
+ * @param string $replacement The hook that should have been used.
+ * @param string $message     A message regarding the change.
+ */
+function cocart_do_deprecated_action( $tag, $args, $version = '', $replacement = null, $message = null ) {
+	if ( ! has_action( $tag ) ) {
+		return;
+	}
+
+	cocart_deprecated_hook( $tag, $version, $replacement, $message );
+	do_action_ref_array( $tag, $args );
+} // END cocart_do_deprecated_action()
+
+/**
+ * Runs a deprecated filter with notice only if used.
+ *
+ * @since 4.0.0 Introduced.
+ *
+ * @uses cocart_deprecated_filter()
+ *
+ * @param string $tag         The name of the filter.
+ * @param array  $args        Array of additional function arguments to be passed to do_action().
+ * @param string $version     The version of CoCart that deprecated the filter.
+ * @param string $replacement The filter that should have been used.
+ * @param string $message     A message regarding the change.
+ */
+function cocart_do_deprecated_filter( $tag, $args, $version = '', $replacement = null, $message = null ) {
+	if ( ! has_filter( $tag ) ) {
+		return;
+	}
+
+	cocart_deprecated_filter( $tag, $version, $replacement, $message );
+	apply_filters_ref_array( $tag, $args );
+} // END cocart_do_deprecated_filter()
+
+/**
  * Wrapper for deprecated hook so we can apply some extra logic.
  *
  * Uses "wp_doing_ajax()" to check if the request is an AJAX request.
