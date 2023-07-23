@@ -204,6 +204,12 @@ class CoCart_REST_Store_v2_Controller {
 					'context'     => array( 'view' ),
 					'readonly'    => true,
 				),
+				'routes'          => array(
+					'description' => __( 'The routes of CoCart.', 'cart-rest-api-for-woocommerce' ),
+					'type'        => 'object',
+					'context'     => array( 'view' ),
+					'properties'  => array(),
+				),
 				'title'           => array(
 					'description' => __( 'Title of the site.', 'cart-rest-api-for-woocommerce' ),
 					'type'        => 'string',
@@ -276,12 +282,6 @@ class CoCart_REST_Store_v2_Controller {
 							'readonly'    => true,
 						),
 					),
-				),
-				'routes'          => array(
-					'description' => __( 'The public routes of CoCart.', 'cart-rest-api-for-woocommerce' ),
-					'type'        => 'object',
-					'context'     => array( 'view' ),
-					'properties'  => array(),
 				),
 			),
 		);
