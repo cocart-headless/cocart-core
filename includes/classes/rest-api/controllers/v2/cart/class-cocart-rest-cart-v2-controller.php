@@ -170,7 +170,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @access public
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @since 4.0.0 Added a check to see if the CoCart session handler is detected.
+	 * @since 4.0.0 Added check if the CoCart session handler is detected.
+	 * @since 4.0.0 Added check for requested cart is in session.
 	 *
 	 * @param WP_REST_Request $request       Full details about the request.
 	 * @param string          $cart_item_key Originally the cart item key.
@@ -183,6 +184,12 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			if ( ! WC()->session instanceof Handler ) {
 				throw new CoCart_Data_Exception( 'cocart_session_handler_not_found', __( 'CoCart session handler was not detected. Another plugin or third party code most likely is using `woocommerce_session_handler` filter to place another session handler in place.', 'cart-rest-api-for-woocommerce' ), 404 );
 			}
+
+			// If requested cart returned empty then throw error.
+			if ( ! empty( WC()->session->get_requested_cart() ) && empty( WC()->session->get_cart( WC()->session->get_requested_cart() ) ) ) {
+				throw new CoCart_Data_Exception( 'cocart_cart_not_found', __( 'Cart not found. The provided cart key is not in session. Try adding an item first.', 'cart-rest-api-for-woocommerce' ), 404 );
+			}
+
 
 			$show_raw      = ! empty( $request['raw'] ) ? $request['raw'] : false; // Internal parameter request.
 			$cart_contents = ! $this->is_completely_empty() ? array_filter( $this->get_cart_instance()->get_cart() ) : array();
