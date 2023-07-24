@@ -273,7 +273,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		$cart = array();
 
 		if ( rest_is_field_included( 'cart_hash', $fields ) ) {
-			$cart['cart_hash'] = ! empty( $this->get_cart_instance()->get_cart_hash() ) ? $this->get_cart_instance()->get_cart_hash() : __( 'No items in cart so no hash', 'cart-rest-api-for-woocommerce' );
+			$cart['cart_hash'] = ! empty( $this->get_cart_instance()->get_cart_hash() ) ? $this->get_cart_instance()->get_cart_hash() : '';
 		}
 
 		if ( rest_is_field_included( 'cart_key', $fields ) ) {
