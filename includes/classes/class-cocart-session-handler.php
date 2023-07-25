@@ -1280,6 +1280,35 @@ class Handler extends Session {
 	} // END get_cart_key_by_user_id()
 
 	/**
+	 * Get the cart key last used by the user ID.
+	 *
+	 * @access public
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param int $user_id The user ID.
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @return bool|string Returns the cart key or false if not found.
+	 */
+	public function get_cart_key_last_used_by_user_id( $user_id = 0 ) {
+		if ( ! is_int( $user_id ) || $user_id === 0 ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$cart_key = $wpdb->get_var( $wpdb->prepare( "SELECT cart_key FROM $this->_table WHERE cart_user_id = %d ORDER BY cart_expiry DESC", $user_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( is_null( $cart_key ) ) {
+			return false;
+		}
+
+		return $cart_key;
+	} // END get_cart_key_last_used_by_user_id()
+
+	/**
 	 * Get the cart key by looking up the customer ID.
 	 *
 	 * @access protected
