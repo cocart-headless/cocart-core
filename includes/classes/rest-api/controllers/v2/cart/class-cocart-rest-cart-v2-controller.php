@@ -2499,10 +2499,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 		switch ( $config ) {
 			case 'digital':
-				$fields = array( 'currency', 'customer', 'items', 'coupons', 'needs_payment', 'taxes', 'totals', 'notices' );
+				$fields = array( 'currency', 'customer.billing_address', 'items', 'coupons', 'needs_payment', 'taxes', 'totals', 'notices' );
 				break;
 			case 'digital_fees':
-				$fields = array( 'currency', 'customer', 'items', 'coupons', 'needs_payment', 'fees', 'taxes', 'totals', 'notices' );
+				$fields = array( 'currency', 'customer.billing_address', 'items', 'coupons', 'needs_payment', 'fees', 'taxes', 'totals', 'notices' );
 				break;
 			case 'shipping':
 				$fields = array( 'currency', 'customer', 'items', 'items_weight', 'coupons', 'needs_payment', 'needs_shipping', 'shipping', 'taxes', 'totals', 'notices' );
