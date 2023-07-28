@@ -1128,18 +1128,38 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @return array Cart totals.
 	 */
 	public function get_cart_totals( $request = array(), $fields = array() ) {
-		$totals = array(
-			'subtotal'       => $this->get_cart_instance()->get_subtotal(),
-			'subtotal_tax'   => $this->get_cart_instance()->get_subtotal_tax(),
-			'fee_total'      => $this->get_cart_instance()->get_fee_total(),
-			'fee_tax'        => $this->get_cart_instance()->get_fee_tax(),
-			'discount_total' => $this->get_cart_instance()->get_discount_total(),
-			'discount_tax'   => $this->get_cart_instance()->get_discount_tax(),
-			'shipping_total' => $this->get_cart_instance()->get_shipping_total(),
-			'shipping_tax'   => $this->get_cart_instance()->get_shipping_tax(),
-			'total'          => $this->get_cart_instance()->get_total( 'edit' ),
-			'total_tax'      => $this->get_cart_instance()->get_total_tax(),
-		);
+		$totals = array();
+
+		if ( rest_is_field_included( 'totals.subtotal', $fields ) ) {
+			$totals['subtotal'] = $this->get_cart_instance()->get_subtotal();
+		}
+		if ( rest_is_field_included( 'totals.subtotal_tax', $fields ) ) {
+			$totals['subtotal_tax'] = $this->get_cart_instance()->get_subtotal_tax();
+		}
+		if ( rest_is_field_included( 'totals.fee_total', $fields ) ) {
+			$totals['fee_total'] = $this->get_cart_instance()->get_fee_total();
+		}
+		if ( rest_is_field_included( 'totals.fee_tax', $fields ) ) {
+			$totals['fee_tax'] = $this->get_cart_instance()->get_fee_tax();
+		}
+		if ( rest_is_field_included( 'totals.discount_total', $fields ) ) {
+			$totals['discount_total'] = $this->get_cart_instance()->get_discount_total();
+		}
+		if ( rest_is_field_included( 'totals.discount_tax', $fields ) ) {
+			$totals['discount_tax'] = $this->get_cart_instance()->get_discount_tax();
+		}
+		if ( rest_is_field_included( 'totals.shipping_total', $fields ) ) {
+			$totals['shipping_total'] = $this->get_cart_instance()->get_shipping_total();
+		}
+		if ( rest_is_field_included( 'totals.shipping_tax', $fields ) ) {
+			$totals['shipping_tax'] = $this->get_cart_instance()->get_shipping_tax();
+		}
+		if ( rest_is_field_included( 'totals.total', $fields ) ) {
+			$totals['total'] = $this->get_cart_instance()->get_total( 'edit' );
+		}
+		if ( rest_is_field_included( 'totals.total_tax', $fields ) ) {
+			$totals['total_tax'] = $this->get_cart_instance()->get_total_tax();
+		}
 
 		if ( ! in_array( 'fees', $fields ) ) {
 			unset( $totals['fee_total'] );
