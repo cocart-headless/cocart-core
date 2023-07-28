@@ -310,10 +310,13 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		}
 
 		if ( rest_is_field_included( 'customer', $fields ) ) {
-			$cart['customer'] = array(
-				'billing_address'  => $this->get_customer_fields( 'billing' ),
-				'shipping_address' => $this->get_customer_fields( 'shipping' ),
-			);
+			$cart['customer'] = array();
+		}
+		if ( rest_is_field_included( 'customer.billing_address', $fields ) ) {
+			$cart['customer']['billing_address'] = $this->get_customer_fields( 'billing' );
+		}
+		if ( rest_is_field_included( 'customer.shipping_address', $fields ) ) {
+			$cart['customer']['shipping_address'] = $this->get_customer_fields( 'shipping' );
 		}
 
 		if ( rest_is_field_included( 'items', $fields ) ) {
