@@ -2545,7 +2545,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				}
 
 				// Check for nested fields if $field is not a direct match.
-				$nested_fields = explode( ':', $field );
+				$nested_fields = explode( '.', $field );
 
 				// A nested field is included so long as its top-level property
 				// is present in the schema.
