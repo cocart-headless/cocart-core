@@ -5,8 +5,10 @@
  * @author  Sébastien Dumont
  * @package CoCart\RESTAPI\Cart\v1
  * @since   2.0.0 Introduced.
- * @version 3.5.0
+ * @version 4.0.0
  */
+
+use CoCart\Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -400,14 +402,14 @@ class CoCart_API_Controller {
 
 		if ( empty( $product_id ) ) {
 			$message = __( 'Product ID number is required!', 'cart-rest-api-for-woocommerce' );
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			return new WP_Error( 'cocart_product_id_required', $message, array( 'status' => 404 ) );
 		}
 
 		if ( ! is_numeric( $product_id ) ) {
 			$message = __( 'Product ID must be numeric!', 'cart-rest-api-for-woocommerce' );
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			return new WP_Error( 'cocart_product_id_not_numeric', $message, array( 'status' => 405 ) );
 		}
@@ -484,7 +486,7 @@ class CoCart_API_Controller {
 				/* translators: %1$s: Attribute name, %2$s: Allowed values. */
 				$message = sprintf( __( 'Invalid value posted for %1$s. Allowed values: %2$s', 'cart-rest-api-for-woocommerce' ), $attribute_label, implode( ', ', $attribute->get_slugs() ) );
 
-				CoCart_Logger::log( $message, 'error' );
+				Logger::log( $message, 'error' );
 
 				/**
 				 * Filters message about invalid variation data.
@@ -508,7 +510,7 @@ class CoCart_API_Controller {
 			/* translators: %s: Attribute name. */
 			$message = __( 'Missing variation data for variable product.', 'cart-rest-api-for-woocommerce' ) . ' ' . sprintf( _n( '%s is a required field.', '%s are required fields.', count( $missing_attributes ), 'cart-rest-api-for-woocommerce' ), wc_format_list_of_items( $missing_attributes ) );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			/**
 			 * Filters message about missing variation data.
@@ -544,7 +546,7 @@ class CoCart_API_Controller {
 		if ( empty( $variation_id ) ) {
 			$message = __( 'No matching variation found.', 'cart-rest-api-for-woocommerce' );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			return new WP_Error( 'cocart_no_variation_found', $message, array( 'status' => 400 ) );
 		}
@@ -571,7 +573,7 @@ class CoCart_API_Controller {
 		if ( ! $product || 'trash' === $product->get_status() ) {
 			$message = __( 'This product cannot be added to the cart.', 'cart-rest-api-for-woocommerce' );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			return new WP_Error( 'cocart_cart_invalid_parent_product', $message, array( 'status' => 403 ) );
 		}
@@ -617,7 +619,7 @@ class CoCart_API_Controller {
 				$message = __( 'This product does not exist!', 'cart-rest-api-for-woocommerce' );
 			}
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			/**
 			 * Filters message about product does not exist.
@@ -669,7 +671,7 @@ class CoCart_API_Controller {
 		if ( ! $passed_validation ) {
 			$message = __( 'Product did not pass validation!', 'cart-rest-api-for-woocommerce' );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			/**
 			 * Filters message about product failing validation.
@@ -719,7 +721,7 @@ class CoCart_API_Controller {
 				/* translators: %s: Product Name */
 				$message = sprintf( __( 'You cannot add another "%s" to your cart.', 'cart-rest-api-for-woocommerce' ), $product->get_name() );
 
-				CoCart_Logger::log( $message, 'error' );
+				Logger::log( $message, 'error' );
 
 				/**
 				 * Filters message about product not being allowed to add another.
@@ -737,7 +739,7 @@ class CoCart_API_Controller {
 		if ( ! $product->is_purchasable() ) {
 			$message = __( 'Sorry, this product cannot be purchased.', 'cart-rest-api-for-woocommerce' );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			/**
 			 * Filters message about product unable to be purchased.
@@ -755,7 +757,7 @@ class CoCart_API_Controller {
 			/* translators: %s: Product name */
 			$message = sprintf( __( 'You cannot add "%s" to the cart because the product is out of stock.', 'cart-rest-api-for-woocommerce' ), $product->get_name() );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			/**
 			 * Filters message about product is out of stock.
@@ -772,7 +774,7 @@ class CoCart_API_Controller {
 			/* translators: 1: Quantity Requested, 2: Product Name, 3: Quantity in Stock */
 			$message = sprintf( __( 'You cannot add a quantity of %1$s for "%2$s" to the cart because there is not enough stock. - only %3$s remaining!', 'cart-rest-api-for-woocommerce' ), $quantity, $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			return new WP_Error( 'cocart_not_enough_in_stock', $message, array( 'status' => 403 ) );
 		}
@@ -789,7 +791,7 @@ class CoCart_API_Controller {
 					wc_format_stock_quantity_for_display( $products_qty_in_cart[ $product->get_stock_managed_by_id() ], $product )
 				);
 
-				CoCart_Logger::log( $message, 'error' );
+				Logger::log( $message, 'error' );
 
 				return new WP_Error( 'cocart_not_enough_stock_remaining', $message, array( 'status' => 403 ) );
 			}
@@ -802,7 +804,7 @@ class CoCart_API_Controller {
 		if ( ! $ok_to_add ) {
 			$error_msg = empty( $response ) ? __( 'This item can not be added to the cart.', 'cart-rest-api-for-woocommerce' ) : $response;
 
-			CoCart_Logger::log( $error_msg, 'error' );
+			Logger::log( $error_msg, 'error' );
 
 			return new WP_Error( 'cocart_not_ok_to_add_item', $error_msg, array( 'status' => 403 ) );
 		}
@@ -865,7 +867,7 @@ class CoCart_API_Controller {
 			/* translators: 1: Quantity Requested, 2: Product Name 3: Quantity in Stock */
 			$message = sprintf( __( 'You cannot add a quantity of %1$s for "%2$s" to the cart because there is not enough stock. - only %3$s remaining!', 'cart-rest-api-for-woocommerce' ), $quantity, $current_product->get_name(), wc_format_stock_quantity_for_display( $current_product->get_stock_quantity(), $current_product ) );
 
-			CoCart_Logger::log( $message, 'error' );
+			Logger::log( $message, 'error' );
 
 			return new WP_Error( 'cocart_not_enough_in_stock', $message, array( 'status' => 403 ) );
 		}
@@ -921,7 +923,7 @@ class CoCart_API_Controller {
 		if ( $rest_base !== 'cart' && empty( $response ) ) {
 			/* translators: %s: api route */
 			$response = sprintf( __( 'Request returned nothing for "%s"! Please seek assistance.', 'cart-rest-api-for-woocommerce' ), rest_url( sprintf( '/%s/%s/', $this->namespace, $rest_base ) ) );
-			CoCart_Logger::log( $response, 'error' );
+			Logger::log( $response, 'error' );
 		}
 
 		// Set as true by default until store is ready to go to production.
