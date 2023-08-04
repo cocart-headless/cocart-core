@@ -217,7 +217,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 				 * @since 3.1.0 Introduced.
 				 * @since 4.0.0 Now checks if the price parameter is used and a salt key is provided.
 				 */
-				if ( ! empty( $price ) && ( maybe_cocart_require_salt() === $request->get_header( 'csaltk' ) ) ) {
+				if ( ! empty( $price ) && ( maybe_cocart_require_salt() === $request->get_header( 'x-cocart-salt' ) ) ) {
 					$controller->cache_cart_item( $item_added_to_cart );
 				}
 
