@@ -3490,41 +3490,18 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				'sanitize_callback' => 'sanitize_key',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
-			'config'   => array(
-				'description' => __( 'Configure the cart response for each sub-parameter.', 'cart-rest-api-for-woocommerce' ),
-				'type'        => 'object',
-				'required'    => false,
-				'items'       => array(
-					'type'       => 'object',
-					'properties' => array(
-						'fields' => array(
-							'description'       => __( 'Specify the type of cart response before the data is fetched.', 'cart-rest-api-for-woocommerce' ),
-							'type'              => 'string',
-							'required'          => false,
-							'enum'              => array(
-								'digital',
-								'digital_fees',
-								'shipping',
-								'shipping_fees',
-								'removed_items',
-								'cross_sells',
-							),
-							'sanitize_callback' => 'sanitize_text_field',
-							'validate_callback' => 'rest_validate_request_arg',
-						),
-						'prices' => array(
-							'description'       => __( 'Return the price values in the format you prefer.', 'cart-rest-api-for-woocommerce' ),
-							'type'              => 'string',
-							'required'          => false,
-							'enum'              => array( 'preformatted' ),
-							'sanitize_callback' => 'sanitize_text_field',
-							'validate_callback' => 'rest_validate_request_arg',
-						),
-					),
+			'prices' => array(
+				'description'       => __( 'Return the price values in the format you prefer.', 'cart-rest-api-for-woocommerce' ),
+				'default'           => ! empty( $defaults['cart_prices'] ) ? $defaults['cart_prices'] : 'raw',
+				'type'              => 'string',
+				'required'          => false,
+				'enum'              => array(
+					'raw',
+					'formatted'
 				),
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
 			),
-			'fields'   => array(
-				'description'       => __( 'Specify each parent field you want to request separated by (,) in the cart response before the data is fetched.', 'cart-rest-api-for-woocommerce' ),
 				'type'              => 'string',
 				'required'          => false,
 				'sanitize_callback' => 'sanitize_text_field',
