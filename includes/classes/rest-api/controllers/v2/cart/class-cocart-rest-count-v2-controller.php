@@ -72,7 +72,7 @@ class CoCart_REST_Count_Items_v2_Controller extends CoCart_REST_Cart_v2_Controll
 	 * @since   1.0.0 Introduced.
 	 * @version 4.0.0
 	 *
-	 * @param WP_REST_Request $request       Full details about the request.
+	 * @param WP_REST_Request $request       Request used to generate the response.
 	 * @param array           $cart_contents Cart contents to count items.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.

@@ -43,7 +43,7 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 	 * @since 3.1.0 Introduced.
 	 * @since 4.0.0 Added the cart $controller as a parameter.
 	 *
-	 * @param WP_REST_Request $request    Full details about the request.
+	 * @param WP_REST_Request $request    Request used to generate the response.
 	 * @param object          $controller The cart controller.
 	 *
 	 * @return bool Returns true.
@@ -95,7 +95,7 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 				 *
 				 * @since 3.1.0 Introduced.
 				 *
-				 * @param WP_REST_Request $request    Full details about the request.
+				 * @param WP_REST_Request $request    Request used to generate the response.
 				 * @param object          $controller The cart controller.
 				 */
 				do_action( 'cocart_cart_updated', $request, $controller );

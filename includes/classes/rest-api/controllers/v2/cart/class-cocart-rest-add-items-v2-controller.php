@@ -75,7 +75,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @since   3.0.0 Introduced.
 	 * @version 4.0.0
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
@@ -130,7 +130,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 				 *
 				 * @param string          $adding_to_cart_handler The product type to identify handler.
 				 * @param WC_Product      $adding_to_cart         Product object.
-				 * @param WP_REST_Request $request                Full details about the request.
+				 * @param WP_REST_Request $request                Request used to generate the response.
 				 */
 				$items_added_to_cart = apply_filters( 'cocart_add_items_to_cart_handler_' . $add_items_to_cart_handler, $adding_to_cart, $request ); // Custom handler.
 			} else {
@@ -179,7 +179,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 				 *
 				 * @since 4.0.0 Introduced.
 				 *
-				 * @param WP_REST_Request $request Full details about the request.
+				 * @param WP_REST_Request $request Request used to generate the response.
 				 * @param object          $controller The Cart controller class.
 				 * @param string          $add_items_to_cart_handler The product type added to cart.
 				 * @param array           $items_added_to_cart The products added to cart.
@@ -215,7 +215,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 	 *
 	 * @param string          $product_id Contains the id of the container product to add to the cart.
 	 * @param array           $items      Contains the quantity of the items to add to the cart.
-	 * @param WP_REST_Request $request    Full details about the request.
+	 * @param WP_REST_Request $request    Request used to generate the response.
 	 *
 	 * @return bool            success or not
 	 */

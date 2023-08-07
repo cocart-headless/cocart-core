@@ -38,7 +38,7 @@ class UpdateCustomer extends Abstracts\CoCart_Cart_Extension_Callback {
 	 *
 	 * @access public
 	 *
-	 * @param WP_REST_Request $request    Full details about the request.
+	 * @param WP_REST_Request $request    Request used to generate the response.
 	 * @param object          $controller The cart controller.
 	 *
 	 * @return bool Returns true.
@@ -64,7 +64,7 @@ class UpdateCustomer extends Abstracts\CoCart_Cart_Extension_Callback {
 	 *
 	 * @access protected
 	 *
-	 * @param WP_REST_Request $request    Full details about the request.
+	 * @param WP_REST_Request $request    Request used to generate the response.
 	 * @param object          $controller The cart controller.
 	 */
 	protected function update_customer_on_cart( $request, $controller ) {
@@ -174,7 +174,7 @@ class UpdateCustomer extends Abstracts\CoCart_Cart_Extension_Callback {
 	 *
 	 * @access protected
 	 *
-	 * @param WP_REST_Request $request      Full details about the request.
+	 * @param WP_REST_Request $request      Request used to generate the response.
 	 * @param string          $fieldset_key The address type we are validating the country for. Default is `billing` else `shipping`
 	 */
 	protected function validate_country( $request, $fieldset_key = 'billing' ) {
@@ -221,7 +221,7 @@ class UpdateCustomer extends Abstracts\CoCart_Cart_Extension_Callback {
 	 *
 	 * @access protected
 	 *
-	 * @param WP_REST_Request $request      Full details about the request.
+	 * @param WP_REST_Request $request      Request used to generate the response.
 	 * @param string          $fieldset_key The address type we are validating the country for. Default is `billing` else `shipping`
 	 */
 	protected function validate_postcode( $request, $fieldset_key = 'billing' ) {

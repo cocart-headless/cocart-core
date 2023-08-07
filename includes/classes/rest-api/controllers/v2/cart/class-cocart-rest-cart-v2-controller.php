@@ -174,7 +174,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since 4.0.0 Added check for requested cart is in session.
 	 * @since 4.0.0 Added check for requested cart if it belongs to customer.
 	 *
-	 * @param WP_REST_Request $request       Full details about the request.
+	 * @param WP_REST_Request $request       Request used to generate the response.
 	 * @param string          $cart_item_key Originally the cart item key.
 	 *
 	 * @return WP_REST_Response $response The response data.
@@ -213,7 +213,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 *
 			 * @param array           $cart_contents Cart contents.
 			 * @param WC_Cart         Cart object.
-			 * @param WP_REST_Request $request       Full details about the request.
+			 * @param WP_REST_Request $request       Request used to generate the response.
 			 */
 			$cart_contents = apply_filters( 'cocart_before_get_cart', $cart_contents, $this->get_cart_instance(), $request );
 
@@ -238,7 +238,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 *
 			 * @param array           $cart_contents Cart contents.
 			 * @param WC_Cart         Cart object.
-			 * @param WP_REST_Request $request       Full details about the request.
+			 * @param WP_REST_Request $request       Request used to generate the response.
 			 */
 			$cart_contents = apply_filters( 'cocart_after_get_cart', $cart_contents, $this->get_cart_instance(), $request );
 
@@ -259,7 +259,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @deprecated 4.0.0 Deprecated use of `get_cart_template()` function and replaced by filtering the requested fields.
 	 *
-	 * @param WP_REST_Request $request       Full details about the request.
+	 * @param WP_REST_Request $request       Request used to generate the response.
 	 * @param array           $cart_contents Cart content.
 	 * @param array           $cart_item_key Originally the cart item key.
 	 * @param bool            $from_session  Identifies if the cart is called from a session.
@@ -414,7 +414,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * @deprecated 4.0.0 No longer use `$from_session` parameter.
 		 *
 		 * @param array           $cart    The whole cart before it's returned.
-		 * @param WP_REST_Request $request Full details about the request.
+		 * @param WP_REST_Request $request Request used to generate the response.
 		 * @param object          $this    The cart controller.
 		 */
 		$cart = apply_filters( 'cocart_cart', $cart, $request, $this );
@@ -708,7 +708,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @param array           $variation    Contains the selected attributes.
 	 * @param array           $item_data    Extra cart item data we want to pass into the item.
 	 * @param string          $product_type The product type.
-	 * @param WP_REST_Request $request      Full details about the request.
+	 * @param WP_REST_Request $request      Request used to generate the response.
 	 *
 	 * @return array Item data.
 	 */
@@ -806,7 +806,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @param null            $variation_id Used to pass the variation id of the product to add to the cart.
 			 * @param int|float       $quantity     Contains the quantity of the item.
 			 * @param string          $product_type The product type.
-			 * @param WP_REST_Request $request      Full details about the request.
+			 * @param WP_REST_Request $request      Request used to generate the response.
 			 */
 			$item_data = (array) apply_filters( 'cocart_add_cart_item_data', $item_data, $product_id, $variation_id, $quantity, $product_type, $request );
 
@@ -930,7 +930,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access public
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return string Cart key.
 	 */
@@ -953,7 +953,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array
 	 */
@@ -993,7 +993,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @deprecated 4.0.0 Removed passing cart object as a parameter.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @see cocart_prepare_money_response()
 	 *
@@ -1094,7 +1094,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @see cocart_prepare_money_response()
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array Cart fees.
 	 */
@@ -1125,7 +1125,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 * @param array           $fields  An array of requested fields for the cart response to return.
 	 *
 	 * @return array Cart totals.
@@ -1180,7 +1180,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * @since 4.0.0 Introduced.
 		 *
 		 * @param array           $totals  Cart totals.
-		 * @param WP_REST_Request $request Full details about the request.
+		 * @param WP_REST_Request $request Request used to generate the response.
 		 * @param array           $fields  An array of requested fields for the cart response to return.
 		 */
 		return apply_filters( 'cocart_cart_totals', $totals, $request, $fields );
@@ -1431,7 +1431,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access public
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return $request
 	 */
@@ -1535,7 +1535,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @param WC_Product      $_product     Product object.
 	 * @param array           $cart_item    The item in the cart containing the default cart item data.
-	 * @param WP_REST_Request $request      Full details about the request.
+	 * @param WP_REST_Request $request      Request used to generate the response.
 	 * @param boolean         $removed_item Determines if the item in the cart is removed.
 	 *
 	 * @return array $item Full details of the item in the cart and it's purchase limits.
@@ -1553,7 +1553,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * @param float                      Original Quantity
 		 * @param string          $item_key  Item key of the item in the cart.
 		 * @param array           $cart_item The item in the cart containing the default cart item data.
-		 * @param WP_REST_Request $request   Full details about the request.
+		 * @param WP_REST_Request $request   Request used to generate the response.
 		 */
 		$quantity   = apply_filters( 'cocart_cart_item_quantity', $cart_item['quantity'], $item_key, $cart_item, $request );
 		$dimensions = $_product->get_dimensions( false );
@@ -1639,7 +1639,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *
 	 * @param array           $cart_contents The cart contents passed.
-	 * @param WP_REST_Request $request       Full details about the request.
+	 * @param WP_REST_Request $request       Request used to generate the response.
 	 *
 	 * @return array $items Returns all items in the cart.
 	 */
@@ -1662,7 +1662,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @param WC_Product      $_product  Product object.
 			 * @param array           $cart_item The item in the cart containing the default cart item data.
 			 * @param string          $item_key  The item key currently looped.
-			 * @param WP_REST_Request $request   Full details about the request.
+			 * @param WP_REST_Request $request   Request used to generate the response.
 			 */
 			$_product = apply_filters( 'cocart_item_product', $cart_item['data'], $cart_item, $item_key, $request );
 
@@ -1702,7 +1702,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * @param string          $item_key  The item key currently looped.
 				 * @param array           $cart_item The item in the cart containing the default cart item data.
 				 * @param WC_Product      $_product  Product object.
-				 * @param WP_REST_Request $request   Full details about the request.
+				 * @param WP_REST_Request $request   Request used to generate the response.
 				 */
 				$items = apply_filters( 'cocart_cart_items', $items, $item_key, $cart_item, $_product, $request );
 			}
@@ -1722,7 +1722,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *
 	 * @param array           $removed_items The removed cart contents passed.
-	 * @param WP_REST_Request $request       Full details about the request.
+	 * @param WP_REST_Request $request       Request used to generate the response.
 	 *
 	 * @return array $items Returns all removed items in the cart.
 	 */
@@ -1789,7 +1789,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since 4.0.0 Prices now return default values and uses filters instead.
 	 *              Added new parameter `$request` (REST API request) to allow more arguments to be passed.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array $cross_sells Returns cross sells.
 	 */
@@ -1838,7 +1838,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * @since 3.0.0 Introduced.
 		 * @since 4.0.0 Added parameter `$request` (REST API request).
 		 *
-		 * @param WP_REST_Request $request Full details about the request.
+		 * @param WP_REST_Request $request Request used to generate the response.
 		 */
 		$cross_sells = apply_filters( 'cocart_cross_sells', $cross_sells, $request );
 
@@ -2173,7 +2173,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @deprecated 4.0.0 No longer used. `return_cart_contents()` function has been improved.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array Returns the default cart response.
 	 */
@@ -2237,7 +2237,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @deprecated 4.0.0 No longer used. `return_cart_contents()` function has been improved.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array $template Returns requested cart response.
 	 */
@@ -2493,7 +2493,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array
 	 */
@@ -2536,7 +2536,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return string Fields to be included in the response.
 	 */

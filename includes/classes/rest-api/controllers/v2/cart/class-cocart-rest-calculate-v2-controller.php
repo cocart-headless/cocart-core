@@ -74,7 +74,7 @@ class CoCart_REST_Calculate_v2_Controller extends CoCart_REST_Cart_v2_Controller
 	 * @since   1.0.0 Introduced.
 	 * @version 4.0.0
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */

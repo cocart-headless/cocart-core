@@ -71,7 +71,7 @@ class CoCart_Add_Item_Controller extends CoCart_API_Controller {
 	 * @see CoCart_API_Controller::get_response()
 	 * @see Logger::log()
 	 *
-	 * @param WP_REST_Request $data Full details about the request.
+	 * @param WP_REST_Request $data Request used to generate the response.
 	 *
 	 * @return WP_Error on failure, WP_REST_Response on success.
 	 */

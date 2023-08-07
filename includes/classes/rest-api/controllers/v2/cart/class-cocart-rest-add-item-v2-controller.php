@@ -75,7 +75,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @since 1.0.0 Introduced.
 	 * @since 4.0.0 Price query is added to determine if we need to cache the item for calculating totals.
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return WP_REST_Response
 	 */
@@ -142,7 +142,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 				 *
 				 * @param string          $adding_to_cart_handler The product type to identify handler.
 				 * @param WC_Product      $adding_to_cart         Product object.
-				 * @param WP_REST_Request $request                Full details about the request.
+				 * @param WP_REST_Request $request                Request used to generate the response.
 				 */
 				$item_added_to_cart = apply_filters( 'cocart_add_to_cart_handler_' . $add_to_cart_handler, $adding_to_cart, $request ); // Custom handler.
 			} else {
@@ -202,7 +202,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 				 *
 				 * @since 4.0.0 Introduced.
 				 *
-				 * @param WP_REST_Request $request             Full details about the request.
+				 * @param WP_REST_Request $request             Request used to generate the response.
 				 * @param object          $controller          The Cart controller class.
 				 * @param string          $add_to_cart_handler The product type added to cart.
 				 * @param array           $item_added_to_cart  The product added to cart.
@@ -257,7 +257,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @param string          $product_id Contains the id of the product to add to the cart.
 	 * @param float           $quantity   Contains the quantity of the item to add to the cart.
 	 * @param array           $item_data  Contains extra cart item data we want to pass into the item.
-	 * @param WP_REST_Request $request    Full details about the request.
+	 * @param WP_REST_Request $request    Request used to generate the response.
 	 *
 	 * @return bool success or not
 	 */
@@ -294,7 +294,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @param null            $deprecated Used to pass the variation id of the product to add to the cart.
 	 * @param array           $variation  Contains the selected attributes of a variation.
 	 * @param array           $item_data  Contains extra cart item data we want to pass into the item.
-	 * @param WP_REST_Request $request    Full details about the request.
+	 * @param WP_REST_Request $request    Request used to generate the response.
 	 *
 	 * @return bool success or not
 	 */
@@ -364,7 +364,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 				 * @param string $item_key      Item key of the item added again.
 				 * @param array  $item_added    Item added to cart again.
 				 * @param int    $new_quantity  New quantity of the item.
-				 * @param array  $request       Full details about the request.
+				 * @param array  $request       Request used to generate the response.
 				 */
 				do_action( 'cocart_item_added_updated_in_cart', $item_key, $item_added, $new_quantity, $request );
 			} else {
@@ -399,7 +399,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 					 *
 					 * @param string          $item_key   Item key of the item added.
 					 * @param array           $item_added Item added to cart.
-					 * @param WP_REST_Request $request    Full details about the request.
+					 * @param WP_REST_Request $request    Request used to generate the response.
 					 */
 					do_action( 'cocart_item_added_to_cart', $item_key, $item_added, $request );
 				} else {
@@ -605,7 +605,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @since 3.0.0 Introduced.
 	 *
 	 * @param int|float       $value   Number of quantity to validate.
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 * @param string          $param   Argument parameters.
 	 *
 	 * @return bool True if the quantity is valid, false otherwise.

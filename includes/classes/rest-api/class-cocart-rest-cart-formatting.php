@@ -119,7 +119,7 @@ class CartFormatting {
 	 * @param float|string    $value     Money value before formatted.
 	 * @param array           $cart_item Cart item data.
 	 * @param string          $item_key  Item key of the item in the cart.
-	 * @param WP_REST_Request $request   Full details about the request.
+	 * @param WP_REST_Request $request   Request used to generate the response.
 	 *
 	 * @return float|string Money value formatted as a float or string.
 	 */
@@ -136,7 +136,7 @@ class CartFormatting {
 	 * @since 4.0.0 Introduced.
 	 *
 	 * @param float|string    $value   Money value before formatted.
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return float|string Money value formatted.
 	 */
@@ -156,7 +156,7 @@ class CartFormatting {
 	 * @since 4.0.0 Introduced.
 	 *
 	 * @param array           $totals  Cart totals.
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return array An array of formatted totals.
 	 */

@@ -58,7 +58,7 @@ class CartCache {
 	 * @since 4.0.0 Added security check if the item is allowed for the price to be changed.
 	 *
 	 * @param array           $cart_item Before cart item modified.
-	 * @param WP_REST_Request $request   Full details about the request.
+	 * @param WP_REST_Request $request   Request used to generate the response.
 	 *
 	 * @return array $cart_item After cart item modified.
 	 */
@@ -90,7 +90,7 @@ class CartCache {
 		 * @since 4.0.0 Introduced.
 		 *
 		 * @param array $cart_item Cart item.
-		 * @param array $request   Full details about the request.
+		 * @param array $request   Request used to generate the response.
 		 */
 		if ( ! self::is_allowed_to_override_price( $cart_item, $request ) ) {
 			return $cart_item;
@@ -241,7 +241,7 @@ class CartCache {
 	 * @since 4.0.0 Introduced.
 	 *
 	 * @param array           $cart_item Cart item.
-	 * @param WP_REST_Request $request   Full details about the request.
+	 * @param WP_REST_Request $request   Request used to generate the response.
 	 *
 	 * @return bool True if the cart item can be allowed to override the price.
 	 */
@@ -251,7 +251,7 @@ class CartCache {
 		 *
 		 * @param bool
 		 * @param array           $cart_item Cart item.
-		 * @param WP_REST_Request $request Full details about the request.
+		 * @param WP_REST_Request $request Request used to generate the response.
 		 */
 		return apply_filters( 'cocart_is_allowed_to_override_price', true, $cart_item, $request );
 	} // END is_allowed_to_override_price()

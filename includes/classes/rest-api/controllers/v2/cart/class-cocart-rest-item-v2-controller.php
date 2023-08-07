@@ -65,7 +65,7 @@ class CoCart_REST_Item_v2_Controller extends CoCart_REST_Cart_v2_Controller {
 	 * @since   3.0.0 Introduced.
 	 * @version 3.7.8
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
 	 * @return WP_REST_Response
 	 */
