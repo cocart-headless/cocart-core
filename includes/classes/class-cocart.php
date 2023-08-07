@@ -381,6 +381,11 @@ final class Core {
 			return;
 		}
 
+		// Check if WordPress is already doing a redirect.
+		if ( isset( $_SERVER['HTTP_X_WP_REDIRECT_CHECK'] ) ) {
+			return;
+		}
+
 		$cocart_settings = get_option( 'cocart_settings', array() );
 
 		if ( empty( $cocart_settings ) ) {
