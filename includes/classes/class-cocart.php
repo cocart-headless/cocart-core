@@ -370,6 +370,17 @@ final class Core {
 	 * @since 4.0.0 Introduced.
 	 */
 	public static function maybe_disable_wp_access() {
+		/**
+		 * If request method is HEAD then the headless site is making a HEAD request to figure out redirects,
+		 * so don't mess with redirects.
+		 */
+		if (
+			isset( $_SERVER['REQUEST_METHOD'] ) &&
+			'HEAD' === sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) )
+		) {
+			return;
+		}
+
 		$cocart_settings = get_option( 'cocart_settings', array() );
 
 		if ( empty( $cocart_settings ) ) {
