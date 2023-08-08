@@ -3062,7 +3062,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					'type'        => 'array',
 					'context'     => array( 'view' ),
 					'readonly'    => true,
-					'items'       => array(
+					'properties'       => array(
 						'type'       => 'object',
 						'properties' => $this->get_public_cart_items_schema_properties(),
 					),
@@ -3084,7 +3084,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					'type'        => 'array',
 					'context'     => array( 'view' ),
 					'readonly'    => true,
-					'items'       => array(
+					'properties'       => array(
 						'type'       => 'object',
 						'properties' => array(
 							'coupon'      => array(
@@ -3393,7 +3393,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					'type'        => 'array',
 					'context'     => array( 'view' ),
 					'readonly'    => true,
-					'items'       => array(
+					'properties'       => array(
 						'type'       => 'object',
 						'properties' => $this->get_public_cart_items_schema_properties(),
 					),
@@ -3526,7 +3526,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 *
 		 * @since 3.1.0 Introduced.
 		 */
-		$schema['properties']['items']['items']['properties'] += apply_filters( 'cocart_cart_items_schema', array() );
+		$schema['properties']['items']['properties']['properties'] += apply_filters( 'cocart_cart_items_schema', array() );
 
 		return $schema;
 	} // END get_public_item_schema()
