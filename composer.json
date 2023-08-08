@@ -30,7 +30,10 @@
     },
     "require-dev": {
         "php": "^7 || ^8",
-        "composer/installers": "2.2.0"
+        "composer/installers": "2.2.0",
+        "php-stubs/woocommerce-stubs": "*",
+        "php-stubs/wp-cli-stubs": "*",
+        "szepeviktor/phpstan-wordpress": "*"
     },
     "scripts": {
         "prep-autoload": [
