@@ -2558,6 +2558,9 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		$config = trim( $request['config']['fields'] );
 
 		switch ( $config ) {
+			case 'mini':
+				$fields = array( 'currency', 'items.item_key', 'items.title', 'items.price', 'items.quantity.value', 'items.featured_image', 'totals.subtotal' );
+				break;
 			case 'digital':
 				$fields = array( 'currency', 'customer.billing_address', 'items', 'coupons', 'needs_payment', 'taxes', 'totals', 'notices' );
 				break;
