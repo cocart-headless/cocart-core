@@ -71,8 +71,8 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 	 *
 	 * @access public
 	 *
-	 * @since   1.0.0 Introduced.
-	 * @version 3.1.0
+	 * @since 1.0.0 Introduced.
+	 * @since 4.0.0 Updated cart key to use `get_cart_key()` instead of `get_customer_unique_id()`.
 	 *
 	 * @param WP_REST_Request $request Request used to generate the response.
 	 *
@@ -81,7 +81,7 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 	public function clear_cart( $request = array() ) {
 		try {
 			// We need the cart key to force a session save later.
-			$cart_key = WC()->session->get_customer_unique_id();
+			$cart_key = WC()->session->get_cart_key();
 
 			/**
 			 * Triggers before the cart emptied.
