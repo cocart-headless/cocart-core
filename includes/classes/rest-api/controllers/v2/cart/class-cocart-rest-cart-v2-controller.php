@@ -2240,7 +2240,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		$fields = ! empty( $request['fields'] ) ? $request['fields'] : '';
 
 		if ( ! empty( $fields ) ) {
-			return self::get_cart_template_limited( $request );
+			return $this->get_cart_template_limited( $request );
 		}
 
 		// Other Requested conditions.
