@@ -2544,7 +2544,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	} // END calculate_totals()
 
 	/**
-	 * Returns an array of fields based on the configuration requested.
+	 * Returns an array of fields based on the configured response requested.
 	 *
 	 * @access public
 	 *
@@ -2554,7 +2554,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @return array
 	 */
-	public function get_fields_configuration( $request ) {
+	public function get_response_from_fields( $request ) {
 		$config = ! empty( $request['response'] ) ? trim( $request['response'] ) : '';
 
 		switch ( $config ) {
@@ -2585,7 +2585,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		}
 
 		return $fields;
-	} // END get_fields_configuration()
+	} // END get_response_from_fields()
 
 	/**
 	 * Gets an array of fields to be included on the response.
