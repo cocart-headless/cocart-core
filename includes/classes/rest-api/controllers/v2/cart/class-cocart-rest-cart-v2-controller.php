@@ -2555,7 +2555,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @return array
 	 */
 	public function get_fields_configuration( $request ) {
-		$config = trim( $request['config']['fields'] );
+		$config = ! empty( $request['response'] ) ? trim( $request['response'] ) : '';
 
 		switch ( $config ) {
 			case 'mini':
@@ -3542,6 +3542,9 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @return array $params The query params.
 	 */
 	public function get_collection_params() {
+		$defaults = get_option( 'cocart_settings', array() );
+		$defaults = ! empty( $defaults[ 'cart' ] ) ? $defaults[ 'cart' ] : array();
+
 		$params = array(
 			'cart_key' => array(
 				'description'       => __( 'Unique identifier for the cart.', 'cart-rest-api-for-woocommerce' ),
@@ -3562,8 +3565,21 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
+			'response' => array(
+				'description'       => __( 'Alternative to setting individual fields, set the default response.', 'cart-rest-api-for-woocommerce' ),
+				'default'           => ! empty( $defaults['cart_response'] ) ? $defaults['cart_response'] : 'default',
 				'type'              => 'string',
 				'required'          => false,
+				'enum'              => array(
+					'default',
+					'mini',
+					'digital',
+					'digital_fees',
+					'shipping',
+					'shipping_fees',
+					'removed_items',
+					'cross_sells',
+				),
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
