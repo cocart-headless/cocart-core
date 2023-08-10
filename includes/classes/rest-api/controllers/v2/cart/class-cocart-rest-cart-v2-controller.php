@@ -2632,18 +2632,19 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
-	 * @param WP_REST_Request $request Request used to generate the response.
+	 * @param WP_REST_Request $request        Request used to generate the response.
+	 * @param array           $default_fields Passes an array of fields already provided for the default response.
 	 *
 	 * @return string Fields to be included in the response.
 	 */
-	public function get_fields_for_response( $request ) {
+	public function get_fields_for_response( $request, $default_fields = array() ) {
 		$schema     = $this->get_public_item_schema();
 		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
 
 		$fields = array_unique( array_keys( $properties ) );
 
 		if ( ! isset( $request['fields'] ) ) {
-			return $fields;
+			return $default_fields;
 		}
 
 		$requested_fields = wp_parse_list( $request['fields'] );
