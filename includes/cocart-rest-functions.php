@@ -459,3 +459,72 @@ function maybe_cocart_require_salt() {
 
 	return false;
 } // END maybe_cocart_require_salt()
+
+/**
+ * Given an array of fields to include in a response, some of which may be
+ * `nested.fields`, determine whether the provided field should be included
+ * in the response body.
+ *
+ * If a parent field is passed in, the presence of any nested field within
+ * that parent will cause the method to return `true`. For example "item"
+ * will return true if any of `item`, `item.title` or `item.name` is
+ * provided.
+ *
+ * If a parent field is passed to be excluded, all presence of any nested
+ * field within that parent will cause the method to return `false`.
+ *
+ * @since 4.0.0 Introduced.
+ *
+ * @param string $field          A field to test for inclusion in the response body.
+ * @param array  $fields         An array of string fields supported by the endpoint.
+ * @param array  $exclude_fields An array of string excluded fields supported by the endpoint.
+ *
+ * @return bool Whether to include the field or not.
+ */
+function cocart_is_field_included( $field, $fields, $exclude_fields = array() ) {
+	// Check if the field is excluded.
+	if ( in_array( $field, $exclude_fields, true ) ) {
+		return false;
+	}
+
+	// Check if the field is included.
+	if ( in_array( $field, $fields, true ) ) {
+		return true;
+	}
+
+	foreach ( $fields as $accepted_field ) {
+		/*
+		 * Check to see if $field is the parent of any item in $fields.
+		 * A field "parent" should be accepted if "parent.child" is accepted.
+		 */
+		if ( str_starts_with( $accepted_field, "$field." ) ) {
+			return true;
+		}
+		/*
+		 * Conversely, if "parent" is accepted, all "parent.child" fields
+		 * should also be accepted.
+		 */
+		if ( str_starts_with( $field, "$accepted_field." ) ) {
+			return true;
+		}
+	}
+
+	// Check if the excluded field doesn't exist in the accepted fields.
+	foreach ( $exclude_fields as $excluded_field ) {
+		/*
+		 * Check to see if $excluded_field is the parent of any item in $exclude_fields.
+		 */
+		if ( str_starts_with( $excluded_field, "$field." ) ) {
+			return true;
+		}
+		/*
+		 * Conversely, if "parent" is excluded, all "parent.child" fields
+		 * should also be excluded.
+		 */
+		if ( str_starts_with( $field, "$excluded_field." ) ) {
+			return true;
+		}
+	}
+
+	return false;
+} // END cocart_is_field_included()
