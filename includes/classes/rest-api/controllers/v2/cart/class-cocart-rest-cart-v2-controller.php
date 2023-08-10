@@ -276,62 +276,47 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			return $cart_contents;
 		}
 
-		/**
-		 * Gets requested fields to return in the response.
-		 *
-		 * Note: Pre-configured fields take priority over specified fields.
-		 *
-		 * @since 4.0.0 Introduced.
-		 */
-		if ( ! empty( $request['config']['fields'] ) ) {
-			/**
-			 * Returns fields in the response based on the configuration requested.
-			 * They don't include any additional fields added to the cart by
-			 * extending the schema from third-party plugins.
-			 */
-			$fields = $this->get_fields_configuration( $request );
-		} else {
-			$fields = $this->get_fields_for_response( $request );
-		}
+		$fields         = $this->get_fields_for_request( $request );
+		$exclude_fields = $this->get_excluded_fields_for_response( $request );
 
 		// Cart response container.
 		$cart = array();
 
-		if ( rest_is_field_included( 'cart_hash', $fields ) ) {
+		if ( cocart_is_field_included( 'cart_hash', $fields, $exclude_fields ) ) {
 			$cart['cart_hash'] = ! empty( $this->get_cart_instance()->get_cart_hash() ) ? $this->get_cart_instance()->get_cart_hash() : '';
 		}
 
-		if ( rest_is_field_included( 'cart_key', $fields ) ) {
+		if ( cocart_is_field_included( 'cart_key', $fields, $exclude_fields ) ) {
 			$cart['cart_key'] = $this->get_cart_key( $request );
 		}
 
-		if ( rest_is_field_included( 'currency', $fields ) ) {
+		if ( cocart_is_field_included( 'currency', $fields, $exclude_fields ) ) {
 			$cart['currency'] = cocart_get_store_currency();
 		}
 
-		if ( rest_is_field_included( 'customer', $fields ) ) {
+		if ( cocart_is_field_included( 'customer', $fields, $exclude_fields ) ) {
 			$cart['customer'] = array();
 		}
-		if ( rest_is_field_included( 'customer.billing_address', $fields ) ) {
+		if ( cocart_is_field_included( 'customer.billing_address', $fields, $exclude_fields ) ) {
 			$cart['customer']['billing_address'] = $this->get_customer_fields( 'billing' );
 		}
-		if ( rest_is_field_included( 'customer.shipping_address', $fields ) ) {
+		if ( cocart_is_field_included( 'customer.shipping_address', $fields, $exclude_fields ) ) {
 			$cart['customer']['shipping_address'] = $this->get_customer_fields( 'shipping' );
 		}
 
-		if ( rest_is_field_included( 'items', $fields ) ) {
+		if ( cocart_is_field_included( 'items', $fields, $exclude_fields ) ) {
 			$cart['items'] = $this->get_items( $cart_contents, $request );
 		}
 
-		if ( rest_is_field_included( 'item_count', $fields ) ) {
+		if ( cocart_is_field_included( 'item_count', $fields, $exclude_fields ) ) {
 			$cart['item_count'] = $this->get_cart_instance()->get_cart_contents_count();
 		}
 
-		if ( rest_is_field_included( 'items_weight', $fields ) ) {
+		if ( cocart_is_field_included( 'items_weight', $fields, $exclude_fields ) ) {
 			$cart['items_weight'] = wc_get_weight( (float) $this->get_cart_instance()->get_cart_contents_weight(), get_option( 'woocommerce_weight_unit' ) );
 		}
 
-		if ( rest_is_field_included( 'coupons', $fields ) ) {
+		if ( cocart_is_field_included( 'coupons', $fields, $exclude_fields ) ) {
 			$cart['coupons'] = array();
 
 			// Returns each coupon applied and coupon total applied if store has coupons enabled.
@@ -352,39 +337,39 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			}
 		}
 
-		if ( rest_is_field_included( 'needs_payment', $fields ) ) {
+		if ( cocart_is_field_included( 'needs_payment', $fields, $exclude_fields ) ) {
 			$cart['needs_payment'] = $this->get_cart_instance()->needs_payment();
 		}
 
-		if ( rest_is_field_included( 'needs_shipping', $fields ) ) {
+		if ( cocart_is_field_included( 'needs_shipping', $fields, $exclude_fields ) ) {
 			$cart['needs_shipping'] = $this->get_cart_instance()->needs_shipping();
 		}
 
-		if ( rest_is_field_included( 'shipping', $fields ) ) {
+		if ( cocart_is_field_included( 'shipping', $fields, $exclude_fields ) ) {
 			$cart['shipping'] = $this->get_shipping_details();
 		}
 
-		if ( rest_is_field_included( 'fees', $fields ) ) {
+		if ( cocart_is_field_included( 'fees', $fields, $exclude_fields ) ) {
 			$cart['fees'] = $this->get_fees( $request );
 		}
 
-		if ( rest_is_field_included( 'taxes', $fields ) ) {
+		if ( cocart_is_field_included( 'taxes', $fields, $exclude_fields ) ) {
 			$cart['taxes'] = $this->get_taxes( $request );
 		}
 
-		if ( rest_is_field_included( 'totals', $fields ) ) {
+		if ( cocart_is_field_included( 'totals', $fields, $exclude_fields ) ) {
 			$cart['totals'] = $this->get_cart_totals( $request, $fields );
 		}
 
-		if ( rest_is_field_included( 'removed_items', $fields ) ) {
+		if ( cocart_is_field_included( 'removed_items', $fields, $exclude_fields ) ) {
 			$cart['removed_items'] = $this->get_removed_items( $this->get_cart_instance()->get_removed_cart_contents(), $request );
 		}
 
-		if ( rest_is_field_included( 'cross_sells', $fields ) ) {
+		if ( cocart_is_field_included( 'cross_sells', $fields, $exclude_fields ) ) {
 			$cart['cross_sells'] = $this->get_cross_sells();
 		}
 
-		if ( rest_is_field_included( 'notices', $fields ) ) {
+		if ( cocart_is_field_included( 'notices', $fields, $exclude_fields ) ) {
 			$cart['notices'] = $this->maybe_return_notices();
 		}
 
@@ -1169,34 +1154,34 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	public function get_cart_totals( $request = array(), $fields = array() ) {
 		$totals = array();
 
-		if ( rest_is_field_included( 'totals.subtotal', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.subtotal', $fields ) ) {
 			$totals['subtotal'] = $this->get_cart_instance()->get_subtotal();
 		}
-		if ( rest_is_field_included( 'totals.subtotal_tax', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.subtotal_tax', $fields ) ) {
 			$totals['subtotal_tax'] = $this->get_cart_instance()->get_subtotal_tax();
 		}
-		if ( rest_is_field_included( 'totals.fee_total', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.fee_total', $fields ) ) {
 			$totals['fee_total'] = $this->get_cart_instance()->get_fee_total();
 		}
-		if ( rest_is_field_included( 'totals.fee_tax', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.fee_tax', $fields ) ) {
 			$totals['fee_tax'] = $this->get_cart_instance()->get_fee_tax();
 		}
-		if ( rest_is_field_included( 'totals.discount_total', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.discount_total', $fields ) ) {
 			$totals['discount_total'] = $this->get_cart_instance()->get_discount_total();
 		}
-		if ( rest_is_field_included( 'totals.discount_tax', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.discount_tax', $fields ) ) {
 			$totals['discount_tax'] = $this->get_cart_instance()->get_discount_tax();
 		}
-		if ( rest_is_field_included( 'totals.shipping_total', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.shipping_total', $fields ) ) {
 			$totals['shipping_total'] = $this->get_cart_instance()->get_shipping_total();
 		}
-		if ( rest_is_field_included( 'totals.shipping_tax', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.shipping_tax', $fields ) ) {
 			$totals['shipping_tax'] = $this->get_cart_instance()->get_shipping_tax();
 		}
-		if ( rest_is_field_included( 'totals.total', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.total', $fields ) ) {
 			$totals['total'] = $this->get_cart_instance()->get_total( 'edit' );
 		}
-		if ( rest_is_field_included( 'totals.total_tax', $fields ) ) {
+		if ( cocart_is_field_included( 'totals.total_tax', $fields ) ) {
 			$totals['total_tax'] = $this->get_cart_instance()->get_total_tax();
 		}
 
@@ -1597,71 +1582,72 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		// Item container.
 		$item = array();
 
-		$fields = $this->get_fields_for_request( $request );
+		$fields         = $this->get_fields_for_request( $request );
+		$exclude_fields = $this->get_excluded_fields_for_response( $request );
 
-		if ( rest_is_field_included( 'items.item_key', $fields ) ) {
+		if ( cocart_is_field_included( 'items.item_key', $fields, $exclude_fields ) ) {
 			$item['item_key'] = $item_key;
 		}
 
-		if ( rest_is_field_included( 'items.id', $fields ) ) {
+		if ( cocart_is_field_included( 'items.id', $fields, $exclude_fields ) ) {
 			$item['id'] = $_product->get_id();
 		}
 
-		if ( rest_is_field_included( 'items.name', $fields ) ) {
+		if ( cocart_is_field_included( 'items.name', $fields, $exclude_fields ) ) {
 			$item['name'] = apply_filters( 'cocart_cart_item_name', $_product->get_name(), $_product, $cart_item, $item_key );
 		}
 
-		if ( rest_is_field_included( 'items.title', $fields ) ) {
+		if ( cocart_is_field_included( 'items.title', $fields, $exclude_fields ) ) {
 			$item['title'] = apply_filters( 'cocart_cart_item_title', $_product->get_title(), $_product, $cart_item, $item_key );
 		}
 
-		if ( rest_is_field_included( 'items.price', $fields ) ) {
+		if ( cocart_is_field_included( 'items.price', $fields, $exclude_fields ) ) {
 			$item['price'] = apply_filters( 'cocart_cart_item_price', $this->get_cart_instance()->get_product_price( $_product ), $cart_item, $item_key, $request );
 		}
 
-		if ( rest_is_field_included( 'items.quantity', $fields ) ) {
+		if ( cocart_is_field_included( 'items.quantity', $fields, $exclude_fields ) ) {
 			$item['quantity'] = array();
 		}
-		if ( rest_is_field_included( 'items.quantity.value', $fields ) ) {
+		if ( cocart_is_field_included( 'items.quantity.value', $fields, $exclude_fields ) ) {
 			$item['quantity']['value'] = (float) $quantity;
 		}
-		if ( rest_is_field_included( 'items.quantity.min_purchase', $fields ) ) {
+		if ( cocart_is_field_included( 'items.quantity.min_purchase', $fields, $exclude_fields ) ) {
 			$item['quantity']['min_purchase'] = $_product->get_min_purchase_quantity();
 		}
-		if ( rest_is_field_included( 'items.quantity.max_purchase', $fields ) ) {
+		if ( cocart_is_field_included( 'items.quantity.max_purchase', $fields, $exclude_fields ) ) {
 			$item['quantity']['max_purchase'] = $_product->get_max_purchase_quantity();
 		}
 
-		if ( rest_is_field_included( 'items.totals', $fields ) ) {
+		if ( cocart_is_field_included( 'items.totals', $fields, $exclude_fields ) ) {
 			$item['totals'] = array();
 		}
-		if ( rest_is_field_included( 'items.totals.subtotal', $fields ) ) {
+		if ( cocart_is_field_included( 'items.totals.subtotal', $fields, $exclude_fields ) ) {
 			$item['totals']['subtotal'] = apply_filters( 'cocart_cart_item_subtotal', $this->get_cart_instance()->get_product_subtotal( $_product, $quantity ), $cart_item, $item_key, $request );
 		}
-		if ( rest_is_field_included( 'items.totals.subtotal_tax', $fields ) ) {
+		if ( cocart_is_field_included( 'items.totals.subtotal_tax', $fields, $exclude_fields ) ) {
 			$item['totals']['subtotal_tax'] = apply_filters( 'cocart_cart_item_subtotal_tax', $cart_item['line_subtotal_tax'], $cart_item, $item_key, $request );
 		}
-		if ( rest_is_field_included( 'items.totals.total', $fields ) ) {
+		if ( cocart_is_field_included( 'items.totals.total', $fields, $exclude_fields ) ) {
 			$item['totals']['total'] = apply_filters( 'cocart_cart_item_total', $cart_item['line_total'], $cart_item, $item_key, $request );
 		}
-		if ( rest_is_field_included( 'items.totals.tax', $fields ) ) {
+		if ( cocart_is_field_included( 'items.totals.tax', $fields, $exclude_fields ) ) {
 			$item['totals']['tax'] = apply_filters( 'cocart_cart_item_tax', $cart_item['line_tax'], $cart_item, $item_key, $request );
 		}
 
-		if ( rest_is_field_included( 'items.slug', $fields ) ) {
+		if ( cocart_is_field_included( 'items.slug', $fields, $exclude_fields ) ) {
 			$item['slug'] = $this->get_product_slug( $_product );
 		}
 
-		if ( rest_is_field_included( 'items.meta', $fields ) ) {
+		if ( cocart_is_field_included( 'items.meta', $fields, $exclude_fields ) ) {
 			$item['meta'] = array();
 		}
-		if ( rest_is_field_included( 'items.meta.product_type', $fields ) ) {
+		if ( cocart_is_field_included( 'items.meta.product_type', $fields, $exclude_fields ) ) {
 			$item['meta']['product_type'] = $_product->get_type();
 		}
-		if ( rest_is_field_included( 'items.meta.sku', $fields ) ) {
+		if ( cocart_is_field_included( 'items.meta.sku', $fields, $exclude_fields ) ) {
 			$item['meta']['sku'] = $_product->get_sku();
 		}
-		if ( rest_is_field_included( 'items.meta.dimensions', $fields ) ) {
+		if ( cocart_is_field_included( 'items.meta.dimensions', $fields, $exclude_fields ) ) {
 			$item['meta']['dimensions'] = ! empty( $dimensions ) ? array(
 				'length' => $dimensions['length'],
 				'width'  => $dimensions['width'],
@@ -1669,19 +1655,19 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				'unit'   => get_option( 'woocommerce_dimension_unit' ),
 			) : array();
 		}
-		if ( rest_is_field_included( 'items.meta.weight', $fields ) ) {
+		if ( cocart_is_field_included( 'items.meta.weight', $fields, $exclude_fields ) ) {
 			$item['meta']['weight'] = wc_get_weight( (float) $_product->get_weight() * (int) $cart_item['quantity'], get_option( 'woocommerce_weight_unit' ) );
 		}
-		if ( rest_is_field_included( 'items.meta.variation', $fields ) ) {
+		if ( cocart_is_field_included( 'items.meta.variation', $fields, $exclude_fields ) ) {
 			$item['meta']['variation'] = isset( $cart_item['variation'] ) ? cocart_format_variation_data( $cart_item['variation'], $_product ) : array();
 		}
 
 		// Backorder notification.
-		if ( rest_is_field_included( 'items.backorders', $fields ) ) {
+		if ( cocart_is_field_included( 'items.backorders', $fields, $exclude_fields ) ) {
 			$item['backorders'] = $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ? wp_kses_post( apply_filters( 'cocart_cart_item_backorder_notification', esc_html__( 'Available on backorder', 'cart-rest-api-for-woocommerce' ), $_product->get_id() ) ) : '';
 		}
 
-		if ( rest_is_field_included( 'items.cart_item_data', $fields ) ) {
+		if ( cocart_is_field_included( 'items.cart_item_data', $fields, $exclude_fields ) ) {
 			// Prepares the remaining cart item data.
 			$cart_item = $this->prepare_item( $cart_item );
 
@@ -1701,11 +1687,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		}
 
 		// If thumbnail is requested then add it to each item in cart.
-		if ( rest_is_field_included( 'items.featured_image', $fields ) ) {
+		if ( cocart_is_field_included( 'items.featured_image', $fields, $exclude_fields ) ) {
 			$item['featured_image'] = $show_thumb ? $this->get_item_thumbnail( $_product, $cart_item, $item_key, $removed_item ) : '';
 		}
 
-		if ( rest_is_field_included( 'items.extensions', $fields ) ) {
+		if ( cocart_is_field_included( 'items.extensions', $fields, $exclude_fields ) ) {
 			/**
 			 * Filter allows plugin extensions to apply additional information.
 			 *
