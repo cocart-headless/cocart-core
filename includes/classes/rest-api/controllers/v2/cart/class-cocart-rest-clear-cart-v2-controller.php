@@ -94,36 +94,26 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 			WC()->session->set( 'cart_fees', array() );
 
 			// Clear cart.
-			WC()->cart->cart_contents = array();
-			WC()->session->cart       = array();
+			$this->get_cart_instance()->set_cart_contents( array() );
 
 			// Clear removed items if not kept.
 			if ( ! $request['keep_removed_items'] ) {
-				WC()->cart->removed_cart_contents = array();
+				$this->get_cart_instance()->set_removed_cart_contents( array() );
 			}
 
 			// Reset everything.
-			WC()->cart->shipping_methods           = array();
-			WC()->cart->coupon_discount_totals     = array();
-			WC()->cart->coupon_discount_tax_totals = array();
-			WC()->cart->applied_coupons            = array();
-			WC()->cart->totals                     = array(
-				'subtotal'            => 0,
-				'subtotal_tax'        => 0,
-				'shipping_total'      => 0,
-				'shipping_tax'        => 0,
-				'shipping_taxes'      => array(),
-				'discount_total'      => 0,
-				'discount_tax'        => 0,
-				'cart_contents_total' => 0,
-				'cart_contents_tax'   => 0,
-				'cart_contents_taxes' => array(),
-				'fee_total'           => 0,
-				'fee_tax'             => 0,
-				'fee_taxes'           => array(),
-				'total'               => 0,
-				'total_tax'           => 0,
-			);
+			$this->get_cart_instance()->shipping_methods = array();
+			$this->get_cart_instance()->set_coupon_discount_totals( array() );
+			$this->get_cart_instance()->set_coupon_discount_tax_totals( array() );
+			$this->get_cart_instance()->set_applied_coupons( array() );
+			$this->get_cart_instance()->set_totals( array() );
+
+			/**
+			 * Triggers when the cart is reset.
+			 *
+			 * @since 4.0.0 Introduced.
+			 */
+			do_action( 'cocart_cart_reset', $this );
 
 			/**
 			 * If the user is authorized and `woocommerce_persistent_cart_enabled` filter is left enabled
@@ -134,7 +124,7 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 			}
 
 			/**
-			 * Triggers as the cart is emptied.
+			 * Triggers once the cart is emptied.
 			 *
 			 * @since 1.0.0 Introduced.
 			 */
@@ -147,7 +137,7 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 			 */
 			WC()->session->update_cart( $cart_key );
 
-			if ( WC()->cart->is_empty() ) {
+			if ( $this->get_cart_instance()->is_empty() ) {
 				/**
 				 * Triggers once the cart is cleared.
 				 *
@@ -208,14 +198,12 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 		$params = parent::get_collection_params();
 
 		// Add to cart query parameters.
-		$params += array(
-			'keep_removed_items' => array(
-				'required'          => false,
-				'default'           => false,
-				'description'       => __( 'Keeps removed items in session when clearing the cart.', 'cart-rest-api-for-woocommerce' ),
-				'type'              => 'boolean',
-				'validate_callback' => 'rest_validate_request_arg',
-			),
+		$params['keep_removed_items'] = array(
+			'required'          => false,
+			'default'           => false,
+			'description'       => __( 'Keeps removed items in session when clearing the cart.', 'cart-rest-api-for-woocommerce' ),
+			'type'              => 'boolean',
+			'validate_callback' => 'rest_validate_request_arg',
 		);
 
 		return $params;
