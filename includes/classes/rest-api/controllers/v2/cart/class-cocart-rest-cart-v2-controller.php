@@ -423,6 +423,42 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	} // END return_cart_contents()
 
 	/**
+	 * Return either requested fields or a default set.
+	 *
+	 * @access protected
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param WP_REST_Request $request Request used to generate the response.
+	 *
+	 * @return array
+	 */
+	protected function get_fields_for_request( $request = array() ) {
+		// Returns the default fields for the response.
+		$defaults = $this->get_response_from_fields( $request );
+
+		/**
+		 * Parses additional fields on top of the default fields for the response.
+		 *
+		 * They may include additional fields added to the cart by
+		 * extending the schema from third-party plugins.
+		 */
+		$args   = $this->get_fields_for_response( $request, $defaults );
+		$fields = wp_parse_args( $args, $defaults );
+
+		/**
+		 * Filter allows you to set the fields for the request returning.
+		 *
+		 * @since 4.0.0 Introduced.
+		 *
+		 * @param array $fields Requested fields, if any.
+		 */
+		$fields = apply_filters( 'cocart_' . $this->rest_base . '_fields_for_request', $fields );
+
+		return $fields;
+	} // END get_fields_for_request()
+
+	/**
 	 * Validate the product ID or SKU ID.
 	 *
 	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
