@@ -2598,10 +2598,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				$fields = array( 'currency', 'items.item_key', 'items.title', 'items.price', 'items.quantity.value', 'items.featured_image', 'totals.subtotal' );
 				break;
 			case 'digital':
-				$fields = array( 'currency', 'customer.billing_address', 'items', 'coupons', 'needs_payment', 'taxes', 'totals', 'notices' );
+				$fields = array( 'currency', 'customer.billing_address', 'items.item_key', 'items.id', 'items.name', 'items.title', 'items.price', 'items.quantity', 'items.totals', 'items.slug', 'items.meta.product_type', 'items.meta.sku', 'items.meta.variation', 'items.cart_item_data', 'items.featured_image', 'items.extensions', 'coupons', 'needs_payment', 'taxes', 'totals', 'notices' );
 				break;
 			case 'digital_fees':
-				$fields = array( 'currency', 'customer.billing_address', 'items', 'coupons', 'needs_payment', 'fees', 'taxes', 'totals', 'notices' );
+				$fields = array( 'currency', 'customer.billing_address', 'items.item_key', 'items.id', 'items.name', 'items.title', 'items.price', 'items.quantity', 'items.totals', 'items.slug', 'items.meta.product_type', 'items.meta.sku', 'items.variation', 'items.cart_item_data', 'items.featured_image', 'items.extensions', 'coupons', 'needs_payment', 'fees', 'taxes', 'totals', 'notices' );
 				break;
 			case 'shipping':
 				$fields = array( 'currency', 'customer', 'items', 'items_weight', 'coupons', 'needs_payment', 'needs_shipping', 'shipping', 'taxes', 'totals', 'notices' );
