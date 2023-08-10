@@ -2682,6 +2682,64 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	} // END get_fields_for_response()
 
 	/**
+	 * Gets an array of fields to be excluded on the response.
+	 *
+	 * Excluded fields are based on item schema and `excluded_fields=` request argument.
+	 *
+	 * @access public
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param WP_REST_Request $request Request used to generate the response.
+	 *
+	 * @return string Fields to be excluded in the response.
+	 */
+	public function get_excluded_fields_for_response( $request ) {
+		$schema     = $this->get_public_item_schema();
+		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
+
+		$fields = array_unique( array_keys( $properties ) );
+
+		if ( empty( $request['exclude_fields'] ) ) {
+			return array();
+		}
+
+		$requested_fields = wp_parse_list( $request['exclude_fields'] );
+
+		// Return all fields if no fields specified.
+		if ( 0 === count( $requested_fields ) ) {
+			return $fields;
+		}
+
+		// Trim off outside whitespace from the comma delimited list.
+		$requested_fields = array_map( 'trim', $requested_fields );
+
+		// Return the list of all requested fields which appear in the schema.
+		return array_reduce(
+			$requested_fields,
+			static function( $response_fields, $field ) use ( $fields ) {
+				if ( in_array( $field, $fields, true ) ) {
+					$response_fields[] = $field;
+
+					return $response_fields;
+				}
+
+				// Check for nested fields if $field is not a direct match.
+				$nested_fields = explode( '.', $field );
+
+				// A nested field is included so long as its top-level property
+				// is present in the schema.
+				if ( in_array( $nested_fields[0], $fields, true ) ) {
+					$response_fields[] = $field;
+				}
+
+				return $response_fields;
+			},
+			array()
+		);
+	} // END get_excluded_fields_for_response()
+
+	/**
 	 * Retrieves the cart items schema properties.
 	 *
 	 * @access public
