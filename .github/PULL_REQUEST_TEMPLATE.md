@@ -40,6 +40,7 @@ Testing instructions:
 <!-- You can optionally choose to enter a changelog entry by checking the box and supplying data. -->
 
 <details>
+<summary>Entry details</summary>
 
 #### Significance
 
