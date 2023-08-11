@@ -2628,11 +2628,12 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	public function get_fields_for_response( $request, $default_fields = array() ) {
 		$schema     = $this->get_public_item_schema();
 		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
+		$properties = array_unique( array_keys( $properties ) );
 
-		$fields = array_unique( array_keys( $properties ) );
+		$fields = empty( $default_fields ) ? $properties : $default_fields;
 
 		if ( ! isset( $request['fields'] ) ) {
-			return $default_fields;
+			return $fields;
 		}
 
 		$requested_fields = wp_parse_list( $request['fields'] );
