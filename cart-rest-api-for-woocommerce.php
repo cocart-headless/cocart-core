@@ -5,7 +5,7 @@
  * Description: CoCart makes it easy to decouple your WooCommerce store via a customizable REST API.
  * Author:      Sébastien Dumont
  * Author URI:  https://sebastiendumont.com
- * Version:     4.0.0-beta.2
+ * Version:     4.0.0-beta.3
  * Text Domain: cart-rest-api-for-woocommerce
  * Domain Path: /languages/
  * Requires at least: 5.6
@@ -39,8 +39,9 @@ if ( ! class_exists( 'CoCart\Core', false ) ) {
 /**
  * Returns the main instance of CoCart and only runs if it does not already exists.
  *
- * @since   2.1.0
- * @version 3.0.7
+ * @since 2.1.0 Introduced.
+ * @since 4.0.0 Updated to Namespaces.
+ *
  * @return CoCart
  */
 if ( ! function_exists( 'CoCart' ) ) {

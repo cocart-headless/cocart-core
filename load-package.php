@@ -2,7 +2,7 @@
 /**
  * This file is designed to be used to load as package NOT a WP plugin!
  *
- * @version 4.0.0-beta.2
+ * @version 4.0.0-beta.3
  * @package CoCart
  */
 
@@ -31,8 +31,9 @@ if ( ! class_exists( 'CoCart\Core', false ) ) {
 /**
  * Returns the main instance of CoCart and only runs if it does not already exists.
  *
- * @since   2.1.0
- * @version 4.0.0
+ * @since 2.1.0 Introduced.
+ * @since 4.0.0 Updated to Namespaces.
+ *
  * @return CoCart
  */
 if ( ! function_exists( 'CoCart' ) ) {
