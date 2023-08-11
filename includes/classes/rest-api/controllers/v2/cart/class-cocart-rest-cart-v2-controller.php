@@ -2604,7 +2604,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				$fields = array( 'currency', 'cross_sells', 'notices' );
 				break;
 			default:
-				$fields = $this->get_fields_for_response( $request );
+				$fields = array();
 				break;
 		}
 
