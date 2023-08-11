@@ -2643,6 +2643,20 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			return $fields;
 		}
 
+		/*
+		 * Requested fields that are not available from the default fields
+		 * will be added to the list of fields.
+		 */
+		if ( ! empty( $default_fields ) ) {
+			foreach( $requested_fields as $field ) {
+				if ( ! in_array( $field, $default_fields ) ) {
+					if ( cocart_is_field_included( $field, $requested_fields ) ) {
+						$fields[] = $field;
+					}
+				}
+			}
+		}
+
 		// Trim off outside whitespace from the comma delimited list.
 		$requested_fields = array_map( 'trim', $requested_fields );
 
