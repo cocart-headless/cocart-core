@@ -414,8 +414,7 @@ function cocart_get_min_max_price_meta_query( $args ) {
 } // END cocart_get_min_max_price_meta_query()
 
 /**
- * Returns the permalink for a product and
- * replaces the frontend URL if set.
+ * Returns the permalink for a product and replaces the frontend URL if set.
  *
  * @since 4.0.0 Introduced.
  *
@@ -426,7 +425,7 @@ function cocart_get_min_max_price_meta_query( $args ) {
 function cocart_get_permalink( $url ) {
 	$settings = get_option( 'cocart_settings', array() );
 
-	$frontend_url = ! empty( $settings['general']['frontend_url'] ) ? $settings['general']['frontend_url'] : '';
+	$frontend_url = ! empty( $settings['general']['frontend_url'] ) ? $settings['general']['frontend_url'] : home_url();
 
 	return str_replace( home_url(), $frontend_url, $url );
 } // END cocart_get_permalink()
