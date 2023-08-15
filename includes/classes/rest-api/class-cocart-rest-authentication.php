@@ -315,6 +315,35 @@ class Authentication {
 	} // END set_method()
 
 	/**
+	 * Get the authorization header.
+	 *
+	 * Returns the value from the authorization header.
+	 *
+	 * @access protected
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @return string $auth_header
+	 */
+	protected function get_auth_header() {
+		$auth_header = isset( $_SERVER['HTTP_AUTHORIZATION'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ) ) : false;
+
+		// Double check for different auth header string (server dependent).
+		if ( ! $auth_header ) {
+			$auth_header = isset( $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ) ) : false;
+		}
+
+		/**
+		 * Filter allows you to change the authorization header.
+		 *
+		 * @since 4.0.0 Introduced.
+		 *
+		 * @param string Authorization header.
+		 */
+		return apply_filters( 'cocart_auth_header', $auth_header );
+	} // END get_auth_header()
+
+	/**
 	 * Basic Authentication.
 	 *
 	 * SSL-encrypted requests are not subject to sniffing or man-in-the-middle
