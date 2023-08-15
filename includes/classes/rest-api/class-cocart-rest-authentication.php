@@ -872,6 +872,35 @@ class Authentication {
 		return $username;
 	} // END get_user_by_phone()
 
+	/**
+	 * Checks if the login provided is valid as a phone number or email address and returns the username.
+	 *
+	 * @access protected
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param string $username Either a phone number, email address or username.
+	 *
+	 * @return string $username Username returned if valid.
+	 */
+	protected function get_username( $username ) {
+		// Check if the username provided is a billing phone number and return the username if true.
+		if ( WC_Validation::is_phone( $username ) ) {
+			$username = $this->get_user_by_phone( $username ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		}
+
+		// Check if the username provided was an email address and return the username if true.
+		if ( is_email( $username ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$user = get_user_by( 'email', $username ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+			if ( $user ) {
+				$username = $user->user_login; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			}
+		}
+
+		return $username;
+	} // END get_username()
+
 } // END class.
 
 return new Authentication();
