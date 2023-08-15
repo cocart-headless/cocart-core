@@ -528,6 +528,15 @@ class Authentication {
 				'Content-Type',
 			);
 
+			/**
+			 * Filter allows you to filter which headers are allowed for the CORS headers.
+			 *
+			 * @since 4.0.0 Introduced.
+			 *
+			 * @param array $allowed_headers Allowed headers.
+			 */
+			$allow_headers = apply_filters( 'cocart_allow_headers', $allow_headers );
+
 			$expose_headers = array(
 				'X-WP-Total',
 				'X-WP-TotalPages',
