@@ -363,56 +363,27 @@ class Authentication {
 		$this->auth_method = 'basic_auth';
 
 		// Look up authorization header and check it's a valid.
-		if ( isset( $_SERVER['HTTP_AUTHORIZATION'] ) && 0 === stripos( $_SERVER['HTTP_AUTHORIZATION'], 'basic ' ) ) {
-			$exploded = explode( ':', base64_decode( substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ) ), 6 ) ), 2 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $this->get_auth_header() ) && 0 === stripos( $this->get_auth_header(), 'basic ' ) ) {
+			$exploded = explode( ':', base64_decode( substr( $this->get_auth_header(), 6 ) ), 2 ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			// If valid return username and password.
 			if ( 2 == \count( $exploded ) ) {
 				list( $username, $password ) = $exploded;
 
-				// Check if the username provided is a billing phone number and return the username if true.
-				if ( WC_Validation::is_phone( $username ) ) {
-					$username = self::get_user_by_phone( $username ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				}
-
-				// Check if the username provided was an email address and return the username if true.
-				if ( is_email( $username ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					$user     = get_user_by( 'email', $username ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					$username = $user->user_login; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				}
+				$username = $this->get_username( $username );
 			}
 		}
 		// Check that we're trying to authenticate via simple headers.
 		elseif ( ! empty( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_PW'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$username = trim( sanitize_user( wp_unslash( $_SERVER['PHP_AUTH_USER'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$username = $this->get_username( $username );
 			$password = trim( sanitize_text_field( wp_unslash( $_SERVER['PHP_AUTH_PW'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-			// Check if the username provided is a billing phone number and return the username if true.
-			if ( WC_Validation::is_phone( $username ) ) {
-				$username = self::get_user_by_phone( $username );
-			}
-
-			// Check if the username provided was an email address and return the username if true.
-			elseif ( is_email( $username ) ) {
-				$user     = get_user_by( 'email', $username );
-				$username = $user->user_login;
-			}
 		}
 		// Fallback to check if the username and password was passed via URL.
 		elseif ( ! empty( $_REQUEST['username'] ) && ! empty( $_REQUEST['password'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$username = trim( sanitize_user( wp_unslash( $_REQUEST['username'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$username = $this->get_username( $username );
 			$password = trim( sanitize_text_field( wp_unslash( $_REQUEST['password'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-			// Check if the username provided is a billing phone number and return the username if true.
-			if ( WC_Validation::is_phone( $username ) ) {
-				$username = self::get_user_by_phone( $username );
-			}
-
-			// Check if the username provided was an email address and return the username if true.
-			elseif ( is_email( $username ) ) {
-				$user     = get_user_by( 'email', $username );
-				$username = $user->user_login; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			}
 		}
 
 		// Only authenticate if a username and password is available to check.
