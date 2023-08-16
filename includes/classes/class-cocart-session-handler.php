@@ -352,7 +352,8 @@ class Handler extends Session {
 	/**
 	 * Backwards compatibility function for setting cart cookie.
 	 *
-	 * Since the cookie name (as of WooCommerce 2.1) is prepended with wp, cache systems like batcache will not cache pages when set.
+	 * Since the cookie name (as of WooCommerce 2.1) is prepended with wp,
+	 * cache systems like batcache will not cache pages when set.
 	 *
 	 * @access public
 	 *
@@ -464,7 +465,7 @@ class Handler extends Session {
 	/**
 	 * Set cart expiration.
 	 *
-	 * This session expiration is used for the REST API.
+	 * This session expiration is used for the REST API and is set for 7 days by default.
 	 *
 	 * @access public
 	 */
