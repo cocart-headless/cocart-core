@@ -338,7 +338,7 @@ class Server {
 	public function initialize_customer() {
 		if ( is_null( WC()->customer ) || ! WC()->customer instanceof Customer ) {
 			$current_user_id = get_current_user_id();
-			$customer_id     = WC()->session->is_user_customer( $current_user_id ) ? strval( $current_user_id ) : WC()->session->get_customer_id_from_cart_key( WC()->session->get_cart_key() );
+			$customer_id     = WC()->session->is_user_customer( $current_user_id ) ? $current_user_id : WC()->session->get_customer_id_from_cart_key( WC()->session->get_cart_key() );
 
 			WC()->customer = new Customer( $customer_id, true );
 
