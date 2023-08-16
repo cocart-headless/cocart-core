@@ -823,15 +823,13 @@ class Authentication {
 	 *
 	 * @access protected
 	 *
-	 * @static
-	 *
 	 * @since 4.0.0 Introduced.
 	 *
 	 * @param numeric $phone The billing phone number to check.
 	 *
 	 * @return string The username returned if found.
 	 */
-	protected static function get_user_by_phone( $phone ) {
+	protected function get_user_by_phone( $phone ) {
 		$matchingUsers = get_users( array(
 			'meta_key'     => 'billing_phone',
 			'meta_value'   => $phone,
