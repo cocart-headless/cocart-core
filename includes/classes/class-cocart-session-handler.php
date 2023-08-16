@@ -170,11 +170,11 @@ class Handler extends Session {
 				$this->update_cart_timestamp( $this->_cart_key, $this->_cart_expiration );
 			}
 		} else {
-			// New guest customer.
+			// New guest customer or recover cart session if no cookie.
 			$this->set_session_expiration();
-			$this->_cart_user_id = strval( get_current_user_id() );
-			$this->_customer_id  = strval( get_current_user_id() );
-			$this->_cart_key     = $this->generate_key();
+			$this->_cart_user_id = get_current_user_id();
+			$this->_customer_id  = get_current_user_id();
+			$this->_cart_key     = $this->_cart_user_id > 0 ? $this->get_cart_key_last_used_by_user_id( $this->_cart_user_id ) : $this->generate_key();
 			$this->_data         = $this->get_cart_data();
 		}
 	} // END init_session_cookie()
