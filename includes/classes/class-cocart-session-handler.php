@@ -95,7 +95,7 @@ class Handler extends Session {
 
 			$this->init_session_cookie();
 
-			add_action( 'woocommerce_set_cart_cookies', array( $this, 'set_customer_cart_cookie' ), 10 );
+			add_action( 'woocommerce_set_cart_cookies', array( $this, 'set_customer_session_cookie' ), 10 );
 			add_action( 'shutdown', array( $this, 'save_data' ), 20 );
 		}
 
@@ -161,7 +161,7 @@ class Handler extends Session {
 				$this->update_customer_id( $this->_cart_user_id );
 
 				// Set new cookie for cart.
-				$this->set_customer_cart_cookie( true );
+				$this->set_customer_session_cookie( true );
 			}
 
 			// Update cart if its close to expiring.
