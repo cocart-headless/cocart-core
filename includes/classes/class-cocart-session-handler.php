@@ -593,16 +593,18 @@ class Handler extends Session {
 			return false;
 		}
 
-		/**
-		 * Check the cookie value is more than what WooCommerce normally sets.
+		$parsed_cookie = explode( '||', $cookie_value );
+
+		/*
+		 * Check if the cookie value is less than the default WooCommerce normally sets.
 		 *
-		 * Will return false if the cookie value is missing data CoCart requires for it's session handling.
+		 * Returns false if the cookie value is missing data CoCart requires for it's session handling.
 		 */
-		if ( count( explode( '||', $cookie_value ) ) > 4 ) {
-			list( $cart_key, $cart_expiration, $cart_expiring, $cookie_hash, $user_id, $customer_id ) = explode( '||', $cookie_value );
-		} else {
+		if ( count( $parsed_cookie ) < 6 ) {
 			return false;
 		}
+
+		list( $cart_key, $cart_expiration, $cart_expiring, $cookie_hash, $user_id, $customer_id ) = $parsed_cookie;
 
 		if ( empty( $cart_key ) ) {
 			return false;
