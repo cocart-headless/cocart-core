@@ -221,22 +221,30 @@ class Handler extends Session {
 	 * @since 4.0.0 Introduced.
 	 */
 	public function init_session_cocart() {
-		// Current user ID. If user is NOT logged in then the customer is a guest.
+		/*
+		 * Current user ID. If user is NOT logged in then the customer is a guest.
+		 */
 		$current_user_id     = get_current_user_id();
 		$this->_cart_user_id = $current_user_id > 0 ? $current_user_id : 0;
 
-		// Get cart key.
-		if ( ! $this->is_user_customer( $this->_cart_user_id ) ) {
-			$this->_cart_key = $this->get_requested_cart();
-		} else {
-			$this->_cart_key = $this->_cart_user_id > 0 ? $this->get_cart_key_by_user_id( $this->_cart_user_id ) : $this->get_requested_cart();
-		}
+		/*
+		 * Get the cart key by the logged in user ID, if any.
+		 */
+		$this->_cart_key = $this->_cart_user_id > 0 ? $this->get_cart_key_by_user_id( $this->_cart_user_id ) : '';
 
-		// Get customer ID.
-		if ( $this->_cart_user_id > 0 && ! $this->is_user_customer( $this->_cart_user_id ) ) {
+		/*
+		 * Get customer ID by the logged in user ID, if any.
+		 */
+		$this->_customer_id = $this->_cart_user_id > 0 ? $this->_cart_user_id : $this->get_customer_id_from_cart_key( $this->_cart_key );
+
+		/*
+		 * If the user logged in is not a customer then we either look up a cart
+		 * session on behalf of a requested customer or create a new session for them later.
+		 */
+		if ( ! $this->is_user_customer( $this->_cart_user_id ) && $this->get_requested_customer() > 0 ) {
+			$requested_cart     = $this->get_cart_key_for_customer_id( $this->_cart_user_id, $this->get_requested_customer() );
+			$this->_cart_key    = ! empty( $requested_cart ) ? $requested_cart : $this->generate_key();
 			$this->_customer_id = $this->get_requested_customer();
-		} else {
-			$this->_customer_id = $this->_cart_user_id > 0 ? $this->_cart_user_id : $this->get_customer_id_from_cart_key( $this->_cart_key );
 		}
 
 		if ( ! empty( $this->_cart_key ) ) {
@@ -250,9 +258,9 @@ class Handler extends Session {
 			}
 		} else {
 			// New cart session created.
-			$this->set_cart_expiration();
-			$this->_cart_key = empty( $this->_cart_key ) && $this->_cart_user_id > 0 && ! $this->is_user_customer( $this->_cart_user_id ) ? $this->get_cart_key_last_used_by_user_id( $this->_cart_user_id ) : $this->generate_key();
+			$this->_cart_key = $this->_cart_user_id > 0 && ! $this->is_user_customer( $this->_cart_user_id ) ? $this->get_cart_key_last_used_by_user_id( $this->_cart_user_id ) : $this->generate_key();
 			$this->_data     = $this->get_cart_data();
+			$this->set_cart_expiration();
 		}
 	} // END init_session_cocart()
 
