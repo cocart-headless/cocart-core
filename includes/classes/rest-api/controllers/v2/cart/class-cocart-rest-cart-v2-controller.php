@@ -1624,7 +1624,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$item['totals'] = array();
 		}
 		if ( cocart_is_field_included( 'items.totals.subtotal', $fields, $exclude_fields ) ) {
-			$item['totals']['subtotal'] = apply_filters( 'cocart_cart_item_subtotal', $this->get_cart_instance()->get_product_subtotal( $_product, $quantity ), $cart_item, $item_key, $request );
+			$item['totals']['subtotal'] = apply_filters( 'cocart_cart_item_subtotal', $cart_item['line_subtotal'], $cart_item, $item_key, $request );
 		}
 		if ( cocart_is_field_included( 'items.totals.subtotal_tax', $fields, $exclude_fields ) ) {
 			$item['totals']['subtotal_tax'] = apply_filters( 'cocart_cart_item_subtotal_tax', $cart_item['line_subtotal_tax'], $cart_item, $item_key, $request );
