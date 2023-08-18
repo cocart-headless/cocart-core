@@ -1367,7 +1367,7 @@ class Handler extends Session {
 
 		global $wpdb;
 
-		$cart_key = $wpdb->get_var( $wpdb->prepare( "SELECT cart_key FROM $this->_table WHERE cart_customer = %d", $customer_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$cart_key = $wpdb->get_var( $wpdb->prepare( "SELECT cart_key FROM $this->_table WHERE cart_user_id = %d AND cart_customer = %d", $user_id, $customer_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		if ( is_null( $cart_key ) ) {
 			return false;
