@@ -1267,6 +1267,11 @@ class Handler extends Session {
 	 * @return int Returns the customer ID.
 	 */
 	public function get_customer_id_from_cart_key( $cart_key ) {
+		// If no cart key provided then we can skip the DB look up.
+		if ( empty( $cart_key ) ) {
+			return 0;
+		}
+
 		global $wpdb;
 
 		$customer_id = $wpdb->get_var( $wpdb->prepare( "SELECT cart_customer FROM $this->_table WHERE cart_key = %s", $cart_key ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
