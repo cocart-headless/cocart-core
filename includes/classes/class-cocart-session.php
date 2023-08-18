@@ -154,7 +154,7 @@ class LoadCart {
 					// Compare the user ID with the cart key.
 					if ( $user_id === $cart_key ) {
 						/* translators: %s: cart key */
-						Logger::log( sprintf( __( 'Cart key "%s" is already loaded as the currently logged in user.', 'cart-rest-api-for-woocommerce' ), $cart_key ), 'error' );
+						Logger::log( sprintf( __( 'Cart key "%s" is already loaded as the current logged in user.', 'cart-rest-api-for-woocommerce' ), $cart_key ), 'error' );
 					} else {
 						/* translators: %s: cart key */
 						Logger::log( sprintf( __( 'Customer is logged in as a different user. Cart key "%s" cannot be loaded into session for a different user.', 'cart-rest-api-for-woocommerce' ), $cart_key ), 'error' );
