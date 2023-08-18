@@ -519,7 +519,7 @@ class Authentication {
 			);
 
 			/**
-			 * Change the allowed HTTP origin result.
+			 * Filter allows you to change the allowed HTTP origin result.
 			 *
 			 * @since 2.5.1 Introduced.
 			 * @since 4.0.0 Added the `$origin_arg` parameter.
@@ -534,6 +534,9 @@ class Authentication {
 			header( 'Access-Control-Allow-Credentials: true' );
 			header( 'Access-Control-Allow-Headers: ' . implode( ', ', $allow_headers ) );
 			header( 'Access-Control-Expose-Headers: ' . implode( ', ', $expose_headers ) );
+			header( 'Access-Control-Max-Age: 600' ); // Cache the result of preflight requests (600 is the upper limit for Chromium).
+			header( 'X-Robots-Tag: noindex' );
+			header( 'X-Content-Type-Options: nosniff' );
 		}
 
 		return $served;
