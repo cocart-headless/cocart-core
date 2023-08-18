@@ -71,7 +71,7 @@ class CartCache {
 		if ( ! empty( maybe_cocart_require_salt() ) ) {
 			$default = true;
 
-			if ( ! array_key_exists( 'x-cocart-salt', $request->get_headers() ) ) {
+			if ( is_null( $request->get_header( 'x-cocart-salt' ) ) ) {
 				Logger::log( __( 'An attempt was made to override the price of an item but the salt key was not provided.', 'cart-rest-api-for-woocommerce' ), 'alert' );
 			} elseif ( ( maybe_cocart_require_salt() !== $request->get_header( 'x-cocart-salt' ) ) ) {
 				Logger::log( __( 'An attempt was made to override the price of an item but the salt key did not match.', 'cart-rest-api-for-woocommerce' ), 'alert' );
