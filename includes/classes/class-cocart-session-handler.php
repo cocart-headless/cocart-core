@@ -1377,6 +1377,41 @@ class Handler extends Session {
 	} // END get_cart_key_for_customer_id()
 
 	/**
+	 * Purpose of this function is to check if the session can be controlled
+	 * natively by the current user logged in.
+	 *
+	 * This is only required for WordPress origin, not the REST API.
+	 *
+	 * @access protected
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param string $cart_key Cart key to validate with.
+	 * @param int    $user_id  User ID to identify control of session.
+	 *
+	 * @return bool True|False
+	 */
+	protected function is_session_controlled_by_user( $cart_key = '', $user_id = 0 ) {
+		if ( empty( $cart_key ) ) {
+			return false;
+		}
+
+		if ( ! is_int( $user_id ) || $user_id === 0 ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$result = $wpdb->get_var( $wpdb->prepare( "SELECT cart_key FROM $this->_table WHERE cart_key = %s AND cart_customer = %d", $cart_key, $user_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( is_null( $result ) ) {
+			return false;
+		}
+
+		return true;
+	} // is_session_controlled_by_user()
+
+	/**
 	 * Updates the customer ID to the cart.
 	 *
 	 * @access protected
