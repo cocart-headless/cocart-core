@@ -1349,13 +1349,18 @@ class Handler extends Session {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
+	 * @param int $user_id     The user ID who is managing the customer.
 	 * @param int $customer_id The customer ID.
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
 	 * @return bool|string Returns the cart key or false if not found.
 	 */
-	protected function get_cart_key_for_customer_id( $customer_id = 0 ) {
+	protected function get_cart_key_for_customer_id( $user_id = 0, $customer_id = 0 ) {
+		if ( ! is_int( $user_id ) || $user_id === 0 ) {
+			return false;
+		}
+
 		if ( ! is_int( $customer_id ) || $customer_id === 0 ) {
 			return false;
 		}
@@ -1412,9 +1417,15 @@ class Handler extends Session {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
+	 * @param int $user_id The user ID.
+	 *
 	 * @return bool Returns true if user is a customer, otherwise false.
 	 */
 	public function is_user_customer( $user_id ) {
+		if ( ! is_int( $user_id ) || $user_id === 0 ) {
+			return false;
+		}
+
 		$current_user = get_userdata( $user_id );
 
 		if ( ! empty( $current_user ) ) {
