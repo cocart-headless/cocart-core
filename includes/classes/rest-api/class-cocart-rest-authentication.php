@@ -115,18 +115,30 @@ class Authentication {
 	 *
 	 * @access public
 	 *
-	 * @since   2.9.1 Introduced.
-	 * @version 3.0.0
+	 * @since 2.9.1 Introduced.
+	 * @since 4.0.0 Checks the user logged in is a customer to prevent persistent cart if not.
 	 *
-	 * @param WP_Error|null|bool $error Error data.
+	 * @uses Handler::is_user_customer()
+	 *
+	 * @param WP_Error|null|bool $error Error from another authentication handler, null if we should handle it, or another value if not.
 	 *
 	 * @return WP_Error|null|bool
 	 */
 	public function cocart_user_logged_in( $error ) {
 		global $current_user;
 
-		if ( $current_user->ID > 0 ) {
-			wc_update_user_last_active( $current_user->ID );
+		// Set the user last active timestamp to now.
+		wc_update_user_last_active( $current_user->ID );
+
+		// Initialize session handler if needed so settings save without error.
+		$server = new \CoCart\RestApi\Server();
+		$server->initialize_session();
+
+		/*
+		 * Only load saved cart if user is a customer. This prevents persistent cart
+		 * cache issue when managing a fresh session for the customer.
+		 */
+		if ( WC()->session->is_user_customer( $current_user->ID ) ) {
 			update_user_meta( $current_user->ID, '_woocommerce_load_saved_cart_after_login', 1 );
 		}
 
