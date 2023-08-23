@@ -1335,8 +1335,9 @@ class Handler extends Session {
 
 		$cart_key = $wpdb->get_var( $wpdb->prepare( "SELECT cart_key FROM $this->_table WHERE cart_user_id = %d ORDER BY cart_expiry DESC", $user_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
+		// If no previous cart exists then provide a new cart key.
 		if ( is_null( $cart_key ) ) {
-			return false;
+			$cart_key = $this->generate_key();
 		}
 
 		return $cart_key;
