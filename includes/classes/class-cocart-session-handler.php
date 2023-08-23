@@ -1324,7 +1324,7 @@ class Handler extends Session {
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
-	 * @return bool|string Returns the cart key or false if not found.
+	 * @return bool|string Returns the cart key or false if no user provided.
 	 */
 	public function get_cart_key_last_used_by_user_id( $user_id = 0 ) {
 		if ( ! is_int( $user_id ) || $user_id === 0 ) {
@@ -1343,7 +1343,7 @@ class Handler extends Session {
 	} // END get_cart_key_last_used_by_user_id()
 
 	/**
-	 * Get the cart key by looking up the customer ID.
+	 * Get the cart key by looking up the customer ID managed by user.
 	 *
 	 * @access protected
 	 *

@@ -23,6 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function cocart_allowed_image_mime_types() {
+	/**
+	 * Filter the image mime types users are allowed to upload via the API.
+	 *
+	 * @since 3.0.0 Introduced.
+	 *
+	 * @param array Array of image mime types.
+	 */
 	return apply_filters(
 		'cocart_allowed_image_mime_types',
 		array(
@@ -58,6 +65,13 @@ function cocart_upload_dir( $pathdata ) {
 		$pathdata['subdir'] = str_replace( $pathdata['subdir'], $subdir, $pathdata['subdir'] );
 	}
 
+	/**
+	 * Filters the upload directory.
+	 *
+	 * @since 3.0.0 Introduced.
+	 *
+	 * @param array $pathdata Array of paths.
+	 */
 	return apply_filters( 'cocart_upload_dir', $pathdata );
 } // END cocart_upload_dir()
 
@@ -314,8 +328,14 @@ function cocart_add_to_cart_message( $products, $show_qty = false, $return = fal
 	 * Filters the "Add to Cart" message without HTML.
 	 *
 	 * @since 3.0.0 Introduced.
+	 *
+	 * @param string    $added_text Add to cart message.
+	 * @param array|int $products   Product ID list or single product ID.
+	 * @param bool      $show_qty   Should qty's be shown.
 	 */
-	$message = apply_filters( 'cocart_add_to_cart_message_html', esc_html( $added_text ), $products, $show_qty );
+	$message = apply_filters( 'cocart_add_to_cart_message_html', $added_text, $products, $show_qty );
+
+	$message = esc_html( $message );
 
 	if ( $return ) {
 		return $message;

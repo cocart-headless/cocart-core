@@ -249,6 +249,8 @@ class CartCache {
 		/**
 		 * Filter which products that can be allowed to override the price if not all.
 		 *
+		 * @since 4.0.0 Introduced.
+		 *
 		 * @param bool
 		 * @param array           $cart_item Cart item.
 		 * @param WP_REST_Request $request Request used to generate the response.

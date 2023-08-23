@@ -194,6 +194,8 @@ function cocart_prepare_money_response( $amount, array $options = array() ) {
 	 *
 	 * If set to "True" the decimals will be forced to "Zero".
 	 *
+	 * @since 3.1.0 Introduced.
+	 *
 	 * @param bool $disable_decimals False by default.
 	 */
 	$disable_decimals = apply_filters( 'cocart_prepare_money_disable_decimals', false );
@@ -321,7 +323,15 @@ function cocart_format_attribute_data( $product ) {
 		} else {
 			$values = $attribute->get_options();
 
-			// If this is a custom option slug, get each options name.
+			/**
+			 * Filters the attribute option name.
+			 *
+			 * @since 3.1.0 Introduced.
+			 *
+			 * @param object     $attribute The attribute.
+			 * @param object     $values    Get each options name.
+			 * @param WC_Product $product   Product data.
+			 */
 			$values = apply_filters( 'cocart_attribute_option_name', $attribute, $values, $product );
 		}
 

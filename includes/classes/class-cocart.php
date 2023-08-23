@@ -90,8 +90,8 @@ final class Core {
 	 *
 	 * @static
 	 *
-	 * @since   1.0.0 Introduced.
-	 * @version 3.1.2
+	 * @since 1.0.0 Introduced.
+	 * @since 4.0.0 Hooked into `template_redirect` to determine if WordPress should be accessible.
 	 */
 	public static function init() {
 		self::setup_constants();

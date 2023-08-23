@@ -231,7 +231,7 @@ class Authentication {
 	 *
 	 * @since 3.0.0 Introduced.
 	 *
-	 * @param WP_Error|null|bool $error Error data.
+	 * @param WP_Error|null|bool $error Error from another authentication handler, null if we should handle it, or another value if not.
 	 *
 	 * @return WP_Error|null|bool
 	 */
@@ -257,16 +257,18 @@ class Authentication {
 	/**
 	 * Check for authentication error.
 	 *
+	 * CoCart does not require authentication.
+	 *
 	 * @access public
 	 *
 	 * @since 3.0.0 Introduced.
 	 *
-	 * @param WP_Error|null|bool $error Error data.
+	 * @param \WP_Error|mixed $error Error from another authentication handler, null if we should handle it, or another value if not.
 	 *
 	 * @return WP_Error|null|bool
 	 */
 	public function check_authentication_error( $error ) {
-		// Pass through other errors.
+		// Pass through errors from other authentication methods used before this one.
 		if ( ! empty( $error ) ) {
 			return $error;
 		}
@@ -806,6 +808,8 @@ class Authentication {
 	 * @access protected
 	 *
 	 * @static
+	 *
+	 * @since 4.0.0 Introduced.
 	 *
 	 * @param string $ip ipv4 or ipv6 ip string.
 	 *

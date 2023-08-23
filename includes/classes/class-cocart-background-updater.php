@@ -1,6 +1,6 @@
 <?php
 /**
- * Background Updater.
+ * Class: CoCart\Background Updater.
  *
  * @author  Sébastien Dumont
  * @package CoCart\Classes

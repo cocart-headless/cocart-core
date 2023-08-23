@@ -34,9 +34,8 @@ class ProductValidation {
 	 *
 	 * @access public
 	 *
-	 * @since   2.1.0 Introduced.
-	 * @since   2.7.2 Prevents variations that are not purchasable from being added to the cart.
-	 * @version 2.7.2
+	 * @since 2.1.0 Introduced.
+	 * @since 2.7.2 Prevents variations that are not purchasable from being added to the cart.
 	 *
 	 * @ignore Function ignored when parsed into Code Reference.
 	 */
@@ -51,7 +50,7 @@ class ProductValidation {
 		/**
 		 * Prevents variations that are not purchasable from being added to the cart.
 		 *
-		 * @since 2.7.2.
+		 * @since 2.7.2 Introduced.
 		 */
 		add_filter( 'cocart_add_to_cart_validation', array( $this, 'variation_not_purchasable' ), 10, 5 );
 
