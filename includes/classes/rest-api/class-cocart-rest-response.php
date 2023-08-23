@@ -82,13 +82,14 @@ class CoCart_Response {
 	 * @return WP_REST_Response The returned response.
 	 */
 	public static function get_response( $data, $namespace = '', $endpoint = '' ) {
-		if ( empty( $endpoint ) ) {
-			$endpoint = 'cart';
-		}
-
-		$endpoint = str_replace( '-', '_', $endpoint );
-
 		try {
+			if ( empty( $endpoint ) ) {
+				$endpoint = 'cart';
+			}
+
+			$raw_endpoint = $endpoint;
+			$endpoint     = str_replace( '-', '_', $endpoint );
+
 			/**
 			 * Filter decides if the responses return as default or
 			 * use the modified response which is filtered by the rest base.
