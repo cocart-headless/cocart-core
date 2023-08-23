@@ -522,6 +522,17 @@ class Authentication {
 				$origin = '';
 			}
 
+			/**
+			 * Filter allows you to change the allowed HTTP origin result.
+			 *
+			 * @since 2.5.1 Introduced.
+			 * @since 4.0.0 Added the `$origin_arg` parameter.
+			 *
+			 * @param string $origin Origin URL if allowed, empty string if not.
+			 * @param string $origin_arg Original origin string passed into is_allowed_http_origin function.
+			 */
+			$origin = apply_filters( 'cocart_allow_origin', $origin, $origin_arg );
+
 			$allow_headers = array(
 				'Authorization',
 				'X-Requested-With',
@@ -549,16 +560,6 @@ class Authentication {
 				'CoCart-API-Cart-Expiration',
 			);
 
-			/**
-			 * Filter allows you to change the allowed HTTP origin result.
-			 *
-			 * @since 2.5.1 Introduced.
-			 * @since 4.0.0 Added the `$origin_arg` parameter.
-			 *
-			 * @param string $origin Origin URL if allowed, empty string if not.
-			 * @param string $origin_arg Original origin string passed into is_allowed_http_origin function.
-			 */
-			$origin = apply_filters( 'cocart_allow_origin', $origin, $origin_arg );
 
 			header( 'Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE' );
 			header( 'Access-Control-Allow-Credentials: true' );
