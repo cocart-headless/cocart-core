@@ -141,7 +141,7 @@ class CoCart_Response {
 			$response->header( 'CoCart-Version', COCART_VERSION );
 
 			// Returns additional headers for the cart endpoint.
-			if ( 'cart' === $endpoint ) {
+			if ( strpos( $raw_endpoint, 'cart' ) !== false ) {
 				$cart_expiring   = WC()->session->get_cart_is_expiring();
 				$cart_expiration = WC()->session->get_carts_expiration();
 
