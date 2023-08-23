@@ -386,6 +386,11 @@ final class Core {
 			return;
 		}
 
+		// Check if WordPress is accessing the customizer.
+		if ( is_customize_preview() ) {
+			return;
+		}
+
 		$cocart_settings = get_option( 'cocart_settings', array() );
 
 		if ( empty( $cocart_settings ) ) {
