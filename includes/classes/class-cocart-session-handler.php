@@ -171,11 +171,21 @@ class Handler extends Session {
 			}
 		} else {
 			// New guest customer or recover cart session if no cookie.
-			$this->set_session_expiration();
 			$this->_cart_user_id = get_current_user_id();
 			$this->_customer_id  = get_current_user_id();
 			$this->_cart_key     = $this->_cart_user_id > 0 ? $this->get_cart_key_last_used_by_user_id( $this->_cart_user_id ) : $this->generate_key();
-			$this->_data         = $this->get_cart_data();
+
+			/*
+			 * If cart recovered is not found to be used for managing a cart for a customer on their behalf, i.e. POS
+			 * then we need a fresh cart session.
+			 */
+			if ( ! $this->is_session_controlled_by_user( $this->_cart_key, $this->_cart_user_id ) ) {
+				$this->_cart_key = $this->generate_key();
+			}
+
+			$this->set_session_expiration();
+
+			$this->_data = $this->get_cart_data();
 		}
 	} // END init_session_cookie()
 
