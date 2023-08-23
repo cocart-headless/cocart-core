@@ -285,7 +285,12 @@ class Authentication {
 			return $error;
 		}
 
-		return $this->get_error();
+		// If any other authentication error is logged then return it.
+		if ( is_wp_error( $this->get_error() ) ) {
+			return $this->get_error();
+		}
+
+		return true;
 	} // END check_authentication_error()
 
 	/**
