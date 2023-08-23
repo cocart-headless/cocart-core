@@ -469,7 +469,19 @@ class Authentication {
 	} // END allow_all_cors()
 
 	/**
-	 * Cross Origin headers.
+	/**
+	 * Is the request a preflight request? Checks the request method.
+	 *
+	 * @access protected
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @return boolean
+	 */
+	protected function is_preflight() {
+		return isset( $_SERVER['REQUEST_METHOD'], $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'], $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'], $_SERVER['HTTP_ORIGIN'] ) && 'OPTIONS' === $_SERVER['REQUEST_METHOD'];
+	} // END is_preflight()
+
 	 *
 	 * For security reasons, browsers restrict cross-origin HTTP requests initiated from scripts.
 	 * This overrides that by providing access should the request be for CoCart.
@@ -543,7 +555,6 @@ class Authentication {
 			 */
 			$origin = apply_filters( 'cocart_allow_origin', $origin, $origin_arg );
 
-			header( 'Access-Control-Allow-Origin: ' . $origin );
 			header( 'Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE' );
 			header( 'Access-Control-Allow-Credentials: true' );
 			header( 'Access-Control-Allow-Headers: ' . implode( ', ', $allow_headers ) );
@@ -551,6 +562,17 @@ class Authentication {
 			header( 'Access-Control-Max-Age: 600' ); // Cache the result of preflight requests (600 is the upper limit for Chromium).
 			header( 'X-Robots-Tag: noindex' );
 			header( 'X-Content-Type-Options: nosniff' );
+			// Allow preflight requests and any allowed origins. Preflight requests
+			// are allowed because we'll be unable to validate customer header at that point.
+			if ( $this->is_preflight() || is_allowed_http_origin( $origin ) ) {
+				header( 'Access-Control-Allow-Origin: ' . $origin );
+			}
+
+			// Exit early during preflight requests. This is so someone cannot access API data by sending an OPTIONS request
+			// with preflight headers and a _GET property to override the method.
+			if ( $this->is_preflight() ) {
+				exit;
+			}
 		}
 
 		return $served;
