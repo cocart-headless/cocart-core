@@ -60,7 +60,7 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 	/**
 	 * Update Item in Cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -102,7 +102,7 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				 */
 				$message = apply_filters( 'cocart_item_not_in_cart_message', $message, 'update' );
 
-				throw new CoCart_Data_Exception( 'cocart_item_not_in_cart', $message, 404 );
+				throw new \CoCart\DataException( 'cocart_item_not_in_cart', $message, 404 );
 			}
 
 			$_product = ! is_null( $current_data['data'] ) ? $current_data['data'] : null;
@@ -167,7 +167,7 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				 */
 				$message = apply_filters( 'cocart_can_not_increase_quantity_message', $message, $_product );
 
-				throw new CoCart_Data_Exception( 'cocart_can_not_increase_quantity', $message, 405 );
+				throw new \CoCart\DataException( 'cocart_can_not_increase_quantity', $message, 405 );
 			}
 
 			// Only update cart item quantity if passed validation.
@@ -203,7 +203,7 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 					 */
 					$message = apply_filters( 'cocart_can_not_update_item_message', $message );
 
-					throw new CoCart_Data_Exception( 'cocart_can_not_update_item', $message, 400 );
+					throw new \CoCart\DataException( 'cocart_can_not_update_item', $message, 400 );
 				}
 
 				$response = $this->get_cart_contents( $request );
@@ -259,7 +259,7 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 
 				return CoCart_Response::get_response( $response, $this->namespace, $this->rest_base );
 			}
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END update_item()

@@ -107,7 +107,7 @@ class CoCart_REST_Batch_Controller {
 	 * @see WP_REST_Server::serve_batch_request_v1
 	 * https://developer.wordpress.org/reference/classes/wp_rest_server/serve_batch_request_v1/
 	 *
-	 * @throws CoCart_Data_Exception On error.
+	 * @throws CoCart\DataException On error.
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
@@ -117,7 +117,7 @@ class CoCart_REST_Batch_Controller {
 		try {
 			foreach ( $request['requests'] as $args ) {
 				if ( ! stristr( $args['path'], 'cocart/v2' ) ) {
-					throw new \CoCart_Data_Exception( 'cocart_rest_invalid_path', __( 'Invalid path provided.', 'cart-rest-api-for-woocommerce' ), 400 );
+					throw new \CoCart\DataException( 'cocart_rest_invalid_path', __( 'Invalid path provided.', 'cart-rest-api-for-woocommerce' ), 400 );
 				}
 			}
 
@@ -164,7 +164,7 @@ class CoCart_REST_Batch_Controller {
 					$response['notices'] = $notices;
 				}
 			}
-		} catch ( \CoCart_Data_Exception $error ) {
+		} catch ( \CoCart\DataException $error ) {
 			$response = CoCart_Response::get_error_response( $error->getErrorCode(), $error->getMessage(), $error->getCode(), $error->getAdditionalData() );
 		} catch ( \Exception $error ) {
 			$response = \CoCart_Response::get_error_response( 'cocart_rest_unknown_server_error', $error->getMessage(), 500 );

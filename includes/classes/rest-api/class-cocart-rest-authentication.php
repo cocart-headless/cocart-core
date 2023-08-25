@@ -10,6 +10,7 @@
 
 namespace CoCart\RestApi;
 
+use CoCart\DataException;
 use CoCart\Utilities\RateLimits;
 use WC_Validation;
 
@@ -589,7 +590,7 @@ class Authentication {
 	/**
 	 * Check for permission to access API.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -634,7 +635,7 @@ class Authentication {
 					case 'get':
 						foreach ( $api_not_allowed as $route ) {
 							if ( preg_match( '!^/' . $prefix . $route . '(?:$|/)!', $path ) ) {
-								throw new CoCart_Data_Exception(
+								throw new DataException(
 									'cocart_rest_permission_error',
 									/* translators: 1: permission method, 2: api route */
 									sprintf(
@@ -653,7 +654,7 @@ class Authentication {
 					case 'delete':
 						foreach ( $api_not_allowed as $route ) {
 							if ( preg_match( '!^/' . $prefix . $route . '(?:$|/)!', $path ) ) {
-								throw new CoCart_Data_Exception(
+								throw new DataException(
 									'cocart_rest_permission_error',
 									/* translators: 1: permission method, 2: api route */
 									sprintf(
@@ -669,7 +670,7 @@ class Authentication {
 					case 'options':
 						foreach ( $api_not_allowed as $route ) {
 							if ( preg_match( '!^/' . $prefix . $route . '(?:$|/)!', $path ) ) {
-								throw new CoCart_Data_Exception(
+								throw new DataException(
 									'cocart_rest_permission_error',
 									/* translators: 1: permission method, 2: api route */
 									sprintf(
@@ -683,7 +684,7 @@ class Authentication {
 						}
 						break;
 					default:
-						throw new CoCart_Data_Exception(
+						throw new DataException(
 							'cocart_rest_permission_error',
 							/* translators: %s: api route */
 							sprintf(
@@ -698,7 +699,7 @@ class Authentication {
 
 			// Return previous result if nothing has changed.
 			return $result;
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END check_api_permissions()

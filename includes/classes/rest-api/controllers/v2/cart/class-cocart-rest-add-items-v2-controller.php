@@ -68,7 +68,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 	/**
 	 * Add other bundled or grouped products to Cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -201,7 +201,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 			}
 
 			return $items_added_to_cart;
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END add_items_to_cart()
@@ -209,7 +209,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 	/**
 	 * Handle adding grouped product to the cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -265,7 +265,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 				}
 
 				if ( ! $was_added_to_cart && ! $quantity_set ) {
-					throw new CoCart_Data_Exception( 'cocart_grouped_product_failed', __( 'Please choose the quantity of items you wish to add to your cart.', 'cart-rest-api-for-woocommerce' ), 404 );
+					throw new \CoCart\DataException( 'cocart_grouped_product_failed', __( 'Please choose the quantity of items you wish to add to your cart.', 'cart-rest-api-for-woocommerce' ), 404 );
 				} elseif ( $was_added_to_cart ) {
 					cocart_add_to_cart_message( $added_to_cart );
 
@@ -275,9 +275,9 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 					return $added_to_cart;
 				}
 			} else {
-				throw new CoCart_Data_Exception( 'cocart_grouped_product_empty', __( 'Please choose a product to add to your cart.', 'cart-rest-api-for-woocommerce' ), 404 );
+				throw new \CoCart\DataException( 'cocart_grouped_product_empty', __( 'Please choose a product to add to your cart.', 'cart-rest-api-for-woocommerce' ), 404 );
 			}
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END add_to_cart_handler_grouped()

@@ -66,7 +66,7 @@ class CoCart_Response {
 	/**
 	 * Returns either the default response of the API requested or a filtered response.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -127,7 +127,7 @@ class CoCart_Response {
 			foreach ( $endpoints as $route ) {
 				if ( $route !== $endpoint && empty( $data ) ) {
 					/* translators: %s: REST API URL */
-					throw new CoCart_Data_Exception( 'cocart_response_returned_empty', sprintf( __( 'Request returned nothing for "%s"! Please seek assistance.', 'cart-rest-api-for-woocommerce' ), rest_url( sprintf( '/%s/%s/', $namespace, $endpoint ) ) ) );
+					throw new CoCart\DataException( 'cocart_response_returned_empty', sprintf( __( 'Request returned nothing for "%s"! Please seek assistance.', 'cart-rest-api-for-woocommerce' ), rest_url( sprintf( '/%s/%s/', $namespace, $endpoint ) ) ) );
 				}
 			}
 
@@ -150,7 +150,7 @@ class CoCart_Response {
 			}
 
 			return $response;
-		} catch ( \CoCart_Data_Exception $e ) {
+		} catch ( CoCart\DataException $e ) {
 			$response = self::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		} catch ( \Exception $e ) {
 			$response = self::get_error_response( 'cocart_unknown_server_error', $e->getMessage(), 500 );

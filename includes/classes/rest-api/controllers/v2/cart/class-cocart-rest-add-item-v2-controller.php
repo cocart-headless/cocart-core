@@ -68,7 +68,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	/**
 	 * Add to Cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -241,7 +241,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 			}
 
 			return $item_added_to_cart;
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END add_to_cart()
@@ -321,7 +321,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	/**
 	 * Adds the item to the cart once passed validation.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -421,12 +421,12 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 					 */
 					$message = apply_filters( 'cocart_product_cannot_add_to_cart_message', $message, $product_data );
 
-					throw new CoCart_Data_Exception( 'cocart_cannot_add_to_cart', $message, 403 );
+					throw new \CoCart\DataException( 'cocart_cannot_add_to_cart', $message, 403 );
 				}
 			}
 
 			return $item_added;
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END add_item_to_cart()

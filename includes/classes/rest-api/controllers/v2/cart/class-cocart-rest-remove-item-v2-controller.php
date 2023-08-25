@@ -60,7 +60,7 @@ class CoCart_REST_Remove_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 	/**
 	 * Removes an Item in Cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -93,7 +93,7 @@ class CoCart_REST_Remove_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				 */
 				$message = apply_filters( 'cocart_no_items_in_cart_message', $message );
 
-				throw new CoCart_Data_Exception( 'cocart_no_items_in_cart', $message, 404 );
+				throw new \CoCart\DataException( 'cocart_no_items_in_cart', $message, 404 );
 			}
 
 			// Check item exists in cart before fetching the cart item data to update.
@@ -129,7 +129,7 @@ class CoCart_REST_Remove_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				 */
 				$message = apply_filters( 'cocart_item_removed_message', $message );
 
-				throw new CoCart_Data_Exception( 'cocart_item_not_in_cart', $message, 404 );
+				throw new \CoCart\DataException( 'cocart_item_not_in_cart', $message, 404 );
 			}
 
 			if ( $this->get_cart_instance()->remove_cart_item( $item_key ) ) {
@@ -169,9 +169,9 @@ class CoCart_REST_Remove_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				 */
 				$message = apply_filters( 'cocart_can_not_remove_item_message', $message );
 
-				throw new CoCart_Data_Exception( 'cocart_can_not_remove_item', $message, 403 );
+				throw new \CoCart\DataException( 'cocart_can_not_remove_item', $message, 403 );
 			}
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END remove_item()

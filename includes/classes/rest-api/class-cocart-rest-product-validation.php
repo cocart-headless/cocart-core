@@ -10,6 +10,7 @@
 
 namespace CoCart\RestApi;
 
+use CoCart\DataException;
 use CoCart\Logger;
 
 // Exit if accessed directly.
@@ -62,7 +63,7 @@ class ProductValidation {
 	/**
 	 * Error response for product types that are not allowed to be added to the cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -98,8 +99,8 @@ class ProductValidation {
 			 */
 			$message = apply_filters( 'cocart_cannot_add_product_type_to_cart_message', $message, $product_data );
 
-			throw new CoCart_Data_Exception( 'cocart_cannot_add_product_type_to_cart', $message, 403 );
-		} catch ( CoCart_Data_Exception $e ) {
+			throw new DataException( 'cocart_cannot_add_product_type_to_cart', $message, 403 );
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END product_not_allowed_to_add()

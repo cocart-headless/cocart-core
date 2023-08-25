@@ -57,7 +57,7 @@ class CoCart_REST_Remove_Items_v2_Controller extends CoCart_REST_Cart_v2_Control
 	/**
 	 * Removes all items in the cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -79,7 +79,7 @@ class CoCart_REST_Remove_Items_v2_Controller extends CoCart_REST_Cart_v2_Control
 			$this->get_cart_instance()->calculate_totals();
 
 			return CoCart_Response::get_response( array(), $this->namespace, $this->rest_base );
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END remove_items()

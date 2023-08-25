@@ -58,7 +58,7 @@ class CoCart_REST_Item_v2_Controller extends CoCart_REST_Cart_v2_Controller {
 	/**
 	 * View Item in Cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -81,11 +81,11 @@ class CoCart_REST_Item_v2_Controller extends CoCart_REST_Cart_v2_Controller {
 
 			// If item is not found, throw exception error.
 			if ( ! $item ) {
-				throw new CoCart_Data_Exception( 'cocart_item_not_found', __( 'Item specified was not found in cart.', 'cart-rest-api-for-woocommerce' ), 404 );
+				throw new \CoCart\DataException( 'cocart_item_not_found', __( 'Item specified was not found in cart.', 'cart-rest-api-for-woocommerce' ), 404 );
 			}
 
 			return CoCart_Response::get_response( $item, $this->namespace, $this->rest_base );
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END view_item()

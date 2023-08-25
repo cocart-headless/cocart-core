@@ -57,7 +57,7 @@ class CoCart_REST_Totals_v2_Controller extends CoCart_REST_Cart_v2_Controller {
 	/**
 	 * Returns all calculated totals.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -77,11 +77,11 @@ class CoCart_REST_Totals_v2_Controller extends CoCart_REST_Cart_v2_Controller {
 			if ( empty( $totals['total'] ) ) {
 				$message = esc_html__( 'This cart has no items.', 'cart-rest-api-for-woocommerce' );
 
-				throw new CoCart_Data_Exception( 'cocart_cart_totals_empty', $message, 404 );
+				throw new \CoCart\DataException( 'cocart_cart_totals_empty', $message, 404 );
 			}
 
 			return CoCart_Response::get_response( $totals, $this->namespace, $this->rest_base );
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END get_totals()

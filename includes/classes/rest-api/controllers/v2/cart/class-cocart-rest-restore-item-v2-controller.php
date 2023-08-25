@@ -60,7 +60,7 @@ class CoCart_REST_Restore_Item_v2_Controller extends CoCart_REST_Cart_v2_Control
 	/**
 	 * Restores an Item in Cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -106,7 +106,7 @@ class CoCart_REST_Restore_Item_v2_Controller extends CoCart_REST_Cart_v2_Control
 				 */
 				$message = apply_filters( 'cocart_item_restored_message', $message );
 
-				throw new CoCart_Data_Exception( 'cocart_item_restored_to_cart', $message, $response_code );
+				throw new \CoCart\DataException( 'cocart_item_restored_to_cart', $message, $response_code );
 			}
 
 			if ( $this->get_cart_instance()->restore_cart_item( $item_key ) ) {
@@ -153,9 +153,9 @@ class CoCart_REST_Restore_Item_v2_Controller extends CoCart_REST_Cart_v2_Control
 				 */
 				$message = apply_filters( 'cocart_can_not_restore_item_message', $message );
 
-				throw new CoCart_Data_Exception( 'cocart_can_not_restore_item', $message, 403 );
+				throw new \CoCart\DataException( 'cocart_can_not_restore_item', $message, 403 );
 			}
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END restore_item()

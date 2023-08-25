@@ -1,11 +1,14 @@
 <?php
 /**
- * Class: CoCart_Data_Exception class.
+ * Class: CoCart\DataException.
  *
  * @author  Sébastien Dumont
+ * @package CoCart\Classes
  * @since   3.0.0 Introduced.
  * @version 4.0.0
  */
+
+namespace CoCart;
 
 use CoCart\Logger;
 
@@ -20,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 3.0.0 Introduced.
  */
-class CoCart_Data_Exception extends Exception {
+class DataException extends \Exception {
 
 	/**
 	 * Sanitized error code.

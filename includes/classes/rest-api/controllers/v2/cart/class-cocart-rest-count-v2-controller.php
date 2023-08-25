@@ -65,7 +65,7 @@ class CoCart_REST_Count_Items_v2_Controller extends CoCart_REST_Cart_v2_Controll
 	/**
 	 * Get cart contents count.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -107,11 +107,11 @@ class CoCart_REST_Count_Items_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				 */
 				$message = apply_filters( 'cocart_no_items_in_cart_message', $message );
 
-				throw new CoCart_Data_Exception( 'cocart_no_items_in_cart', $message, 404 );
+				throw new \CoCart\DataException( 'cocart_no_items_in_cart', $message, 404 );
 			}
 
 			return CoCart_Response::get_response( $count, $this->namespace, $this->rest_base );
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END get_cart_contents_count()
