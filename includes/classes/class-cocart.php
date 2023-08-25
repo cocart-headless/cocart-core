@@ -244,7 +244,6 @@ final class Core {
 
 		// REST API functions.
 		include_once COCART_ABSPATH . 'includes/cocart-rest-functions.php';
-		include_once COCART_ABSPATH . 'includes/classes/class-cocart-rest.php';
 
 		// WP-CLI.
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
