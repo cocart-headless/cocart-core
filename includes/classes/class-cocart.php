@@ -233,6 +233,7 @@ final class Core {
 		include_once COCART_ABSPATH . 'includes/cocart-core-functions.php';
 		include_once COCART_ABSPATH . 'includes/cocart-deprecated-functions.php';
 		include_once COCART_ABSPATH . 'includes/cocart-formatting-functions.php';
+		include_once COCART_ABSPATH . 'includes/cocart-setting-functions.php';
 
 		// Core classes.
 		include_once COCART_ABSPATH . 'includes/classes/rest-api/class-cocart-rest-authentication.php';
