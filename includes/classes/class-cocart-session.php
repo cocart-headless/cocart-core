@@ -111,7 +111,7 @@ class LoadCart {
 	 * Unless specified not to override, the carts will merge the current cart
 	 * and the loaded cart items together.
 	 *
-	 * Uses "wc_nocache_headers()", "wc_add_notice()", "WC()->session->get()"
+	 * Uses "cocart_nocache_headers()", "wc_add_notice()", "WC()->session->get()"
 	 *
 	 * @see Logger::log()
 	 *
@@ -129,7 +129,7 @@ class LoadCart {
 			$override_cart   = true;  // Override the cart by default.
 			$notify_customer = false; // Don't notify the customer by default.
 
-			wc_nocache_headers();
+			cocart_nocache_headers();
 
 			$handler = new Handler();
 
