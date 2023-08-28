@@ -56,7 +56,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'add_items_to_cart' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => array( $this, 'has_api_permission' ),
 					'args'                => $this->get_collection_params(),
 				),
 				'allow_batch' => array( 'v1' => true ),

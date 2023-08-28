@@ -55,12 +55,53 @@ class CoCart_REST_Store_v2_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_store' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => array( $this, 'has_api_permission' ),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			),
 		);
 	} // register_routes()
+
+	/**
+	 * Check whether the access token is required before proceeding
+	 * with the request or allow unauthorized access.
+	 *
+	 * @throws CoCart\DataException Exception if invalid data is detected.
+	 *
+	 * @access public
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 *
+	 * @return true|WP_Error True if the request has write access, WP_Error object otherwise.
+	 */
+	public function has_api_permission( $request ) {
+		try {
+			$access_token         = cocart_get_setting( 'general', 'access_token' );
+			$require_access_token = cocart_get_setting( 'general', 'require_access_token' );
+
+			if ( $require_access_token === 'yes' && ! empty( $access_token ) ) {
+				$requested_token = $request->get_header( 'x-cocart-access-token' );
+
+				// Validate requested token.
+				if ( ! empty( $requested_token ) && ! wp_is_uuid( $requested_token ) ) {
+					throw new \CoCart\DataException( 'cocart_rest_invalid_token', __( 'Invalid token provided.', 'cart-rest-api-for-woocommerce' ), rest_authorization_required_code() );
+				}
+
+				// If token matches then proceed.
+				if ( $access_token == $requested_token ) {
+					return true;
+				} else {
+					throw new \CoCart\DataException( 'cocart_rest_permission_denied', __( 'Permission Denied.', 'cart-rest-api-for-woocommerce' ), rest_authorization_required_code() );
+				}
+			}
+		} catch ( \CoCart\DataException $e ) {
+			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
+		}
+
+		return true;
+	} // END has_api_permission()
 
 	/**
 	 * Retrieves the store index.

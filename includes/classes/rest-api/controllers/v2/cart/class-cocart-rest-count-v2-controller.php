@@ -54,7 +54,7 @@ class CoCart_REST_Count_Items_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_cart_contents_count' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => array( $this, 'has_api_permission' ),
 					'args'                => $this->get_collection_params(),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),

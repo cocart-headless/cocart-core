@@ -46,6 +46,27 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	protected $rest_base = 'cart';
 
 	/**
+	 * Access token.
+	 *
+	 * @var string
+	 */
+	protected $access_token = '';
+
+	/**
+	 * Require Access token.
+	 *
+	 * @var string
+	 */
+	protected $require_access_token = '';
+
+	/**
+	 * Requested token.
+	 *
+	 * @var string
+	 */
+	protected $requested_token = '';
+
+	/**
 	 * Register the routes for cart.
 	 *
 	 * @access public
@@ -61,13 +82,56 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_cart' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => array( $this, 'has_api_permission' ),
 					'args'                => $this->get_collection_params(),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			)
 		);
 	} // register_routes()
+
+	/**
+	 * Check whether the access token is required before proceeding
+	 * with the request or allow unauthorized access.
+	 *
+	 * @throws CoCart\DataException Exception if invalid data is detected.
+	 *
+	 * @access public
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 *
+	 * @return true|WP_Error True if the request has write access, WP_Error object otherwise.
+	 */
+	public function has_api_permission( $request ) {
+		try {
+			// Check if we already got the access token from a batch request otherwise get it from settings.
+			$this->access_token         = empty( $this->access_token ) ? cocart_get_setting( 'general', 'access_token' ) : $this->access_token;
+			$this->require_access_token = empty( $this->require_access_token ) ? cocart_get_setting( 'general', 'require_access_token' ) : $this->require_access_token;
+
+			if ( $this->require_access_token === 'yes' && ! empty( $this->access_token ) ) {
+				// Check if we already got the requested token from a batch request otherwise get requested token from header.
+				$this->requested_token = empty( $this->requested_token ) ? $request->get_header( 'x-cocart-access-token' ) : $this->requested_token;
+
+				// Validate requested token.
+				if ( ! empty( $this->requested_token ) && ! wp_is_uuid( $this->requested_token ) ) {
+					throw new \CoCart\DataException( 'cocart_rest_invalid_token', __( 'Invalid token provided.', 'cart-rest-api-for-woocommerce' ), rest_authorization_required_code() );
+				}
+
+				// If token matches then proceed.
+				if ( $this->access_token == $this->requested_token ) {
+					return true;
+				} else {
+					throw new \CoCart\DataException( 'cocart_rest_permission_denied', __( 'Permission Denied.', 'cart-rest-api-for-woocommerce' ), rest_authorization_required_code() );
+				}
+			}
+		} catch ( \CoCart\DataException $e ) {
+			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
+		}
+
+		return true;
+	} // END has_api_permission()
 
 	/**
 	 * Gets the cart instance so we only call it once in the API.
