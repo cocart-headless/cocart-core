@@ -10,7 +10,7 @@
 namespace CoCart\RestApi\Callbacks;
 
 use CoCart\Abstracts;
-use CoCart_Data_Exception;
+use DataException;
 use CoCart_Response;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -38,7 +38,7 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 	/**
 	 * Callback to update the cart.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -108,7 +108,7 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 			}
 
 			return true;
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END callback()

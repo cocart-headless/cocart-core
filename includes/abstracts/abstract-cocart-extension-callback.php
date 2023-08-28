@@ -9,7 +9,7 @@
 
 namespace CoCart\Abstracts;
 
-use CoCart_Data_Exception;
+use DataException;
 use CoCart_Response;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -41,7 +41,7 @@ abstract class CoCart_Cart_Extension_Callback {
 	/**
 	 * Runs the extension callback.
 	 *
-	 * @throws CoCart_Data_Exception Exception if invalid data is detected.
+	 * @throws DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
@@ -53,12 +53,12 @@ abstract class CoCart_Cart_Extension_Callback {
 	 */
 	public function callback( $request, $controller ) {
 		try {
-			throw new CoCart_Data_Exception( 'cocart_no_callback_found', sprintf(
+			throw new DataException( 'cocart_no_callback_found', sprintf(
 				/* translators: %s: Class name */
 				esc_html__( 'A "callback" function must be registered when extending class "%s"', 'cart-rest-api-for-woocommerce' ),
 				__CLASS__
 			), 400 );
-		} catch ( CoCart_Data_Exception $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END callback()
