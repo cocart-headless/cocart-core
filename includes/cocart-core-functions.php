@@ -366,3 +366,15 @@ function cocart_carts_source_other() {
 
 	return $results[0]['count'];
 } // END cocart_carts_source_other()
+
+/**
+ * Wrapper for nocache_headers which also disables page caching.
+ *
+ * @since 4.0.0 Introduced.
+ */
+function cocart_nocache_headers() {
+	cocart_maybe_define_constant( 'DONOTCACHEPAGE', true );
+	cocart_maybe_define_constant( 'DONOTCACHEOBJECT', true );
+	cocart_maybe_define_constant( 'DONOTCACHEDB', true );
+	nocache_headers();
+} // END cocart_nocache_headers()
