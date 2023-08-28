@@ -5,12 +5,13 @@
  * @author  Sébastien Dumont
  * @package CoCart\Callback
  * @since   3.1.0 Introduced.
+ * @version 4.0.0
  */
 
 namespace CoCart\RestApi\Callbacks;
 
 use CoCart\Abstracts;
-use DataException;
+use CoCart\DataException;
 use CoCart_Response;
 
 if ( ! defined( 'ABSPATH' ) ) {
