@@ -470,7 +470,7 @@ class Authentication {
 		// Remove the default cors server headers.
 		remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
 
-		// Adds new cors server headers.
+		// Sets CORS server headers.
 		add_filter( 'rest_pre_serve_request', array( $this, 'cors_headers' ), 0, 4 );
 	} // END allow_all_cors()
 
@@ -488,9 +488,17 @@ class Authentication {
 		return isset( $_SERVER['REQUEST_METHOD'], $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'], $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'], $_SERVER['HTTP_ORIGIN'] ) && 'OPTIONS' === $_SERVER['REQUEST_METHOD'];
 	} // END is_preflight()
 
+	/**
+	 * Set Cross Origin headers.
 	 *
 	 * For security reasons, browsers restrict cross-origin HTTP requests initiated from scripts.
 	 * This overrides that by providing access should the request be for CoCart.
+	 *
+	 * These checks prevent access to the API from non-allowed origins. By default, the WordPress REST API allows
+	 * access from any origin. Because some API routes return PII, we need to add our own CORS headers.
+	 *
+	 * Allowed origins can be changed using the WordPress `allowed_http_origins` or `allowed_http_origin` filters if
+	 * access needs to be granted to other domains.
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/get_http_origin/
 	 * @link https://developer.wordpress.org/reference/functions/get_allowed_http_origins/
