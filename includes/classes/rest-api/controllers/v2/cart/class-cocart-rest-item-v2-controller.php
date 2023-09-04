@@ -47,7 +47,7 @@ class CoCart_REST_Item_v2_Controller extends CoCart_REST_Cart_v2_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'view_item' ),
-					'permission_callback' => array( $this, 'has_api_permission' ),
+					'permission_callback' => array( 'CoCart\Utilities\APIPermission', 'has_api_permission' ),
 					'args'                => $this->get_collection_params(),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),

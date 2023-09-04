@@ -49,7 +49,7 @@ class CoCart_REST_Remove_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( $this, 'remove_item' ),
-					'permission_callback' => array( $this, 'has_api_permission' ),
+					'permission_callback' => array( 'CoCart\Utilities\APIPermission', 'has_api_permission' ),
 					'args'                => $this->get_collection_params(),
 				),
 				'allow_batch' => array( 'v1' => true ),
