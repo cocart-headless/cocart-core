@@ -59,6 +59,12 @@ class Fields {
 			case 'cross_sells':
 				$fields = array( 'currency', 'cross_sells', 'notices' );
 				break;
+			case 'quick_browse':
+				$fields = array( 'id', 'parent_id', 'name', 'type', 'permalink', 'short_description', 'featured', 'prices', 'images', 'external_url', 'add_to_cart' );
+				break;
+			case 'quick_view':
+				$fields = array( 'id', 'parent_id', 'name', 'type', 'permalink', 'short_description', 'featured', 'prices', 'images', 'attributes', 'default_attributes', 'variations', 'stock', 'external_url', 'add_to_cart' );
+				break;
 			default:
 				$fields = array();
 				break;
@@ -90,7 +96,7 @@ class Fields {
 		 * They may include additional fields added to the cart by
 		 * extending the schema from third-party plugins.
 		 */
-		$args   = self::get_fields_for_response( $request, $schema, $default_fields, $additional_fields = false );
+		$args   = self::get_fields_for_response( $request, $schema, $default_fields, $additional_fields );
 		$fields = wp_parse_args( $args, $default_fields );
 
 		/**
@@ -119,19 +125,16 @@ class Fields {
 	 * @param WP_REST_Request $request           The request object.
 	 * @param array           $schema            The public item schema data.
 	 * @param array           $default_fields    An array of fields preset as the default response.
-	 * @param bool            $additional_fields Include registered fields for posts?
+	 * @param array           $additional_fields An array of registered fields for posts, if any.
 	 *
 	 * @return string Fields to be included in the response.
 	 */
-	public static function get_fields_for_response( WP_REST_Request $request, $schema = array(), $default_fields = array(), $additional_fields = false ) {
+	public static function get_fields_for_response( WP_REST_Request $request, $schema = array(), $default_fields = array(), $additional_fields = array() ) {
 		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
 		$properties = empty( $default_fields ) ? $properties : $default_fields;
 
 		// Include registered fields?
-		if ( $additional_fields ) {
-			$rest_controller   = new WP_REST_Controller();
-			$additional_fields = $rest_controller->get_additional_fields( $schema['title'] );
-
+		if ( ! empty( $additional_fields ) ) {
 			foreach ( $additional_fields as $field_name => $field_options ) {
 				/*
 				* For back-compat, include any field with an empty schema
