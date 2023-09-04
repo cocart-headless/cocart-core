@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use CoCart\Session\Handler;
 use CoCart\RestApi\CartCache;
+use CoCart\Utilities\Fields;
 
 use \Automattic\WooCommerce\Checkout\Helpers\ReserveStock;
 
@@ -340,8 +341,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			return $cart_contents;
 		}
 
-		$fields         = $this->get_fields_for_request( $request );
-		$exclude_fields = $this->get_excluded_fields_for_response( $request );
+		$schema         = $this->get_public_item_schema();
+		$default_fields = Fields::get_response_from_fields( $request );
+		$fields         = Fields::get_fields_for_request( $request, $schema, $default_fields );
+		$exclude_fields = Fields::get_excluded_fields_for_response( $request, $schema );
 
 		// Cart response container.
 		$cart = array();
@@ -470,42 +473,6 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 		return $cart;
 	} // END return_cart_contents()
-
-	/**
-	 * Return either requested fields or a default set.
-	 *
-	 * @access protected
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param WP_REST_Request $request Request used to generate the response.
-	 *
-	 * @return array
-	 */
-	protected function get_fields_for_request( $request = array() ) {
-		// Returns the default fields for the response.
-		$defaults = $this->get_response_from_fields( $request );
-
-		/**
-		 * Parses additional fields on top of the default fields for the response.
-		 *
-		 * They may include additional fields added to the cart by
-		 * extending the schema from third-party plugins.
-		 */
-		$args   = $this->get_fields_for_response( $request, $defaults );
-		$fields = wp_parse_args( $args, $defaults );
-
-		/**
-		 * Filter allows you to set the fields for the request returning.
-		 *
-		 * @since 4.0.0 Introduced.
-		 *
-		 * @param array $fields Requested fields, if any.
-		 */
-		$fields = apply_filters( 'cocart_' . $this->rest_base . '_fields_for_request', $fields );
-
-		return $fields;
-	} // END get_fields_for_request()
 
 	/**
 	 * Validate the product ID or SKU ID.
@@ -1648,8 +1615,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		// Item container.
 		$item = array();
 
-		$fields         = $this->get_fields_for_request( $request );
-		$exclude_fields = $this->get_excluded_fields_for_response( $request );
+		$schema         = $this->get_public_item_schema();
+		$default_fields = Fields::get_response_from_fields( $request );
+		$fields         = Fields::get_fields_for_request( $request, $schema, $default_fields );
+		$exclude_fields = Fields::get_excluded_fields_for_response( $request, $schema );
 
 		if ( cocart_is_field_included( 'items.item_key', $fields, $exclude_fields ) ) {
 			$item['item_key'] = $item_key;
@@ -2631,182 +2600,6 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		$this->get_cart_instance()->calculate_shipping();
 		$this->get_cart_instance()->calculate_totals();
 	} // END calculate_totals()
-
-	/**
-	 * Returns an array of fields based on the configured response requested.
-	 *
-	 * @access public
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param WP_REST_Request $request Request used to generate the response.
-	 *
-	 * @return array
-	 */
-	public function get_response_from_fields( $request ) {
-		$config = ! empty( $request['response'] ) ? trim( $request['response'] ) : '';
-
-		switch ( $config ) {
-			case 'mini':
-				$fields = array( 'currency', 'items.item_key', 'items.title', 'items.price', 'items.quantity.value', 'items.featured_image', 'totals.subtotal' );
-				break;
-			case 'digital':
-				$fields = array( 'currency', 'customer.billing_address', 'items.item_key', 'items.id', 'items.name', 'items.title', 'items.price', 'items.quantity', 'items.totals', 'items.slug', 'items.meta.product_type', 'items.meta.sku', 'items.meta.variation', 'items.cart_item_data', 'items.featured_image', 'items.extensions', 'coupons', 'needs_payment', 'taxes', 'totals', 'notices' );
-				break;
-			case 'digital_fees':
-				$fields = array( 'currency', 'customer.billing_address', 'items.item_key', 'items.id', 'items.name', 'items.title', 'items.price', 'items.quantity', 'items.totals', 'items.slug', 'items.meta.product_type', 'items.meta.sku', 'items.variation', 'items.cart_item_data', 'items.featured_image', 'items.extensions', 'coupons', 'needs_payment', 'fees', 'taxes', 'totals', 'notices' );
-				break;
-			case 'shipping':
-				$fields = array( 'currency', 'customer', 'items', 'items_weight', 'coupons', 'needs_payment', 'needs_shipping', 'shipping', 'taxes', 'totals', 'notices' );
-				break;
-			case 'shipping_fees':
-				$fields = array( 'currency', 'customer', 'items', 'items_weight', 'coupons', 'needs_payment', 'needs_shipping', 'shipping', 'fees', 'taxes', 'totals', 'notices' );
-				break;
-			case 'removed_items':
-				$fields = array( 'currency', 'removed_items', 'notices' );
-				break;
-			case 'cross_sells':
-				$fields = array( 'currency', 'cross_sells', 'notices' );
-				break;
-			default:
-				$fields = array();
-				break;
-		}
-
-		return $fields;
-	} // END get_response_from_fields()
-
-	/**
-	 * Gets an array of fields to be included on the response.
-	 *
-	 * Included fields are based on item schema and `fields=` request argument.
-	 *
-	 * @access public
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param WP_REST_Request $request        Request used to generate the response.
-	 * @param array           $default_fields Passes an array of fields already provided for the default response.
-	 *
-	 * @return string Fields to be included in the response.
-	 */
-	public function get_fields_for_response( $request, $default_fields = array() ) {
-		$schema     = $this->get_public_item_schema();
-		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
-		$properties = array_unique( array_keys( $properties ) );
-
-		$fields = empty( $default_fields ) ? $properties : $default_fields;
-
-		if ( ! isset( $request['fields'] ) ) {
-			return $fields;
-		}
-
-		$requested_fields = wp_parse_list( $request['fields'] );
-
-		// Return all fields if no fields specified.
-		if ( 0 === count( $requested_fields ) ) {
-			return $fields;
-		}
-
-		/*
-		 * Requested fields that are not available from the default fields
-		 * will be added to the list of fields.
-		 */
-		if ( ! empty( $default_fields ) ) {
-			foreach( $requested_fields as $field ) {
-				if ( ! in_array( $field, $default_fields ) ) {
-					if ( cocart_is_field_included( $field, $requested_fields ) ) {
-						$fields[] = $field;
-					}
-				}
-			}
-		}
-
-		// Trim off outside whitespace from the comma delimited list.
-		$requested_fields = array_map( 'trim', $requested_fields );
-
-		// Return the list of all requested fields which appear in the schema.
-		return array_reduce(
-			$requested_fields,
-			static function( $response_fields, $field ) use ( $fields ) {
-				if ( in_array( $field, $fields, true ) ) {
-					$response_fields[] = $field;
-
-					return $response_fields;
-				}
-
-				// Check for nested fields if $field is not a direct match.
-				$nested_fields = explode( '.', $field );
-
-				// A nested field is included so long as its top-level property
-				// is present in the schema.
-				if ( in_array( $nested_fields[0], $fields, true ) ) {
-					$response_fields[] = $field;
-				}
-
-				return $response_fields;
-			},
-			array()
-		);
-	} // END get_fields_for_response()
-
-	/**
-	 * Gets an array of fields to be excluded on the response.
-	 *
-	 * Excluded fields are based on item schema and `excluded_fields=` request argument.
-	 *
-	 * @access public
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param WP_REST_Request $request Request used to generate the response.
-	 *
-	 * @return string Fields to be excluded in the response.
-	 */
-	public function get_excluded_fields_for_response( $request ) {
-		$schema     = $this->get_public_item_schema();
-		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
-
-		$fields = array_unique( array_keys( $properties ) );
-
-		if ( empty( $request['exclude_fields'] ) ) {
-			return array();
-		}
-
-		$requested_fields = wp_parse_list( $request['exclude_fields'] );
-
-		// Return all fields if no fields specified.
-		if ( 0 === count( $requested_fields ) ) {
-			return $fields;
-		}
-
-		// Trim off outside whitespace from the comma delimited list.
-		$requested_fields = array_map( 'trim', $requested_fields );
-
-		// Return the list of all requested fields which appear in the schema.
-		return array_reduce(
-			$requested_fields,
-			static function( $response_fields, $field ) use ( $fields ) {
-				if ( in_array( $field, $fields, true ) ) {
-					$response_fields[] = $field;
-
-					return $response_fields;
-				}
-
-				// Check for nested fields if $field is not a direct match.
-				$nested_fields = explode( '.', $field );
-
-				// A nested field is included so long as its top-level property
-				// is present in the schema.
-				if ( in_array( $nested_fields[0], $fields, true ) ) {
-					$response_fields[] = $field;
-				}
-
-				return $response_fields;
-			},
-			array()
-		);
-	} // END get_excluded_fields_for_response()
 
 	/**
 	 * Retrieves the cart items schema properties.
