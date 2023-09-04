@@ -1364,7 +1364,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
-	} // END get_product_for_cart()
+	} // END validate_product_for_cart()
 
 	/**
 	 * Validates item quantity and checks if sold individually.
@@ -2276,7 +2276,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	/**
 	 * Convert queued error notices into an exception.
 	 *
-	 * For example, Payment methods may add error notices during validating fields to prevent checkout.
+	 * Since we're not rendering notices at all, we need to convert them to exceptions.
+	 *
 	 * This method will find the first error message and thrown an exception instead. Discards notices once complete.
 	 *
 	 * @throws CoCart\DataException If an error notice is detected, Exception is thrown.
