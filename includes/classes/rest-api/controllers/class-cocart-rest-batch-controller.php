@@ -178,8 +178,12 @@ class CoCart_REST_Batch_Controller {
 	public function get_response( \WP_REST_Request $request ) {
 		try {
 			foreach ( $request['requests'] as $args ) {
-				if ( ! stristr( $args['path'], 'cocart/v2' ) ) {
-					throw new \CoCart\DataException( 'cocart_rest_invalid_path', __( 'Invalid path provided.', 'cart-rest-api-for-woocommerce' ), 400 );
+				// Check each path is requesting a CoCart route.
+				if ( preg_match( '/cocart\/v([2-9]|[1-9]\d+)/', $args['path'], $matches ) ) {
+					// If the request is not higher than version 1 then return invalid.
+					if ( $matches[1] > 1 ) {
+						throw new \CoCart\DataException( 'cocart_rest_invalid_path', __( 'Invalid path provided.', 'cart-rest-api-for-woocommerce' ), 400 );
+					}
 				}
 			}
 
@@ -191,7 +195,7 @@ class CoCart_REST_Batch_Controller {
 			// Check that we are only doing cart requests to return a singular cart response.
 			foreach ( $request['requests'] as $args ) {
 				// If path is not for cart then return response for batch as normal.
-				if ( ! stristr( $args['path'], 'cocart/v2/cart' ) ) {
+				if ( ! preg_match( '/cocart\/v([2-9]|[1-9]\d+)\/cart/', $args['path'], $matches ) ) {
 					$cart_requests = false;
 				}
 			}
