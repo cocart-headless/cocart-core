@@ -37,19 +37,19 @@ class CartFormatting {
 		add_filter( 'cocart_session', array( $this, 'remove_removed_items_parent_item_key' ), 0 );
 
 		// Format money values after giving 3rd party plugins or extensions a chance to manipulate them first.
-		add_filter( 'cocart_cart_item_price', array( $this, 'return_monetary_value' ), 99, 4 );
-		add_filter( 'cocart_cart_item_subtotal', array( $this, 'return_monetary_value' ), 99, 4 );
-		add_filter( 'cocart_cart_item_subtotal_tax', array( $this, 'return_monetary_value' ), 99, 4 );
-		add_filter( 'cocart_cart_item_total', array( $this, 'return_monetary_value' ), 99, 4 );
-		add_filter( 'cocart_cart_item_tax', array( $this, 'return_monetary_value' ), 99, 4 );
-		add_filter( 'cocart_cart_totals_taxes_total', array( $this, 'return_monetary_value' ), 99, 2 );
-		add_filter( 'cocart_cart_cross_item_price', array( $this, 'return_monetary_value' ), 99, 2 );
-		add_filter( 'cocart_cart_cross_item_regular_price', array( $this, 'return_monetary_value' ), 99, 2 );
-		add_filter( 'cocart_cart_cross_item_sale_price', array( $this, 'return_monetary_value' ), 99, 2 );
-		add_filter( 'cocart_cart_fee_amount', array( $this, 'convert_money_response' ), 99, 2 );
-		add_filter( 'cocart_cart_tax_line_amount', array( $this, 'convert_money_response' ), 99, 2 );
-		add_filter( 'cocart_cart_totals', array( $this, 'convert_totals_response' ), 99, 2 );
-		add_filter( 'cocart_session_totals', array( $this, 'convert_totals_response' ), 99, 2 );
+		add_filter( 'cocart_cart_item_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 4 );
+		add_filter( 'cocart_cart_item_subtotal', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 4 );
+		add_filter( 'cocart_cart_item_subtotal_tax', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 4 );
+		add_filter( 'cocart_cart_item_total', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 4 );
+		add_filter( 'cocart_cart_item_tax', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 4 );
+		add_filter( 'cocart_cart_totals_taxes_total', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
+		add_filter( 'cocart_cart_cross_item_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
+		add_filter( 'cocart_cart_cross_item_regular_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
+		add_filter( 'cocart_cart_cross_item_sale_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
+		add_filter( 'cocart_cart_fee_amount', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_money_response' ) , 99, 2 );
+		add_filter( 'cocart_cart_tax_line_amount', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_money_response' ) , 99, 2 );
+		add_filter( 'cocart_cart_totals', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_totals_response' ) , 99, 2 );
+		add_filter( 'cocart_session_totals', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_totals_response' ) , 99, 2 );
 
 		// Remove any empty cart item data objects.
 		add_filter( 'cocart_cart_item_data', array( $this, 'clean_empty_cart_item_data' ), 0 );
@@ -110,76 +110,11 @@ class CartFormatting {
 	} // END remove_removed_items_parent_item_key()
 
 	/**
-	 * Returns a monetary value formatted.
-	 *
-	 * @access public
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param float|string    $value     Money value before formatted.
-	 * @param array           $cart_item Cart item data.
-	 * @param string          $item_key  Item key of the item in the cart.
-	 * @param WP_REST_Request $request   Request used to generate the response.
-	 *
-	 * @return float|string Money value formatted as a float or string.
-	 */
-	public function return_monetary_value( $value, $cart_item, $item_key, $request ) {
-		return $this->convert_money_response( $value, $request );
-	} // END return_monetary_value()
-
-	/**
-	 * Formats money values after giving 3rd party plugins
-	 * or extensions to manipulate them first.
-	 *
-	 * @access public
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param float|string    $value   Money value before formatted.
-	 * @param WP_REST_Request $request Request used to generate the response.
-	 *
-	 * @return float|string Money value formatted.
-	 */
-	public function convert_money_response( $value, $request ) {
-		if ( ! empty( $request['prices'] ) && $request['prices'] === 'formatted' ) {
-			return cocart_price_no_html( $value );
-		} else {
-			return (float) cocart_prepare_money_response( $value );
-		}
-	} // END convert_money_response()
-
-	/**
-	 * Formats cart totals to return as a float or formatted.
-	 *
-	 * @access public
-	 *
-	 * @since 4.0.0 Introduced.
-	 *
-	 * @param array           $totals  Cart totals.
-	 * @param WP_REST_Request $request Request used to generate the response.
-	 *
-	 * @return array An array of formatted totals.
-	 */
-	public function convert_totals_response( $totals, $request ) {
-		$totals_converted = array();
-
-		foreach ( $totals as $key => $value ) {
-			if ( ! empty( $request['prices'] ) && $request['prices'] === 'formatted' ) {
-				$totals_converted[ $key ] = cocart_price_no_html( $value );
-			} else {
-				$totals_converted[ $key ] = (float) cocart_prepare_money_response( $value );
-			}
-		}
-
-		$totals = $totals_converted;
-
-		return $totals;
-	} // END convert_totals_response()
-
-	/**
 	 * Remove any empty cart item data objects.
 	 *
 	 * @access public
+	 *
+	 * @since 3.0.0 Introduced.
 	 *
 	 * @param array $cart_item_data Cart item data before.
 	 *
