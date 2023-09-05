@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Parses and formats a date for ISO8601/RFC3339.
  *
- * Requires WP 4.4 or later.
+ * Requires WordPress 4.4 or later.
  *
  * @link https://developer.wordpress.org/reference/functions/mysql_to_rfc3339/
  *
@@ -146,6 +146,50 @@ function cocart_price_no_html( $price, $args = array() ) {
 } // END cocart_price_no_html()
 
 /**
+ * Convert monetary values from WooCommerce to string based integers, using
+ * the smallest unit of a currency.
+ *
+ * @since 3.1.0 Introduced.
+ *
+ * @deprecated 4.0.0 Use `cocart_format_money()` instead.
+ *
+ * @see cocart_format_money()
+ *
+ * @param string|float $amount        Monetary amount with decimals.
+ * @param int          $decimals      Number of decimals the amount is formatted with.
+ * @param int          $rounding_mode Defaults to the PHP_ROUND_HALF_UP constant.
+ *
+ * @return string       The new amount.
+ */
+function cocart_prepare_money_response( $amount, $decimals = 2, $rounding_mode = PHP_ROUND_HALF_UP ) {
+	cocart_deprecated_function( 'cocart_prepare_money_response', '4.0', 'cocart_format_money' );
+
+	// If string, clean it first.
+	if ( is_string( $amount ) ) {
+		$amount = wc_format_decimal( html_entity_decode( wp_strip_all_tags( $amount ) ) );
+		$amount = (float) $amount;
+	}
+
+	/**
+	 * This filter allows you to disable the decimals.
+	 * If set to "True" the decimals will be set to "Zero".
+	 */
+	$disable_decimals = apply_filters( 'cocart_prepare_money_disable_decimals', false );
+
+	if ( $disable_decimals ) {
+		$decimals = 0;
+	}
+
+	return (string) intval(
+		round(
+			( (float) wc_format_decimal( $amount ) ) * ( 10 ** absint( $decimals ) ),
+			0,
+			absint( $rounding_mode )
+		)
+	);
+} // END cocart_prepare_money_response()
+
+/**
  * Convert monetary values from store settings to string based integers, using
  * the smallest unit of a currency.
  *
@@ -165,9 +209,6 @@ function cocart_format_money( $amount, array $options = array() ) {
 	);
 
 	if ( ! empty( $options ) ) {
-		// Backwards compatibility converting "int" values into an array since `$decimals` was dropped.
-		$options = ! is_array( $options ) ? array( 'decimals' => $options ) : $options;
-
 		$options = wp_parse_args( $options, $default_options );
 	} else {
 		$options = $default_options;
