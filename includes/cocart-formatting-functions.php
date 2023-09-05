@@ -152,12 +152,12 @@ function cocart_price_no_html( $price, $args = array() ) {
  * @since 3.1.0 Introduced.
  * @since 4.0.0 Dropped `$decimals` and `$rounding_mode` in favor of a new array parameter `$options`.
  *
- * @param mixed $value   Value to format.
+ * @param mixed $amount  The amount to format.
  * @param array $options Options that influence the formatting.
  *
  * @return mixed Formatted value.
  */
-function cocart_prepare_money_response( $amount, array $options = array() ) {
+function cocart_prepare_money_response( $amount, $options = array() ) {
 	$default_options = array(
 		'currency'      => get_woocommerce_currency(),
 		'decimals'      => wc_get_price_decimals(),
@@ -166,6 +166,9 @@ function cocart_prepare_money_response( $amount, array $options = array() ) {
 	);
 
 	if ( ! empty( $options ) ) {
+		// Backwards compatibility converting "int" values into an array since `$decimals` was dropped.
+		$options = ! is_array( $options ) ? array( 'decimals' => $options ) : $options;
+
 		$options = wp_parse_args( $options, $default_options );
 	} else {
 		$options = $default_options;
