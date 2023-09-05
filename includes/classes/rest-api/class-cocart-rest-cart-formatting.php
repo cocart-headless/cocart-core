@@ -46,10 +46,10 @@ class CartFormatting {
 		add_filter( 'cocart_cart_cross_item_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
 		add_filter( 'cocart_cart_cross_item_regular_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
 		add_filter( 'cocart_cart_cross_item_sale_price', array( 'CoCart\Utilities\MonetaryFormatting', 'return_monetary_value' ) , 99, 2 );
-		add_filter( 'cocart_cart_fee_amount', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_money_response' ) , 99, 2 );
-		add_filter( 'cocart_cart_tax_line_amount', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_money_response' ) , 99, 2 );
-		add_filter( 'cocart_cart_totals', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_totals_response' ) , 99, 2 );
-		add_filter( 'cocart_session_totals', array( 'CoCart\Utilities\MonetaryFormatting', 'convert_totals_response' ) , 99, 2 );
+		add_filter( 'cocart_cart_fee_amount', array( 'CoCart\Utilities\MonetaryFormatting', 'format_money' ) , 99, 2 );
+		add_filter( 'cocart_cart_tax_line_amount', array( 'CoCart\Utilities\MonetaryFormatting', 'format_money' ) , 99, 2 );
+		add_filter( 'cocart_cart_totals', array( 'CoCart\Utilities\MonetaryFormatting', 'format_totals' ) , 99, 2 );
+		add_filter( 'cocart_session_totals', array( 'CoCart\Utilities\MonetaryFormatting', 'format_totals' ) , 99, 2 );
 
 		// Remove any empty cart item data objects.
 		add_filter( 'cocart_cart_item_data', array( $this, 'clean_empty_cart_item_data' ), 0 );

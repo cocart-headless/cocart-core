@@ -40,12 +40,12 @@ class MonetaryFormatting {
 	 * @return float|string Money value formatted as a float or string.
 	 */
 	public static function return_monetary_value( $value, $cart_item, $item_key, $request ) {
-		return self::convert_money_response( $value, $request );
+		return self::format_money( $value, $request );
 	} // END return_monetary_value()
 
 	/**
 	 * Formats money values after giving 3rd party plugins
-	 * or extensions to manipulate them first.
+	 * or extensions a chance to manipulate them first.
 	 *
 	 * @access public
 	 *
@@ -58,13 +58,13 @@ class MonetaryFormatting {
 	 *
 	 * @return float|string Money value formatted.
 	 */
-	public static function convert_money_response( $value, $request ) {
+	public static function format_money( $value, $request ) {
 		if ( ! empty( $request['prices'] ) && $request['prices'] === 'formatted' ) {
 			return cocart_price_no_html( $value );
 		} else {
-			return (float) cocart_prepare_money_response( $value );
+			return (float) cocart_format_money( $value );
 		}
-	} // END convert_money_response()
+	} // END format_money()
 
 	/**
 	 * Formats cart totals to return as a float or formatted.
@@ -80,20 +80,20 @@ class MonetaryFormatting {
 	 *
 	 * @return array An array of formatted totals.
 	 */
-	public static function convert_totals_response( $totals, $request ) {
+	public static function format_totals( $totals, $request ) {
 		$totals_converted = array();
 
 		foreach ( $totals as $key => $value ) {
 			if ( ! empty( $request['prices'] ) && $request['prices'] === 'formatted' ) {
 				$totals_converted[ $key ] = cocart_price_no_html( $value );
 			} else {
-				$totals_converted[ $key ] = (float) cocart_prepare_money_response( $value );
+				$totals_converted[ $key ] = (float) cocart_format_money( $value );
 			}
 		}
 
 		$totals = $totals_converted;
 
 		return $totals;
-	} // END convert_totals_response()
+	} // END format_totals()
 
 } // END class

@@ -149,15 +149,14 @@ function cocart_price_no_html( $price, $args = array() ) {
  * Convert monetary values from store settings to string based integers, using
  * the smallest unit of a currency.
  *
- * @since 3.1.0 Introduced.
- * @since 4.0.0 Dropped `$decimals` and `$rounding_mode` in favor of a new array parameter `$options`.
+ * @since 4.0.0 Introduced.
  *
  * @param mixed $amount  The amount to format.
  * @param array $options Options that influence the formatting.
  *
  * @return mixed Formatted value.
  */
-function cocart_prepare_money_response( $amount, $options = array() ) {
+function cocart_format_money( $amount, array $options = array() ) {
 	$default_options = array(
 		'currency'      => get_woocommerce_currency(),
 		'decimals'      => wc_get_price_decimals(),
@@ -222,7 +221,7 @@ function cocart_prepare_money_response( $amount, $options = array() ) {
 	} else {
 		return (string) $formatted_value;
 	}
-} // END cocart_prepare_money_response()
+} // END cocart_format_money()
 
 /**
  * Notation to numbers.
