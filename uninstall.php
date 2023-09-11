@@ -21,12 +21,16 @@ wp_clear_scheduled_hook( 'cocart_cleanup_carts' );
 // Reschedule WooCommerce cleanup sessions event.
 wp_schedule_event( time() + ( 6 * HOUR_IN_SECONDS ), 'twicedaily', 'woocommerce_cleanup_sessions' );
 
+require_once dirname( __FILE__ ) . '/includes/cocart-setting-functions.php';
+
+$uninstall_data = cocart_get_setting( 'misc', 'uninstall_data' );
+
 /**
- * Only remove ALL plugin data and database table if COCART_REMOVE_ALL_DATA constant is
- * set to true in user's wp-config.php. This is to prevent data loss when deleting the
+ * Only remove ALL plugin data and database table if uninstall data is
+ * set via the CoCart settings page. This is to prevent data loss when deleting the
  * plugin from the backend and to ensure only the site owner can perform this action.
  */
-if ( defined( 'COCART_REMOVE_ALL_DATA' ) && true === COCART_REMOVE_ALL_DATA ) {
+if ( $uninstall_data === 'yes' ) {
 	// Drop Tables.
 	require_once dirname( __FILE__ ) . '/includes/classes/class-cocart-install.php';
 	CoCart\Install::drop_tables();
