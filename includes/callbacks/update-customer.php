@@ -47,6 +47,17 @@ class UpdateCustomer extends Abstracts\CoCart_Cart_Extension_Callback {
 		$items = isset( $request['quantity'] ) && is_array( $request['quantity'] ) ? wp_unslash( $request['quantity'] ) : array();
 
 		if ( $this->update_customer_on_cart( $request, $controller ) ) {
+			/**
+			 * Fires after the cart has updated via a callback,
+			 * but before cart totals are re-calculated.
+			 *
+			 * @since 4.0.0 Introduced.
+			 *
+			 * @param WP_REST_Request $request    The request object.
+			 * @param object          $controller The cart controller.
+			 */
+			do_action( 'cocart_updated_cart_before_totals', $request, $controller );
+
 			$controller->calculate_totals();
 
 			/**
