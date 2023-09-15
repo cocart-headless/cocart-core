@@ -105,7 +105,10 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 
 				$controller->calculate_totals();
 
-				wc_add_notice( __( 'Cart updated.', 'cart-rest-api-for-woocommerce' ), 'success' );
+				// Only returns success notice if there are no error notices.
+				if ( 0 === wc_notice_count( 'error' ) ) {
+					wc_add_notice( __( 'Cart updated.', 'cart-rest-api-for-woocommerce' ), 'success' );
+				}
 			}
 
 			return true;
