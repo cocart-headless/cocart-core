@@ -126,6 +126,17 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 
 				$controller->calculate_totals();
 
+				/**
+				 * Fires after the cart has updated via a callback and
+				 * the cart totals are re-calculated.
+				 *
+				 * @since 4.0.0 Introduced.
+				 *
+				 * @param WP_REST_Request $request    The request object.
+				 * @param object          $controller The cart controller.
+				 */
+				do_action( 'cocart_updated_cart_after_totals', $request, $controller );
+
 				// Only returns success notice if there are no error notices.
 				if ( 0 === wc_notice_count( 'error' ) ) {
 					wc_add_notice( __( 'Cart updated.', 'cart-rest-api-for-woocommerce' ), 'success' );
