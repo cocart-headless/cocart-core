@@ -109,7 +109,7 @@ class CoCart_REST_Batch_Controller {
 	 *
 	 * @throws CoCart\DataException On error.
 	 *
-	 * @param WP_REST_Request $request Request object.
+	 * @param WP_REST_Request $request The request object.
 	 *
 	 * @return WP_REST_Response
 	 */

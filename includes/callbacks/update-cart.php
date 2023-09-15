@@ -44,9 +44,9 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 	 * @access public
 	 *
 	 * @since 3.1.0 Introduced.
-	 * @since 4.0.0 Added the cart $controller as a parameter.
+	 * @since 4.0.0 Added the cart controller as a parameter.
 	 *
-	 * @param WP_REST_Request $request    Request used to generate the response.
+	 * @param WP_REST_Request $request    The request object.
 	 * @param object          $controller The cart controller.
 	 *
 	 * @return bool Returns true.

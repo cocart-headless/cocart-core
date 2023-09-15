@@ -72,7 +72,7 @@ class CoCart_REST_Store_v2_Controller {
 	 * @since 3.0.0 Introduced.
 	 * @since 4.0.0 Version and routes are only shown if "WP_DEBUG" is true.
 	 *
-	 * @param WP_REST_Request $request Request used to generate the response.
+	 * @param WP_REST_Request $request The request object.
 	 *
 	 * @return WP_REST_Response The API root index data.
 	 */

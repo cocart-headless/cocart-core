@@ -74,7 +74,7 @@ class CoCart_REST_Clear_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controlle
 	 * @since 1.0.0 Introduced.
 	 * @since 4.0.0 Updated cart key to use `get_cart_key()` instead of `get_customer_unique_id()`.
 	 *
-	 * @param WP_REST_Request $request Request used to generate the response.
+	 * @param WP_REST_Request $request The request object.
 	 *
 	 * @return WP_REST_Response
 	 */

@@ -71,7 +71,7 @@ class ProductValidation {
 	 * @version 3.0.0
 	 *
 	 * @param WC_Product      $product_data Passes the product data we are attempting to add to cart.
-	 * @param WP_REST_Request $request      Request used to generate the response.
+	 * @param WP_REST_Request $request      The request object.
 	 *
 	 * @return WP_Error
 	 */

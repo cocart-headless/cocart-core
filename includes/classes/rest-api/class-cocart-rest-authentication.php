@@ -511,7 +511,7 @@ class Authentication {
 	 *
 	 * @param bool             $served  Whether the request has already been served. Default false.
 	 * @param WP_HTTP_Response $result  Result to send to the client. Usually a WP_REST_Response.
-	 * @param WP_REST_Request  $request Request used to generate the response.
+	 * @param WP_REST_Request  $request The request object.
 	 * @param WP_REST_Server   $server  Server instance.
 	 *
 	 * @return bool
@@ -607,7 +607,7 @@ class Authentication {
 	 *
 	 * @param mixed           $result  Response to replace the requested version with.
 	 * @param WP_REST_Server  $server  Server instance.
-	 * @param WP_REST_Request $request Request used to generate the response.
+	 * @param WP_REST_Request $request The request object.
 	 *
 	 * @return mixed
 	 */
