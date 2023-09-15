@@ -3434,8 +3434,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @return array $params The query params.
 	 */
 	public function get_collection_params() {
-		$defaults = get_option( 'cocart_settings', array() );
-		$defaults = ! empty( $defaults[ 'cart' ] ) ? $defaults[ 'cart' ] : array();
+		$defaults = cocart_get_settings( 'cart' );
 
 		$params = array(
 			'cart_key' => array(
