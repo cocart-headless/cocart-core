@@ -25,12 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @uses cocart_deprecated_hook()
  *
  * @param string $tag         The name of the action hook.
- * @param array  $args        Array of additional function arguments to be passed to do_action().
  * @param string $version     The version of CoCart that deprecated the hook.
  * @param string $replacement The hook that should have been used.
  * @param string $message     A message regarding the change.
+ * @param array  $args        Array of additional function arguments to be passed to do_action().
  */
-function cocart_do_deprecated_action( $tag, $args, $version = '', $replacement = null, $message = null ) {
+function cocart_do_deprecated_action( $tag, $version = '', $replacement = null, $message = null, $args = array() ) {
 	if ( ! has_action( $tag ) ) {
 		return;
 	}
@@ -47,17 +47,17 @@ function cocart_do_deprecated_action( $tag, $args, $version = '', $replacement =
  * @uses cocart_deprecated_filter()
  *
  * @param string $tag         The name of the filter.
- * @param array  $args        Array of additional function arguments to be passed to do_action().
  * @param string $version     The version of CoCart that deprecated the filter.
  * @param string $replacement The filter that should have been used.
  * @param string $message     A message regarding the change.
+ * @param array  $args        Array of additional function arguments to be passed to do_action().
  */
-function cocart_do_deprecated_filter( $tag, $args, $version = '', $replacement = null, $message = null ) {
+function cocart_do_deprecated_filter( $tag, $version = '', $replacement = null, $message = null, $args = array() ) {
 	if ( ! has_filter( $tag ) ) {
 		return;
 	}
 
-	cocart_deprecated_filter( $tag, $version, $replacement, $message );
+	cocart_deprecated_filter( $tag, $args, $version, $replacement, $message );
 	apply_filters_ref_array( $tag, $args );
 } // END cocart_do_deprecated_filter()
 
