@@ -471,7 +471,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since 3.1.0 Added product object as parameter and validation for maximum quantity allowed to add to cart.
 	 *
 	 * @param int|float  $quantity The quantity to validate.
-	 * @param WC_Product $product  Product object.
+	 * @param WC_Product $product  The product object.
 	 *
 	 * @return int|float|\WP_Error
 	 */
@@ -488,7 +488,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @since 3.1.0  Added product object as parameter.
 			 *
 			 * @param int|float  Minimum quantity to validate with.
-			 * @param WC_Product Product object.
+			 * @param WC_Product The product object.
 			 */
 			$minimum_quantity = apply_filters( 'cocart_quantity_minimum_requirement', $product->get_min_purchase_quantity(), $product );
 
@@ -509,7 +509,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @since 3.1.0 Introduced.
 			 *
 			 * @param int|float  Maximum quantity to validate with.
-			 * @param WC_Product Product object.
+			 * @param WC_Product The product object.
 			 */
 			$maximum_quantity = apply_filters( 'cocart_quantity_maximum_allowed', $maximum_quantity, $product );
 
@@ -539,7 +539,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @param int        $variation_id ID of the variation.
 	 * @param array      $variation    Attribute values.
-	 * @param WC_Product $product      Product object.
+	 * @param WC_Product $product      The product object.
 	 *
 	 * @return array $variation_id ID of the variation and attribute values.
 	 */
@@ -627,7 +627,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @version 3.0.0
 	 *
 	 * @param array      $variation Submitted attributes.
-	 * @param WC_Product $product   Product object.
+	 * @param WC_Product $product   The product object.
 	 *
 	 * @return int $variation_id Matching variation ID.
 	 */
@@ -658,7 +658,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since   2.1.2 Introduced.
 	 * @version 3.0.0
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param WC_Product $product The product object.
 	 *
 	 * @return array $attributes Product attributes.
 	 */
@@ -779,7 +779,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * @since 1.0.0 Introduced.
 				 *
 				 * @param string     $message Message.
-				 * @param WC_Product $product Product object.
+				 * @param WC_Product $product The product object.
 				 */
 				$message = apply_filters( 'cocart_product_failed_validation_message', $message, $product );
 
@@ -1037,7 +1037,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @deprecated 4.0.0 Replaced with a global function `cocart_format_variation_data()`
 	 *
 	 * @param array      $variation_data Array of data from the cart.
-	 * @param WC_Product $product        Product object.
+	 * @param WC_Product $product        The product object.
 	 *
 	 * @return array Formatted variation data.
 	 */
@@ -1242,7 +1242,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access public
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param WC_Product $product The product object.
 	 *
 	 * @return WC_Product $product Returns a product object if purchasable.
 	 */
@@ -1256,7 +1256,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * Filters message about product that cannot be added to cart.
 				 *
 				 * @param string     $message Message.
-				 * @param WC_Product $product Product object.
+				 * @param WC_Product $product The product object.
 				 */
 				$message = apply_filters( 'cocart_product_cannot_be_added_message', $message, $product );
 
@@ -1279,7 +1279,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since   3.0.0 Introduced.
 	 * @version 3.1.0
 	 *
-	 * @param WC_Product $product      Product object.
+	 * @param WC_Product $product      The product object.
 	 * @param int|float  $quantity     The quantity to validate.
 	 * @param int        $product_id   The product ID.
 	 * @param int        $variation_id The variation ID.
@@ -1314,7 +1314,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					 * @since 3.0.0 Introduced.
 					 *
 					 * @param string     $message Message.
-					 * @param WC_Product $product Product object.
+					 * @param WC_Product $product The product object.
 					 */
 					$message = apply_filters( 'cocart_product_can_not_add_another_message', $message, $product );
 
@@ -1338,7 +1338,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since   2.1.0 Introduced.
 	 * @version 3.1.0
 	 *
-	 * @param WC_Product $product  Product object.
+	 * @param WC_Product $product  The product object.
 	 * @param int|float  $quantity Quantity of product to validate availability.
 	 */
 	public function validate_add_to_cart( $product, $quantity ) {
@@ -1359,7 +1359,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * @since 2.1.0 Introduced.
 				 *
 				 * @param string     $message Message.
-				 * @param WC_Product $product Product object.
+				 * @param WC_Product $product The product object.
 				 */
 				$message = apply_filters( 'cocart_product_is_out_of_stock_message', $message, $product );
 
@@ -1383,7 +1383,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * @since 3.1.0 Introduced.
 				 *
 				 * @param string     $message        Message.
-				 * @param WC_Product $product        Product object.
+				 * @param WC_Product $product        The product object.
 				 * @param int        $stock_quantity Quantity remaining.
 				 */
 				$message = apply_filters( 'cocart_product_not_enough_stock_message', $message, $product, $stock_quantity );
@@ -1439,7 +1439,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access public
 	 *
-	 * @param WC_Product $_product Product object.
+	 * @param WC_Product $_product The product object.
 	 *
 	 * @return string The product slug.
 	 */
@@ -1464,7 +1464,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 4.0.0 Introduced.
 	 *
-	 * @param WC_Product $product      Product object.
+	 * @param WC_Product $product      The product object.
 	 * @param array      $cart_item    The item in the cart containing the default cart item data.
 	 * @param string     $item_key     The item key generated based on the details of the item.
 	 * @param boolean    $removed_item Determines if the item in the cart is removed.
@@ -1523,7 +1523,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *
-	 * @param WC_Product      $_product     Product object.
+	 * @param WC_Product      $_product     The product object.
 	 * @param array           $cart_item    The item in the cart containing the default cart item data.
 	 * @param WP_REST_Request $request      Request used to generate the response.
 	 * @param boolean         $removed_item Determines if the item in the cart is removed.
@@ -1709,7 +1709,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @since 3.0.0 Introduced.
 			 * @since 4.0.0 Added `$request` (REST API request) as parameter.
 			 *
-			 * @param WC_Product      $_product  Product object.
+			 * @param WC_Product      $_product  The product object.
 			 * @param array           $cart_item The item in the cart containing the default cart item data.
 			 * @param string          $item_key  The item key currently looped.
 			 * @param WP_REST_Request $request   Request used to generate the response.
@@ -1732,7 +1732,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * @since 2.1.0 Introduced.
 				 *
 				 * @param string     $message  Message.
-				 * @param WC_Product $_product Product object.
+				 * @param WC_Product $_product The product object.
 				 */
 				$message = apply_filters( 'cocart_cart_item_removed_message', $message, $_product );
 
@@ -1751,7 +1751,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * @param array           $items     Array of items in the cart.
 				 * @param string          $item_key  The item key currently looped.
 				 * @param array           $cart_item The item in the cart containing the default cart item data.
-				 * @param WC_Product      $_product  Product object.
+				 * @param WC_Product      $_product  The product object.
 				 * @param WP_REST_Request $request   Request used to generate the response.
 				 */
 				$items = apply_filters( 'cocart_cart_items', $items, $item_key, $cart_item, $_product, $request );
@@ -2069,7 +2069,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @param int        $variation_id   ID of the variation being added to the cart.
 	 * @param array      $variation      Attribute values.
 	 * @param array      $cart_item_data Extra cart item data we want to pass into the item.
-	 * @param WC_Product $product_data   Product object.
+	 * @param WC_Product $product_data   The product object.
 	 *
 	 * @return string|boolean $item_key Cart item key or false if error.
 	 */
@@ -2432,7 +2432,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 3.0.4 Introduced.
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param WC_Product $product The product object.
 	 */
 	protected function throw_product_not_purchasable( $product ) {
 		$message = sprintf(
@@ -2445,7 +2445,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * Filters message about product unable to be purchased.
 		 *
 		 * @param string     $message Message.
-		 * @param WC_Product $product Product object.
+		 * @param WC_Product $product The product object.
 		 */
 		$message = apply_filters( 'cocart_product_cannot_be_purchased_message', $message, $product );
 
@@ -2459,7 +2459,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 3.1.0 Introduced.
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param WC_Product $product The product object.
 	 *
 	 * @return int Quantity of the product.
 	 */
@@ -2477,7 +2477,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 3.1.0 Introduced.
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param WC_Product $product The product object.
 	 *
 	 * @return int Remaining stock.
 	 */

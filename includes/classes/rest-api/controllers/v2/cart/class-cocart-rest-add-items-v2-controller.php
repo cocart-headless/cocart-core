@@ -115,7 +115,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 			 * @since 2.1.0 Introduced.
 			 *
 			 * @param string     $adding_to_cart_handler The product type to identify handler.
-			 * @param WC_Product $adding_to_cart         Product object.
+			 * @param WC_Product $adding_to_cart         The product object
 			 */
 			$add_items_to_cart_handler = apply_filters( 'cocart_add_items_to_cart_handler', $adding_to_cart->get_type(), $adding_to_cart );
 
@@ -129,7 +129,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 				 * @since 2.1.0 Introduced.
 				 *
 				 * @param string          $adding_to_cart_handler The product type to identify handler.
-				 * @param WC_Product      $adding_to_cart         Product object.
+				 * @param WC_Product      $adding_to_cart         The product object
 				 * @param WP_REST_Request $request                The request object.
 				 */
 				$items_added_to_cart = apply_filters( 'cocart_add_items_to_cart_handler_' . $add_items_to_cart_handler, $adding_to_cart, $request ); // Custom handler.
