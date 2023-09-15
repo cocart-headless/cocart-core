@@ -1409,8 +1409,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				}
 			}
 
-			cocart_do_deprecated_action( 'cocart_ok_to_add_response', '3.0.0', null, 'This filter is no longer used in the API.' );
-			cocart_do_deprecated_action( 'cocart_ok_to_add', '3.0.0', null, 'This filter is no longer used in the API.' );
+			cocart_do_deprecated_filter( 'cocart_ok_to_add_response', '3.0.0', null, 'This filter is no longer used in the API.' );
+			cocart_do_deprecated_filter( 'cocart_ok_to_add', '3.0.0', null, 'This filter is no longer used in the API.' );
 		} catch ( \CoCart\DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
