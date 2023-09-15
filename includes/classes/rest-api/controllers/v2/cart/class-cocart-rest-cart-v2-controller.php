@@ -1545,8 +1545,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * @param array           $cart_item The item in the cart containing the default cart item data.
 		 * @param WP_REST_Request $request   The request object.
 		 */
-		$quantity   = apply_filters( 'cocart_cart_item_quantity', $cart_item['quantity'], $item_key, $cart_item, $request );
-		$dimensions = $_product->get_dimensions( false );
+		$quantity = apply_filters( 'cocart_cart_item_quantity', $cart_item['quantity'], $item_key, $cart_item, $request );
 
 		// Item container.
 		$item = array();
@@ -1619,6 +1618,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$item['meta']['sku'] = $_product->get_sku();
 		}
 		if ( cocart_is_field_included( 'items.meta.dimensions', $fields, $exclude_fields ) ) {
+			$dimensions = $_product->get_dimensions( false );
+
 			$item['meta']['dimensions'] = ! empty( $dimensions ) ? array(
 				'length' => $dimensions['length'],
 				'width'  => $dimensions['width'],
