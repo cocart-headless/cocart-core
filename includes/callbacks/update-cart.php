@@ -107,10 +107,11 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 				 *
 				 * @since 3.1.0 Introduced.
 				 *
-				 * @param WP_REST_Request $request    Request used to generate the response.
-				 * @param object          $controller The cart controller.
+				 * @deprecated 4.0.0 Replaced with `cocart_updated_cart_after_totals` hook.
+				 *
+				 * @see cocart_updated_cart_before_totals
 				 */
-				do_action( 'cocart_cart_updated', $request, $controller );
+				cocart_do_deprecated_action( 'cocart_cart_updated', '4.0.0', 'cocart_updated_cart_before_totals', '', array( $request, $controller ) );
 
 				$controller->calculate_totals();
 
