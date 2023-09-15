@@ -75,7 +75,16 @@ class UpdateCart extends Abstracts\CoCart_Cart_Extension_Callback {
 						continue;
 					}
 
-					// Update cart validation.
+					/**
+					 * Filters the cart validation when updating the cart.
+					 *
+					 * @since 3.1.0 Introduced.
+					 *
+					 * @param bool              True by default.
+					 * @param string $item_key  Item key of the item updated.
+					 * @param array  $cart_item Cart item after updated.
+					 * @param int    $quantity  New quantity amount.
+					 */
 					$passed_validation = apply_filters( 'cocart_update_cart_validation', true, $item_key, $cart_item, $quantity );
 
 					// Is sold individually.
