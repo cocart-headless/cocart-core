@@ -331,7 +331,8 @@ class Handler extends Session {
 	 *
 	 * @access public
 	 *
-	 * @since      2.1.0 Introduced.
+	 * @since 2.1.0 Introduced.
+	 *
 	 * @deprecated 4.0.0 No replacement.
 	 *
 	 * @return bool
@@ -411,7 +412,7 @@ class Handler extends Session {
 	 * @access public
 	 *
 	 * @since      2.1.0 Introduced.
-	 * @deprecated 4.0.0 Uses cocart_setcookie() instead.
+	 * @deprecated 4.0.0 Use `cocart_setcookie()` instead.
 	 *
 	 * @param string  $name     Name of the cookie being set.
 	 * @param string  $value    Value of the cookie.
@@ -972,7 +973,7 @@ class Handler extends Session {
 	 * @access public
 	 *
 	 * @since      3.1.0 Introduced.
-	 * @deprecated 4.0.0 Uses cocart_get_timestamp() instead.
+	 * @deprecated 4.0.0 Use `cocart_get_timestamp()` instead.
 	 *
 	 * @param string $cart_key The cart key.
 	 *
@@ -996,7 +997,7 @@ class Handler extends Session {
 	 * @access public
 	 *
 	 * @since      3.1.0 Introduced.
-	 * @deprecated 4.0.0 Uses cocart_get_timestamp() instead.
+	 * @deprecated 4.0.0 Use `cocart_get_timestamp()` instead.
 	 *
 	 * @param string $cart_key The cart key.
 	 *
@@ -1020,7 +1021,7 @@ class Handler extends Session {
 	 * @access public
 	 *
 	 * @since      3.1.0 Introduced.
-	 * @deprecated 4.0.0 Uses cocart_get_source() instead.
+	 * @deprecated 4.0.0 Use `cocart_get_source()` instead.
 	 *
 	 * @param string $cart_key The cart key.
 	 *
@@ -1164,7 +1165,7 @@ class Handler extends Session {
 	 * @access protected
 	 *
 	 * @since 2.7.2 Introduced.
-	 * @since 4.0.0 Added $cart_key parameter.
+	 * @since 4.0.0 Added $cart_key as parameter.
 	 *
 	 * @param array  $data     The cart data to validate.
 	 * @param string $cart_key The cart key.
@@ -1193,6 +1194,7 @@ class Handler extends Session {
 	 * @access protected
 	 *
 	 * @since 2.7.2 Introduced.
+	 *
 	 * @deprecated 4.0.0 No longer used.
 	 *
 	 * @return boolean

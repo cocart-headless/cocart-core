@@ -33,10 +33,10 @@ function cocart_maybe_define_constant( $name, $value ) {
  *
  * @since 4.0.0 Introduced.
  *
- * @param string  $name Name of the cookie being set.
- * @param string  $value Value of the cookie.
- * @param integer $expire Expiry of the cookie.
- * @param bool    $secure Whether the cookie should be served only over https.
+ * @param string  $name     Name of the cookie being set.
+ * @param string  $value    Value of the cookie.
+ * @param integer $expire   Expiry of the cookie.
+ * @param bool    $secure   Whether the cookie should be served only over https.
  * @param bool    $httponly Whether the cookie is only accessible over HTTP, not scripting languages like JavaScript. @since 2.7.2.
  */
 function cocart_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false, $samesite = 'None' ) {
@@ -89,7 +89,7 @@ function cocart_setcookie( $name, $value, $expire = 0, $secure = false, $httponl
  * @since 4.0.0 Introduced.
  *
  * @param string $cart_key The cart key.
- * @param string $type The type of timestamp.
+ * @param string $type     The type of timestamp.
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *

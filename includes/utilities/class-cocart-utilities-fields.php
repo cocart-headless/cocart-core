@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Links class.
+ * Fields class.
  *
  * @since 4.0.0 Introduced.
  */
@@ -27,6 +27,8 @@ class Fields {
 	 * Returns an array of fields based on the configured response requested.
 	 *
 	 * @access public
+	 *
+	 * @static
 	 *
 	 * @since 4.0.0 Introduced.
 	 *

@@ -397,7 +397,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * Filters the cart contents before it is returned.
 		 *
 		 * @since 3.0.0 Introduced.
-		 * @since 4.0.0 Added `$request` (REST API request) and `$this` (cart controller class) as parameters.
+		 * @since 4.0.0 Added the request object and the cart controller as parameters.
 		 *
 		 * @deprecated 4.0.0 No longer use `$from_session` parameter.
 		 *
@@ -1519,7 +1519,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @access public
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @since 4.0.0 Added new parameter `$request` (REST API request) to allow more arguments to be passed.
+	 * @since 4.0.0 Added the request object as parameter.
 	 *
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *
@@ -1684,7 +1684,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @access public
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @since 4.0.0 Added new parameter `$request` (REST API request) to allow more arguments to be passed.
+	 * @since 4.0.0 Added the request object as parameter.
 	 *
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *
@@ -1707,7 +1707,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * Filter allows you to alter the item product data returned.
 			 *
 			 * @since 3.0.0 Introduced.
-			 * @since 4.0.0 Added `$request` (REST API request) as parameter.
+			 * @since 4.0.0 Added the request object as parameter.
 			 *
 			 * @param WC_Product      $_product  The product object.
 			 * @param array           $cart_item The item in the cart containing the default cart item data.
@@ -1746,7 +1746,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 * Filter allows additional data to be returned for a specific item in cart.
 				 *
 				 * @since 2.1.0 Introduced.
-				 * @since 4.0.0 Added `$request` (REST API request) as parameter.
+				 * @since 4.0.0 Added the request object as parameter.
 				 *
 				 * @param array           $items     Array of items in the cart.
 				 * @param string          $item_key  The item key currently looped.
@@ -1767,7 +1767,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @access public
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @since 4.0.0 Added new parameter `$request` (REST API request) to allow more arguments to be passed.
+	 * @since 4.0.0 Added the request object as parameter.
 	 *
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *

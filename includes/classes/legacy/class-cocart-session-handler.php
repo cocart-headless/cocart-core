@@ -270,7 +270,8 @@ class Handler extends Session {
 	 *
 	 * @access public
 	 *
-	 * @since      2.1.0 Introduced.
+	 * @since 2.1.0 Introduced.
+	 *
 	 * @deprecated 4.0.0 No replacement.
 	 *
 	 * @return bool
@@ -353,8 +354,8 @@ class Handler extends Session {
 	 * @access public
 	 *
 	 * @since      2.1.0 Introduced.
-	 * @deprecated 4.0.0 Uses cocart_setcookie() instead.
-	 * @version    4.0.0
+	 *
+	 * @deprecated 4.0.0 Use `cocart_setcookie()` instead.
 	 *
 	 * @param string  $name Name of the cookie being set.
 	 * @param string  $value Value of the cookie.
@@ -767,9 +768,9 @@ class Handler extends Session {
 	 *
 	 * @access public
 	 *
-	 * @since      2.1.2 Introduced.
-	 * @deprecated 4.0.0
-	 * @version    4.0.0
+	 * @since 2.1.2 Introduced.
+	 *
+	 * @deprecated 4.0.0 Use `CoCart\Session\Handler::maybe_update_nonce_user_logged_out()` instead.
 	 *
 	 * @param int $uid User ID.
 	 *
@@ -1073,7 +1074,8 @@ class Handler extends Session {
 	 *
 	 * @access protected
 	 *
-	 * @since      2.7.2 Introduced.
+	 * @since 2.7.2 Introduced.
+	 *
 	 * @deprecated 4.0.0 No longer used.
 	 *
 	 * @return boolean
