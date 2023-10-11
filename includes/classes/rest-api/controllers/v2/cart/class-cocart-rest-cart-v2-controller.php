@@ -2206,6 +2206,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 */
 	public static function convert_notices_to_exceptions( $error_code = 'unknown_server_error' ) {
 		if ( 0 === wc_notice_count( 'error' ) ) {
+			wc_clear_notices();
 			return;
 		}
 
