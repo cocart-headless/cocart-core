@@ -210,6 +210,29 @@ final class Core {
 	} // END get_path()
 
 	/**
+	 * Plugin version getter.
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @static
+	 *
+	 * @param boolean $base
+	 * @param string  $version
+	 *
+	 * @return string
+	 */
+	public static function plugin_version( $base = false, $version = '' ) {
+		$version = ! empty( $version ) ? $version : self::get_version();
+
+		if ( $base ) {
+			$version_parts = explode( '-', $version );
+			$version       = count( $version_parts ) > 1 ? $version_parts[ 0 ] : $version;
+		}
+
+		return $version;
+	} // END plugin_version()
+
+	/**
 	 * Includes required core files.
 	 *
 	 * @access public
