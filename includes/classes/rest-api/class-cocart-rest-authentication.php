@@ -82,6 +82,9 @@ class Authentication {
 	public function __construct() {
 		// Check that we are only authenticating for our API.
 		if ( $this->is_rest_api_request() ) {
+			// Prevent "Password Protected" plugin from interfering with CoCart.
+			remove_filter( 'rest_authentication_errors', array( 'Password_Protected', 'only_allow_logged_in_rest_access' ) );
+
 			// Authenticate user.
 			add_filter( 'determine_current_user', array( $this, 'authenticate' ), 16 );
 			add_filter( 'rest_authentication_errors', array( $this, 'authentication_fallback' ) );
