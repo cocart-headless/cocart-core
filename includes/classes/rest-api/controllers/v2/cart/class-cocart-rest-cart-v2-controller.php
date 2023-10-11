@@ -668,7 +668,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				$product = wc_get_product( $product->get_parent_id() );
 			}
 
-			if ( ! $product || 'trash' === $product->get_status() ) {
+			if ( ! $product || ! $product->exists() || 'trash' === $product->get_status() ) {
 				$message = __( 'This product cannot be added to the cart.', 'cart-rest-api-for-woocommerce' );
 
 				throw new \CoCart\DataException( 'cocart_cart_invalid_parent_product', $message, 404 );
@@ -1251,7 +1251,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	public function validate_product_for_cart( $product ) {
 		try {
 			// Check if the product exists before continuing.
-			if ( ! $product || 'trash' === $product->get_status() ) {
+			if ( ! $product || ! $product->exists() || 'trash' === $product->get_status() ) {
 				$message = __( 'This product cannot be added to the cart.', 'cart-rest-api-for-woocommerce' );
 
 				/**
