@@ -33,8 +33,8 @@ class MonetaryFormatting {
 	 * @since 4.0.0 Introduced.
 	 *
 	 * @param float|string    $value     Money value before formatted.
-	 * @param array           $cart_item Cart item data.
-	 * @param string          $item_key  Item key of the item in the cart.
+	 * @param array           $cart_item The cart item data.
+	 * @param string          $item_key  Generated ID based on the product information when added to the cart.
 	 * @param WP_REST_Request $request   The request object.
 	 *
 	 * @return float|string Money value formatted as a float or string.

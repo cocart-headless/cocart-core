@@ -979,7 +979,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @access protected
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @since 4.0.0 Added parameter `$request` (REST API request).
+	 * @since 4.0.0 Added the request object as parameter.
 	 *
 	 * @deprecated 4.0.0 Removed passing cart object as a parameter.
 	 *
@@ -1078,7 +1078,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @access public
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @since 4.0.0 Added `$request` (REST API request) as a parameter.
+	 * @since 4.0.0 Added the request object as parameter.
 	 *
 	 * @deprecated 4.0.0 Removed passing cart object as a parameter.
 	 *
@@ -1242,6 +1242,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access public
 	 *
+	 * @since 3.0.0 Introduced.
+	 *
 	 * @param WC_Product $product The product object.
 	 *
 	 * @return WC_Product $product Returns a product object if purchasable.
@@ -1254,6 +1256,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 				/**
 				 * Filters message about product that cannot be added to cart.
+				 *
+				 * @since 3.0.0 Introduced.
 				 *
 				 * @param string     $message Message.
 				 * @param WC_Product $product The product object.
@@ -1465,7 +1469,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since 4.0.0 Introduced.
 	 *
 	 * @param WC_Product $product      The product object.
-	 * @param array      $cart_item    The item in the cart containing the default cart item data.
+	 * @param array      $cart_item    The cart item data.
 	 * @param string     $item_key     The item key generated based on the details of the item.
 	 * @param boolean    $removed_item Determines if the item in the cart is removed.
 	 *
@@ -1480,7 +1484,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * @since 3.0.0 Introduced.
 		 *
 		 * @param int     $thumbnail_id Thumbnail ID of the image.
-		 * @param array   $cart_item    The item in the cart containing the default cart item data.
+		 * @param array   $cart_item    The cart item data.
 		 * @param string  $item_key     The item key generated based on the details of the item.
 		 * @param boolean $removed_item Determines if the item in the cart is removed.
 		 */
@@ -1491,6 +1495,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 *
 		 * @since 3.0.0 Introduced.
 		 *
+		 * @param string                Thumbnail size.
 		 * @param boolean $removed_item Determines if the item in the cart is removed.
 		 */
 		$thumbnail_size = apply_filters( 'cocart_item_thumbnail_size', 'woocommerce_thumbnail', $removed_item );
@@ -1502,10 +1507,13 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		/**
 		 * Filters the source of the product thumbnail of the item in cart.
 		 *
-		 * @since   2.1.0 Introduced.
-		 * @version 3.0.0
+		 * @since 2.1.0 Introduced.
+		 * @since 3.0.0 Added parameter `$removed_item`.
 		 *
-		 * @param string $thumbnail_src URL of the product thumbnail.
+		 * @param string  $thumbnail_src URL of the product thumbnail.
+		 * @param array   $cart_item     The cart item data.
+		 * @param string  $item_key      The item key generated based on the details of the item.
+		 * @param boolean $removed_item  Determines if the item in the cart is removed.
 		 */
 		$thumbnail_src = apply_filters( 'cocart_item_thumbnail_src', $thumbnail_src, $cart_item, $item_key, $removed_item );
 
@@ -1524,11 +1532,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @deprecated 4.0.0 No longer use `$show_thumb` as parameter.
 	 *
 	 * @param WC_Product      $_product     The product object.
-	 * @param array           $cart_item    The item in the cart containing the default cart item data.
+	 * @param array           $cart_item    The cart item data.
 	 * @param WP_REST_Request $request      The request object.
 	 * @param boolean         $removed_item Determines if the item in the cart is removed.
 	 *
-	 * @return array $item Full details of the item in the cart and it's purchase limits.
+	 * @return array $item Returns the item prepared for the cart response.
 	 */
 	public function get_item( $_product, $cart_item = array(), $request = array(), $removed_item = false ) {
 		$show_thumb = ! empty( $request['thumb'] ) ? $request['thumb'] : false;
@@ -1711,7 +1719,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @since 4.0.0 Added the request object as parameter.
 			 *
 			 * @param WC_Product      $_product  The product object.
-			 * @param array           $cart_item The item in the cart containing the default cart item data.
+			 * @param array           $cart_item The cart item data.
 			 * @param string          $item_key  The item key currently looped.
 			 * @param WP_REST_Request $request   The request object.
 			 */
@@ -1751,7 +1759,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 *
 				 * @param array           $items     Array of items in the cart.
 				 * @param string          $item_key  The item key currently looped.
-				 * @param array           $cart_item The item in the cart containing the default cart item data.
+				 * @param array           $cart_item The cart item data.
 				 * @param WC_Product      $_product  The product object.
 				 * @param WP_REST_Request $request   The request object.
 				 */
@@ -1887,7 +1895,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 * Filters the cross sell items.
 		 *
 		 * @since 3.0.0 Introduced.
-		 * @since 4.0.0 Added parameter `$request` (REST API request).
+		 * @since 4.0.0 Added the request object as parameter.
 		 *
 		 * @param WP_REST_Request $request The request object.
 		 */
@@ -2499,10 +2507,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @since 3.0.17 Introduced.
 	 *
-	 * @param string $item_key Item key of the item in the cart.
+	 * @param string $item_key Generated ID based on the product information when added to the cart.
 	 * @param string $status   Status of which we are checking the item key.
 	 *
-	 * @return string $item_key Item key of the item in the cart.
+	 * @return string $item_key Generated ID based on the product information when added to the cart.
 	 */
 	protected function throw_missing_item_key( $item_key, $status ) {
 		$item_key = (string) $item_key; // Make sure the item key is a string value.
