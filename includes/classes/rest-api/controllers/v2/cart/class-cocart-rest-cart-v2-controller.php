@@ -2033,7 +2033,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$notice_count += count( $notices );
 		}
 
-		$notices = $notice_count > 0 ? $this->print_notices() : array();
+		$notices = $notice_count > 0 ? $this->print_notices( $all_notices ) : array();
 
 		return $notices;
 	} // END maybe_return_notices()
@@ -2043,10 +2043,12 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access protected
 	 *
+	 * @param array $all_notices Return notices already fetched.
+	 *
 	 * @return array
 	 */
-	protected function print_notices() {
-		$all_notices  = WC()->session->get( 'wc_notices', array() );
+	protected function print_notices( $all_notices = array() ) {
+		$all_notices  = empty( $all_notices ) ? WC()->session->get( 'wc_notices', array() ) : $all_notices;
 		$notice_types = apply_filters( 'cocart_notice_types', array( 'error', 'success', 'notice', 'info' ) );
 		$notices      = array();
 
