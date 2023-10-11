@@ -49,7 +49,7 @@ class APIPermission {
 	 * Check whether the access token is required before proceeding
 	 * with the request or allow unauthorized access.
 	 *
-	 * @throws DataException Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *

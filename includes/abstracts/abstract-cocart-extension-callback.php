@@ -41,7 +41,7 @@ abstract class CoCart_Cart_Extension_Callback {
 	/**
 	 * Runs the extension callback.
 	 *
-	 * @throws DataException Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *

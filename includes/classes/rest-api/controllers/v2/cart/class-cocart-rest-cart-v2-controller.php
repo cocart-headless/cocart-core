@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use CoCart\Session\Handler;
 use CoCart\RestApi\CartCache;
+use CoCart\DataException;
 use CoCart\Utilities\Fields;
 
 use \Automattic\WooCommerce\Checkout\Helpers\ReserveStock;
@@ -90,7 +91,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		$cart = WC()->cart;
 
 		if ( ! $cart || ! $cart instanceof \WC_Cart ) {
-			throw new \CoCart\DataException( 'cocart_cart_error', __( 'Unable to retrieve cart.', 'cart-rest-api-for-woocommerce' ), 404 );
+			throw new DataException( 'cocart_cart_error', __( 'Unable to retrieve cart.', 'cart-rest-api-for-woocommerce' ), 404 );
 		}
 
 		return $cart;
@@ -189,17 +190,17 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		try {
 			// Checks that we are using CoCart session handler. If not detected, throw error response.
 			if ( ! WC()->session instanceof Handler ) {
-				throw new \CoCart\DataException( 'cocart_session_handler_not_found', __( 'CoCart session handler was not detected. Another plugin or third party code most likely is using `woocommerce_session_handler` filter to place another session handler in place.', 'cart-rest-api-for-woocommerce' ), 404 );
+				throw new DataException( 'cocart_session_handler_not_found', __( 'CoCart session handler was not detected. Another plugin or third party code most likely is using `woocommerce_session_handler` filter to place another session handler in place.', 'cart-rest-api-for-woocommerce' ), 404 );
 			}
 
 			// If requested cart returned empty then throw error.
 			if ( ! empty( WC()->session->get_requested_cart() ) && empty( WC()->session->get_cart( WC()->session->get_requested_cart() ) ) ) {
-				throw new \CoCart\DataException( 'cocart_cart_not_found', __( 'Cart not found. The provided cart key is not in session. Try adding an item first.', 'cart-rest-api-for-woocommerce' ), 404 );
+				throw new DataException( 'cocart_cart_not_found', __( 'Cart not found. The provided cart key is not in session. Try adding an item first.', 'cart-rest-api-for-woocommerce' ), 404 );
 			}
 
 			// If requested cart belongs to customer throw error.
 			if ( ! empty( WC()->session->get_requested_cart() ) && WC()->session->get_customer_id_from_cart_key( WC()->session->get_requested_cart() ) > 0 ) {
-				throw new \CoCart\DataException( 'cocart_cart_needs_authenticating', __( 'Cart belongs to customer. You need to authenticate as customer without cart key passed.', 'cart-rest-api-for-woocommerce' ), 403 );
+				throw new DataException( 'cocart_cart_needs_authenticating', __( 'Cart belongs to customer. You need to authenticate as customer without cart key passed.', 'cart-rest-api-for-woocommerce' ), 403 );
 			}
 
 			$show_raw      = ! empty( $request['raw'] ) ? $request['raw'] : false; // Internal parameter request.
@@ -251,7 +252,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$cart_contents = $this->return_cart_contents( $request, $cart_contents );
 
 			return CoCart_Response::get_response( $cart_contents, $this->namespace, $this->rest_base );
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END get_cart()
@@ -286,7 +287,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$cart_contents = $this->return_cart_contents( $request );
 
 			return CoCart_Response::get_response( $cart_contents, $this->namespace, $this->rest_base );
-		} catch ( \DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END create_cart()
@@ -475,27 +476,27 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				} else {
 					$message = __( 'Product does not exist! Check that you have submitted a product ID or SKU ID correctly for a product that exists.', 'cart-rest-api-for-woocommerce' );
 
-					throw new \CoCart\DataException( 'cocart_unknown_product_id', $message, 404 );
+					throw new DataException( 'cocart_unknown_product_id', $message, 404 );
 				}
 			}
 
 			if ( empty( $product_id ) ) {
 				$message = __( 'Product ID number is required!', 'cart-rest-api-for-woocommerce' );
 
-				throw new \CoCart\DataException( 'cocart_product_id_required', $message, 404 );
+				throw new DataException( 'cocart_product_id_required', $message, 404 );
 			}
 
 			if ( ! is_numeric( $product_id ) ) {
 				$message = __( 'Product ID must be numeric!', 'cart-rest-api-for-woocommerce' );
 
-				throw new \CoCart\DataException( 'cocart_product_id_not_numeric', $message, 405 );
+				throw new DataException( 'cocart_product_id_not_numeric', $message, 405 );
 			}
 
 			// Force product ID to be integer.
 			$product_id = (int) $product_id;
 
 			return $product_id;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_product_id()
@@ -518,7 +519,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	protected function validate_quantity( $quantity, WC_Product $product = null ) {
 		try {
 			if ( ! is_numeric( $quantity ) ) {
-				throw new \CoCart\DataException( 'cocart_quantity_not_numeric', __( 'Quantity must be integer or a float value!', 'cart-rest-api-for-woocommerce' ), 405 );
+				throw new DataException( 'cocart_quantity_not_numeric', __( 'Quantity must be integer or a float value!', 'cart-rest-api-for-woocommerce' ), 405 );
 			}
 
 			/**
@@ -533,7 +534,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$minimum_quantity = apply_filters( 'cocart_quantity_minimum_requirement', $product->get_min_purchase_quantity(), $product );
 
 			if ( 0 === $quantity || $quantity < $minimum_quantity ) {
-				throw new \CoCart\DataException( 'cocart_quantity_invalid_amount', sprintf(
+				throw new DataException( 'cocart_quantity_invalid_amount', sprintf(
 					/* translators: %s: Minimum quantity. */
 					__( 'Quantity must be a minimum of %s.', 'cart-rest-api-for-woocommerce' ),
 					$minimum_quantity
@@ -554,7 +555,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$maximum_quantity = apply_filters( 'cocart_quantity_maximum_allowed', $maximum_quantity, $product );
 
 			if ( ! empty( $maximum_quantity ) && $quantity > $maximum_quantity ) {
-				throw new \CoCart\DataException( 'cocart_quantity_invalid_amount', sprintf(
+				throw new DataException( 'cocart_quantity_invalid_amount', sprintf(
 					/* translators: %s: Maximum quantity. */
 					__( 'Quantity must be %s or lower.', 'cart-rest-api-for-woocommerce' ),
 					$maximum_quantity
@@ -562,7 +563,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			}
 
 			return wc_stock_amount( $quantity );
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_quantity()
@@ -625,7 +626,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					 */
 					$message = apply_filters( 'cocart_invalid_variation_data_message', $message, $attribute_label, $attribute->get_slugs() );
 
-					throw new \CoCart\DataException( 'cocart_invalid_variation_data', $message, 400 );
+					throw new DataException( 'cocart_invalid_variation_data', $message, 400 );
 				}
 
 				// If no attribute was posted, only error if the variation has an 'any' attribute which requires a value.
@@ -647,11 +648,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 */
 				$message = apply_filters( 'cocart_missing_variation_data_message', $message, count( $missing_attributes ), wc_format_list_of_items( $missing_attributes ) );
 
-				throw new \CoCart\DataException( 'cocart_missing_variation_data', $message, 400 );
+				throw new DataException( 'cocart_missing_variation_data', $message, 400 );
 			}
 
 			return $variation;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_variable_product()
@@ -679,11 +680,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			if ( empty( $variation_id ) ) {
 				$message = __( 'No matching variation found.', 'cart-rest-api-for-woocommerce' );
 
-				throw new \CoCart\DataException( 'cocart_no_variation_found', $message, 404 );
+				throw new DataException( 'cocart_no_variation_found', $message, 404 );
 			}
 
 			return $variation_id;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END get_variation_id_from_variation_data()
@@ -711,11 +712,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			if ( ! $product || ! $product->exists() || 'trash' === $product->get_status() ) {
 				$message = __( 'This product cannot be added to the cart.', 'cart-rest-api-for-woocommerce' );
 
-				throw new \CoCart\DataException( 'cocart_cart_invalid_parent_product', $message, 404 );
+				throw new DataException( 'cocart_cart_invalid_parent_product', $message, 404 );
 			}
 
 			return $product->get_attributes();
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END get_variable_product_attributes()
@@ -823,7 +824,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 */
 				$message = apply_filters( 'cocart_product_failed_validation_message', $message, $product );
 
-				throw new \CoCart\DataException( 'cocart_product_failed_validation', $message, 400 );
+				throw new DataException( 'cocart_product_failed_validation', $message, 400 );
 			}
 
 			/**
@@ -894,7 +895,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				'product_data' => $product,
 				'request'      => $request,
 			);
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_product()
@@ -925,11 +926,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				/* translators: 1: Quantity Requested, 2: Product Name 3: Quantity in Stock */
 				$message = sprintf( __( 'You cannot add a quantity of (%1$s) for "%2$s" to the cart because there is not enough stock. - only (%3$s remaining)!', 'cart-rest-api-for-woocommerce' ), $quantity, $current_product->get_name(), wc_format_stock_quantity_for_display( $current_product->get_stock_quantity(), $current_product ) );
 
-				throw new \CoCart\DataException( 'cocart_not_enough_in_stock', $message, 404 );
+				throw new DataException( 'cocart_not_enough_in_stock', $message, 404 );
 			}
 
 			return true;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END has_enough_stock()
@@ -1304,11 +1305,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 */
 				$message = apply_filters( 'cocart_product_cannot_be_added_message', $message, $product );
 
-				throw new \CoCart\DataException( 'cocart_invalid_product', $message, 400 );
+				throw new DataException( 'cocart_invalid_product', $message, 400 );
 			}
 
 			return $product;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_product_for_cart()
@@ -1361,12 +1362,12 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					 */
 					$message = apply_filters( 'cocart_product_can_not_add_another_message', $message, $product );
 
-					throw new \CoCart\DataException( 'cocart_product_sold_individually', $message, 403 );
+					throw new DataException( 'cocart_product_sold_individually', $message, 403 );
 				}
 			}
 
 			return $quantity;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_item_quantity()
@@ -1406,7 +1407,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 */
 				$message = apply_filters( 'cocart_product_is_out_of_stock_message', $message, $product );
 
-				throw new \CoCart\DataException( 'cocart_product_out_of_stock', $message, 404 );
+				throw new DataException( 'cocart_product_out_of_stock', $message, 404 );
 			}
 
 			if ( ! $product->has_enough_stock( $quantity ) ) {
@@ -1431,7 +1432,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 				 */
 				$message = apply_filters( 'cocart_product_not_enough_stock_message', $message, $product, $stock_quantity );
 
-				throw new \CoCart\DataException( 'cocart_not_enough_in_stock', $message, 404 );
+				throw new DataException( 'cocart_not_enough_in_stock', $message, 404 );
 			}
 
 			// Stock check - this time accounting for whats already in-cart and look up what's reserved.
@@ -1448,13 +1449,13 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 						wc_format_stock_quantity_for_display( $qty_in_cart, $product )
 					);
 
-					throw new \CoCart\DataException( 'cocart_not_enough_stock_remaining', $message, 404 );
+					throw new DataException( 'cocart_not_enough_stock_remaining', $message, 404 );
 				}
 			}
 
 			cocart_do_deprecated_filter( 'cocart_ok_to_add_response', '3.0.0', null, 'This filter is no longer used in the API.' );
 			cocart_do_deprecated_filter( 'cocart_ok_to_add', '3.0.0', null, 'This filter is no longer used in the API.' );
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END validate_add_to_cart()
@@ -2163,7 +2164,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			do_action( 'cocart_add_to_cart', $item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data );
 
 			return $item_key;
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END add_cart_item()
@@ -2257,7 +2258,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		wc_clear_notices();
 
 		foreach ( $error_notices as $error_notice ) {
-			throw new \CoCart\DataException( $error_code, wp_strip_all_tags( $error_notice['notice'] ), 400 );
+			throw new DataException( $error_code, wp_strip_all_tags( $error_notice['notice'] ), 400 );
 		}
 	} // END convert_notices_to_exceptions()
 
@@ -2500,7 +2501,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 */
 		$message = apply_filters( 'cocart_product_cannot_be_purchased_message', $message, $product );
 
-		throw new \CoCart\DataException( 'cocart_cannot_be_purchased', $message, 400 );
+		throw new DataException( 'cocart_cannot_be_purchased', $message, 400 );
 	} // END throw_product_not_purchasable()
 
 	/**
@@ -2569,7 +2570,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 */
 			$message = apply_filters( 'cocart_cart_item_key_required_message', $message, $status );
 
-			throw new \CoCart\DataException( 'cocart_cart_item_key_required', $message, 404 );
+			throw new DataException( 'cocart_cart_item_key_required', $message, 404 );
 		}
 
 		return $item_key;

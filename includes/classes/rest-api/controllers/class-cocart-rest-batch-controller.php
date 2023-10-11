@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use CoCart\DataException;
+
 /**
  * Controller for submitting multiple requests at once.
  *
@@ -107,7 +109,7 @@ class CoCart_REST_Batch_Controller {
 	 * @see WP_REST_Server::serve_batch_request_v1
 	 * https://developer.wordpress.org/reference/classes/wp_rest_server/serve_batch_request_v1/
 	 *
-	 * @throws CoCart\DataException On error.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -120,7 +122,7 @@ class CoCart_REST_Batch_Controller {
 				if ( preg_match( '/cocart\/v([2-9]|[1-9]\d+)/', $args['path'], $matches ) ) {
 					// If the request is not higher than version 1 then return invalid.
 					if ( $matches[1] > 1 ) {
-						throw new \CoCart\DataException( 'cocart_rest_invalid_path', __( 'Invalid path provided.', 'cart-rest-api-for-woocommerce' ), 400 );
+						throw new DataException( 'cocart_rest_invalid_path', __( 'Invalid path provided.', 'cart-rest-api-for-woocommerce' ), 400 );
 					}
 				}
 			}
@@ -168,8 +170,8 @@ class CoCart_REST_Batch_Controller {
 					$response['notices'] = $notices;
 				}
 			}
-		} catch ( \CoCart\DataException $error ) {
-			$response = CoCart_Response::get_error_response( $error->getErrorCode(), $error->getMessage(), $error->getCode(), $error->getAdditionalData() );
+		} catch ( DataException $error ) {
+			$response = \CoCart_Response::get_error_response( $error->getErrorCode(), $error->getMessage(), $error->getCode(), $error->getAdditionalData() );
 		} catch ( \Exception $error ) {
 			$response = \CoCart_Response::get_error_response( 'cocart_rest_unknown_server_error', $error->getMessage(), 500 );
 		}

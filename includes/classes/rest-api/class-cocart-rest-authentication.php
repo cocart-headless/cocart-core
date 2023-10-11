@@ -598,7 +598,7 @@ class Authentication {
 	/**
 	 * Check for permission to access API.
 	 *
-	 * @throws DataException Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *

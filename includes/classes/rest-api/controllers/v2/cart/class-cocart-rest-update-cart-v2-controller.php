@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use CoCart\DataException;
+
 /**
  * Controller for updating the cart via a registered callback (API v2).
  *
@@ -83,7 +85,7 @@ class CoCart_REST_Update_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controll
 
 		try {
 			if ( ! is_string( $namespace ) ) {
-				throw new \CoCart\DataException( 'cocart_update_cart_namespace_error', sprintf(
+				throw new DataException( 'cocart_update_cart_namespace_error', sprintf(
 					/* translators: %s: Available namespaces */
 					__( 'You must provide a namespace when extending the cart endpoint. Available namespaces: (%s)', 'cart-rest-api-for-woocommerce' ),
 					implode( ', ', array_keys( $callback_methods ) )
@@ -91,7 +93,7 @@ class CoCart_REST_Update_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controll
 			}
 
 			if ( ! array_key_exists( $namespace, $callback_methods ) ) {
-				throw new \CoCart\DataException( 'cocart_update_cart_no_namespace_error', sprintf(
+				throw new DataException( 'cocart_update_cart_no_namespace_error', sprintf(
 					/* translators: %s: Namespace */
 					__( 'There is no such namespace registered: %s.', 'cart-rest-api-for-woocommerce' ),
 					$namespace
@@ -99,13 +101,13 @@ class CoCart_REST_Update_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controll
 			}
 
 			if ( ! is_callable( array( $callback_methods[ $namespace ], 'callback' ) ) ) {
-				throw new \CoCart\DataException( 'cocart_update_cart_invalid_callback_error', sprintf(
+				throw new DataException( 'cocart_update_cart_invalid_callback_error', sprintf(
 					/* translators: %s: Namespace */
 					__( 'There is no valid callback registered for: %s.', 'cart-rest-api-for-woocommerce' ),
 					$namespace
 				), 404 );
 			}
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 
@@ -147,7 +149,7 @@ class CoCart_REST_Update_Cart_v2_Controller extends CoCart_REST_Cart_v2_Controll
 			$cart = $this->get_cart_contents( $request );
 
 			return CoCart_Response::get_response( $cart, $this->namespace, $this->rest_base );
-		} catch ( \CoCart\DataException $e ) {
+		} catch ( DataException $e ) {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END update_cart()

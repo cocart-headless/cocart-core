@@ -63,7 +63,7 @@ class ProductValidation {
 	/**
 	 * Error response for product types that are not allowed to be added to the cart.
 	 *
-	 * @throws DataException Exception if invalid data is detected.
+	 * @throws CoCart\DataException Exception if invalid data is detected.
 	 *
 	 * @access public
 	 *
