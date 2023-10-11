@@ -801,10 +801,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$item_data = (array) apply_filters( 'cocart_add_cart_item_data', $item_data, $product_id, $variation_id, $quantity, $product_type, $request );
 
 			// Generate an ID based on product ID, variation ID, variation data, and other cart item data.
-			$cart_id = $this->get_cart_instance()->generate_cart_id( $product_id, $variation_id, $variation, $item_data );
+			$item_key = $this->get_cart_instance()->generate_cart_id( $product_id, $variation_id, $variation, $item_data );
 
 			// Find the cart item key in the existing cart.
-			$item_key = $this->find_product_in_cart( $cart_id );
+			$item_key = $this->find_product_in_cart( $item_key );
 
 			/**
 			 * Filters the quantity for specified products.
@@ -820,7 +820,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			$quantity = apply_filters( 'cocart_add_to_cart_quantity', $quantity, $product_id, $variation_id, $variation, $item_data );
 
 			// Validates the item quantity.
-			$quantity = $this->validate_item_quantity( $product, $quantity, $product_id, $variation_id, $item_data, $cart_id, $item_key );
+			$quantity = $this->validate_item_quantity( $product, $quantity, $product_id, $variation_id, $item_data, $item_key );
 
 			/**
 			 * If product validation returned an error return error response.
@@ -1288,12 +1288,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @param int        $product_id   The product ID.
 	 * @param int        $variation_id The variation ID.
 	 * @param array      $item_data    The cart item data.
-	 * @param string     $cart_id      Generated ID based on item in cart.
-	 * @param string     $item_key     The item key of the cart item.
+	 * @param string     $item_key     Generated ID based on the product information when added to the cart.
 	 *
 	 * @return float $quantity The quantity returned.
 	 */
-	public function validate_item_quantity( $product, $quantity, $product_id, $variation_id, $item_data, $cart_id, $item_key ) {
+	public function validate_item_quantity( $product, $quantity, $product_id, $variation_id, $item_data, $item_key ) {
 		try {
 			// Force quantity to 1 if sold individually and check for existing item in cart.
 			if ( $product->is_sold_individually() ) {
@@ -1306,7 +1305,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 				$cart_contents = $this->get_cart();
 
-				$found_in_cart = apply_filters( 'cocart_add_to_cart_sold_individually_found_in_cart', $item_key && $cart_contents[ $item_key ]['quantity'] > 0, $product_id, $variation_id, $item_data, $cart_id );
+				$found_in_cart = apply_filters( 'cocart_add_to_cart_sold_individually_found_in_cart', $item_key && $cart_contents[ $item_key ]['quantity'] > 0, $product_id, $variation_id, $item_data, $item_key );
 
 				if ( $found_in_cart ) {
 					/* translators: %s: Product Name */
