@@ -65,6 +65,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					'permission_callback' => array( 'CoCart\Utilities\APIPermission', 'has_api_permission' ),
 					'args'                => $this->get_collection_params(),
 				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_cart' ),
+					'permission_callback' => array( 'CoCart\Utilities\APIPermission', 'has_api_permission' ),
+				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			)
 		);
@@ -250,6 +255,41 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
 		}
 	} // END get_cart()
+
+	/**
+	 * Create a cart.
+	 *
+	 * This won't create a cart in session until the first item is added to
+	 * the cart using the cart key provided. Once the cart key is provided in
+	 * the response, capture it.
+	 *
+	 * @throws CoCart\DataException Exception if invalid data is detected.
+	 *
+	 * @access public
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param WP_REST_Request $request The request object.
+	 *
+	 * @return WP_REST_Response $response The response data.
+	 */
+	public function create_cart( $request = array() ) {
+		try {
+			// Checks that we are using CoCart session handler. If not detected, throw error response.
+			if ( ! WC()->session instanceof Handler ) {
+				throw new DataException( 'cocart_session_handler_not_found', __( 'CoCart session handler was not detected. Another plugin or third party code most likely is using `woocommerce_session_handler` filter to place another session handler in place.', 'cart-rest-api-for-woocommerce' ), 404 );
+			}
+
+			// Only return the cart key field.
+			$request->set_param( 'fields', array('cart_key') );
+
+			$cart_contents = $this->return_cart_contents( $request );
+
+			return CoCart_Response::get_response( $cart_contents, $this->namespace, $this->rest_base );
+		} catch ( \DataException $e ) {
+			return CoCart_Response::get_error_response( $e->getErrorCode(), $e->getMessage(), $e->getCode(), $e->getAdditionalData() );
+		}
+	} // END create_cart()
 
 	/**
 	 * Return cart contents.
