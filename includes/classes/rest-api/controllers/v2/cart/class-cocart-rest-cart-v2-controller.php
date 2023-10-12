@@ -1728,11 +1728,17 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @access protected
 	 *
+	 * @since 3.0.0 Introduced.
+	 *
+	 * @deprecated 4.0.0 Replaced with function `prepare_cart_item_data()`
+	 *
 	 * @param array $cart_item Before cart item data is modified.
 	 *
 	 * @return array $cart_item Modified cart item data returned.
 	 */
 	protected function prepare_item( $cart_item ) {
+		cocart_deprecated_function( __FUNCTION__, '4.0', 'CoCart_REST_Cart_v2_Controller::prepare_cart_item_data' );
+
 		unset( $cart_item['key'] );
 		unset( $cart_item['product_id'] );
 		unset( $cart_item['variation_id'] );
@@ -1748,6 +1754,47 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 		return $cart_item;
 	} // END prepare_item()
+
+	/**
+	 * Removes all internal elements of an item that is not needed
+	 * and returns any remaining cart item data.
+	 *
+	 * @access protected
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param array  $cart_item The cart item data.
+	 * @param string $item_key  Generated ID based on the product information when added to the cart.
+	 *
+	 * @return array $cart_item_data Remaining cart item data.
+	 */
+	protected function prepare_cart_item_data( $cart_item, $item_key ) {
+		unset( $cart_item['key'] );
+		unset( $cart_item['product_id'] );
+		unset( $cart_item['variation_id'] );
+		unset( $cart_item['variation'] );
+		unset( $cart_item['quantity'] );
+		unset( $cart_item['data'] );
+		unset( $cart_item['data_hash'] );
+		unset( $cart_item['line_tax_data'] );
+		unset( $cart_item['line_subtotal'] );
+		unset( $cart_item['line_subtotal_tax'] );
+		unset( $cart_item['line_total'] );
+		unset( $cart_item['line_tax'] );
+
+		/**
+		 * Filter allows you to alter the remaining cart item data.
+		 *
+		 * @since 3.0.0 Introduced.
+		 *
+		 * @param array  $cart_item The cart item data.
+		 * @param string $item_key  Generated ID based on the product information when added to the cart.
+		 */
+		$cart_item_data = apply_filters( 'cocart_cart_item_data', $cart_item, $item_key );
+
+		return $cart_item_data;
+	} // END prepare_cart_item_data()
+
 	/**
 	 * Prepares the item for cart response.
 	 *
