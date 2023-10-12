@@ -36,7 +36,7 @@ class Fields {
 	 *
 	 * @return array
 	 */
-	public static function get_response_from_fields( WP_REST_Request $request ) {
+	public static function get_response_from_fields( $request ) {
 		$config = ! empty( $request['response'] ) ? trim( $request['response'] ) : '';
 
 		switch ( $config ) {
@@ -91,7 +91,7 @@ class Fields {
 	 *
 	 * @return array
 	 */
-	public static function get_fields_for_request( WP_REST_Request $request, $schema = array(), $default_fields = array(), $additional_fields = false ) {
+	public static function get_fields_for_request( $request, $schema = array(), $default_fields = array(), $additional_fields = false ) {
 		/**
 		 * Parses additional fields on top of the default fields for the response.
 		 *
@@ -131,7 +131,7 @@ class Fields {
 	 *
 	 * @return string Fields to be included in the response.
 	 */
-	public static function get_fields_for_response( WP_REST_Request $request, $schema = array(), $default_fields = array(), $additional_fields = array() ) {
+	public static function get_fields_for_response( $request, $schema = array(), $default_fields = array(), $additional_fields = array() ) {
 		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
 		$properties = empty( $default_fields ) ? $properties : $default_fields;
 
@@ -241,7 +241,7 @@ class Fields {
 	 *
 	 * @return string Fields to be excluded in the response.
 	 */
-	public static function get_excluded_fields_for_response( WP_REST_Request $request, $schema = array() ) {
+	public static function get_excluded_fields_for_response( $request, $schema = array() ) {
 		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
 
 		$fields = array_unique( array_keys( $properties ) );
