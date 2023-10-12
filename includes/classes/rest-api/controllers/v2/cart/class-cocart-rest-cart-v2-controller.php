@@ -861,7 +861,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			/**
 			 * Filters the quantity for specified products.
 			 *
-			 * @since 1.0.0 Introduced.
+			 * @since 2.1.2 Introduced.
 			 *
 			 * @param int|float $quantity     The original quantity of the item.
 			 * @param int       $product_id   The product ID.
