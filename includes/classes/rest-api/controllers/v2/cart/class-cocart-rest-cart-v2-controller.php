@@ -1590,152 +1590,12 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @return array $item Returns the item prepared for the cart response.
 	 */
 	public function get_item( $_product, $cart_item = array(), $request = array(), $removed_item = false ) {
-		$show_thumb = ! empty( $request['thumb'] ) ? $request['thumb'] : false;
-
-		$item_key = $cart_item['key'];
-
-		/**
-		 * Filter allows the item quantity to be changed.
-		 *
-		 * The quantity may need to show as a different quantity depending on the product added.
-		 *
-		 * @param float                      Original Quantity
-		 * @param string          $item_key  Item key of the item in the cart.
-		 * @param array           $cart_item The item in the cart containing the default cart item data.
-		 * @param WP_REST_Request $request   The request object.
-		 */
-		$quantity = apply_filters( 'cocart_cart_item_quantity', $cart_item['quantity'], $item_key, $cart_item, $request );
-
-		// Item container.
-		$item = array();
-
 		$schema         = $this->get_public_item_schema();
 		$default_fields = Fields::get_response_from_fields( $request );
 		$fields         = Fields::get_fields_for_request( $request, $schema, $default_fields );
 		$exclude_fields = Fields::get_excluded_fields_for_response( $request, $schema );
 
-		if ( cocart_is_field_included( 'items.item_key', $fields, $exclude_fields ) ) {
-			$item['item_key'] = $item_key;
-		}
-
-		if ( cocart_is_field_included( 'items.id', $fields, $exclude_fields ) ) {
-			$item['id'] = $_product->get_id();
-		}
-
-		if ( cocart_is_field_included( 'items.name', $fields, $exclude_fields ) ) {
-			$item['name'] = apply_filters( 'cocart_cart_item_name', $_product->get_name(), $_product, $cart_item, $item_key );
-		}
-
-		if ( cocart_is_field_included( 'items.title', $fields, $exclude_fields ) ) {
-			$item['title'] = apply_filters( 'cocart_cart_item_title', $_product->get_title(), $_product, $cart_item, $item_key );
-		}
-
-		if ( cocart_is_field_included( 'items.price', $fields, $exclude_fields ) ) {
-			$item['price'] = apply_filters( 'cocart_cart_item_price', $this->get_cart_instance()->get_product_price( $_product ), $cart_item, $item_key, $request );
-		}
-
-		if ( cocart_is_field_included( 'items.quantity', $fields, $exclude_fields ) ) {
-			$item['quantity'] = array();
-		}
-		if ( cocart_is_field_included( 'items.quantity.value', $fields, $exclude_fields ) ) {
-			$item['quantity']['value'] = (float) $quantity;
-		}
-		if ( cocart_is_field_included( 'items.quantity.min_purchase', $fields, $exclude_fields ) ) {
-			$item['quantity']['min_purchase'] = $_product->get_min_purchase_quantity();
-		}
-		if ( cocart_is_field_included( 'items.quantity.max_purchase', $fields, $exclude_fields ) ) {
-			$item['quantity']['max_purchase'] = $_product->get_max_purchase_quantity();
-		}
-
-		if ( cocart_is_field_included( 'items.totals', $fields, $exclude_fields ) ) {
-			$item['totals'] = array();
-		}
-		if ( cocart_is_field_included( 'items.totals.subtotal', $fields, $exclude_fields ) ) {
-			$item['totals']['subtotal'] = apply_filters( 'cocart_cart_item_subtotal', $cart_item['line_subtotal'], $cart_item, $item_key, $request );
-		}
-		if ( cocart_is_field_included( 'items.totals.subtotal_tax', $fields, $exclude_fields ) ) {
-			$item['totals']['subtotal_tax'] = apply_filters( 'cocart_cart_item_subtotal_tax', $cart_item['line_subtotal_tax'], $cart_item, $item_key, $request );
-		}
-		if ( cocart_is_field_included( 'items.totals.total', $fields, $exclude_fields ) ) {
-			$item['totals']['total'] = apply_filters( 'cocart_cart_item_total', $cart_item['line_total'], $cart_item, $item_key, $request );
-		}
-		if ( cocart_is_field_included( 'items.totals.tax', $fields, $exclude_fields ) ) {
-			$item['totals']['tax'] = apply_filters( 'cocart_cart_item_tax', $cart_item['line_tax'], $cart_item, $item_key, $request );
-		}
-
-		if ( cocart_is_field_included( 'items.slug', $fields, $exclude_fields ) ) {
-			$item['slug'] = $this->get_product_slug( $_product );
-		}
-
-		if ( cocart_is_field_included( 'items.meta', $fields, $exclude_fields ) ) {
-			$item['meta'] = array();
-		}
-		if ( cocart_is_field_included( 'items.meta.product_type', $fields, $exclude_fields ) ) {
-			$item['meta']['product_type'] = $_product->get_type();
-		}
-		if ( cocart_is_field_included( 'items.meta.sku', $fields, $exclude_fields ) ) {
-			$item['meta']['sku'] = $_product->get_sku();
-		}
-		if ( cocart_is_field_included( 'items.meta.dimensions', $fields, $exclude_fields ) ) {
-			$dimensions = $_product->get_dimensions( false );
-
-			$item['meta']['dimensions'] = ! empty( $dimensions ) ? array(
-				'length' => $dimensions['length'],
-				'width'  => $dimensions['width'],
-				'height' => $dimensions['height'],
-				'unit'   => get_option( 'woocommerce_dimension_unit' ),
-			) : array();
-		}
-		if ( cocart_is_field_included( 'items.meta.weight', $fields, $exclude_fields ) ) {
-			$item['meta']['weight'] = wc_get_weight( (float) $_product->get_weight() * (int) $cart_item['quantity'], get_option( 'woocommerce_weight_unit' ) );
-		}
-		if ( cocart_is_field_included( 'items.meta.variation', $fields, $exclude_fields ) ) {
-			$item['meta']['variation'] = isset( $cart_item['variation'] ) ? cocart_format_variation_data( $cart_item['variation'], $_product ) : array();
-		}
-
-		// Backorder notification.
-		if ( cocart_is_field_included( 'items.backorders', $fields, $exclude_fields ) ) {
-			$item['backorders'] = $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ? wp_kses_post( apply_filters( 'cocart_cart_item_backorder_notification', esc_html__( 'Available on backorder', 'cart-rest-api-for-woocommerce' ), $_product->get_id() ) ) : '';
-		}
-
-		if ( cocart_is_field_included( 'items.cart_item_data', $fields, $exclude_fields ) ) {
-			// Prepares the remaining cart item data.
-			$cart_item = $this->prepare_item( $cart_item );
-
-			/**
-			 * Filter allows you to alter the remaining cart item data.
-			 *
-			 * @since 3.0.0 Introduced.
-			 *
-			 * @param array  $cart_item Cart item data.
-			 * @param string $item_key  Item key of the item in the cart.
-			 */
-			$cart_item_data = apply_filters( 'cocart_cart_item_data', $cart_item, $item_key );
-
-			// Returns remaining cart item data.
-			$cart_item_data         = ! empty( $cart_item ) ? $cart_item_data : array();
-			$item['cart_item_data'] = $cart_item_data;
-		}
-
-		// If thumbnail is requested then add it to each item in cart.
-		if ( cocart_is_field_included( 'items.featured_image', $fields, $exclude_fields ) ) {
-			$item['featured_image'] = $show_thumb ? $this->get_item_thumbnail( $_product, $cart_item, $item_key, $removed_item ) : '';
-		}
-
-		if ( cocart_is_field_included( 'items.extensions', $fields, $exclude_fields ) ) {
-			/**
-			 * Filter allows plugin extensions to apply additional information.
-			 *
-			 * @since 4.0.0 Introduced.
-			 *
-			 * @param array           $cart_item Cart item data.
-			 * @param string          $item_key  Item key of the item in the cart.
-			 * @param WP_REST_Request $request   The request object.
-			 */
-			$item['extensions'] = apply_filters( 'cocart_cart_item_extensions', array(), $cart_item_data, $item_key, $request );
-		}
-
-		return $item;
+		return $this->prepare_item_for_cart( $request, $_product, $cart_item, $fields, $exclude_fields, $removed_item );
 	} // END get_item()
 
 	/**
@@ -1888,6 +1748,275 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 		return $cart_item;
 	} // END prepare_item()
+	/**
+	 * Prepares the item for cart response.
+	 *
+	 * @access public
+	 *
+	 * @since 4.0.0 Introduced.
+	 *
+	 * @param WP_REST_Request $request         The request object.
+	 * @param WC_Product      $_product        The product object.
+	 * @param array           $cart_item       The cart item data.
+	 * @param array           $fields          The requested fields to return.
+	 * @param array           $excluded_fields The requested fields to exclude from returning.
+	 * @param boolean         $removed_item    Is the item in the cart is removed?
+	 *
+	 * @return array $item Returns the item prepared for the cart response.
+	 */
+	public function prepare_item_for_cart( $request, $_product, $cart_item = array(), $fields = array(), $exclude_fields = array(), $removed_item = false ) {
+		$show_thumb = ! empty( $request['thumb'] ) ? $request['thumb'] : false;
+
+		// Item container.
+		$item = array();
+
+		// Get item key.
+		$item_key = $cart_item['key'];
+
+		if ( cocart_is_field_included( 'items.item_key', $fields, $exclude_fields ) ) {
+			$item['item_key'] = $item_key;
+		}
+
+		if ( cocart_is_field_included( 'items.id', $fields, $exclude_fields ) ) {
+			$item['id'] = $_product->get_id();
+		}
+
+		if ( cocart_is_field_included( 'items.name', $fields, $exclude_fields ) ) {
+			$name = $_product->get_name();
+
+			/**
+			 * Filter allows to change the item name.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $name      The product name.
+			 * @param WC_Product      $_product  The product object.
+			 * @param array           $cart_item The cart item data.
+			 * @param string          $item_key  The item key.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$name = apply_filters( 'cocart_cart_item_name', $name, $_product, $cart_item, $item_key, $request );
+
+			$item['name'] = $name;
+		}
+
+		if ( cocart_is_field_included( 'items.title', $fields, $exclude_fields ) ) {
+			$title = $_product->get_title();
+
+			/**
+			 * Filter allows the item title to be changed.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $title     The product title.
+			 * @param WC_Product      $_product  The product object.
+			 * @param array           $cart_item The cart item data.
+			 * @param string          $item_key  The item key.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$title = apply_filters( 'cocart_cart_item_title', $title, $_product, $cart_item, $item_key, $request );
+
+			$item['title'] = $title;
+		}
+
+		if ( cocart_is_field_included( 'items.price', $fields, $exclude_fields ) ) {
+			$price = $this->get_cart_instance()->get_product_price( $_product );
+
+			/**
+			 * Filter allows the item price to be changed.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $price     The product price.
+			 * @param array           $cart_item The cart item data.
+			 * @param string          $item_key  The item key.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$price = apply_filters( 'cocart_cart_item_price', $price, $cart_item, $item_key, $request );
+
+			$item['price'] = $price;
+		}
+
+		if ( cocart_is_field_included( 'items.quantity', $fields, $exclude_fields ) ) {
+			$item['quantity'] = array();
+		}
+		if ( cocart_is_field_included( 'items.quantity.value', $fields, $exclude_fields ) ) {
+			$quantity = $cart_item['quantity'];
+
+			/**
+			 * Filter allows the item quantity to be changed.
+			 *
+			 * Use it should you need to show a different quantity depending on the product added.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param float           $quantity  Original Quantity.
+			 * @param string          $item_key  Generated ID based on the product information when added to the cart.
+			 * @param array           $cart_item The cart item data.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$quantity = apply_filters( 'cocart_cart_item_quantity', $quantity, $item_key, $cart_item, $request );
+
+			$item['quantity']['value'] = (float) $quantity;
+		}
+		if ( cocart_is_field_included( 'items.quantity.min_purchase', $fields, $exclude_fields ) ) {
+			$item['quantity']['min_purchase'] = $_product->get_min_purchase_quantity();
+		}
+		if ( cocart_is_field_included( 'items.quantity.max_purchase', $fields, $exclude_fields ) ) {
+			$item['quantity']['max_purchase'] = $_product->get_max_purchase_quantity();
+		}
+
+		if ( cocart_is_field_included( 'items.totals', $fields, $exclude_fields ) ) {
+			$item['totals'] = array();
+		}
+		if ( cocart_is_field_included( 'items.totals.subtotal', $fields, $exclude_fields ) ) {
+			$subtotal = $cart_item['line_subtotal'];
+
+			/**
+			 * Filter allows the item subtotal to be changed.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $subtotal  Original Subtotal.
+			 * @param array           $cart_item The cart item data.
+			 * @param string          $item_key  Generated ID based on the product information when added to the cart.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$subtotal = apply_filters( 'cocart_cart_item_subtotal', $subtotal, $cart_item, $item_key, $request );
+
+			$item['totals']['subtotal'] = $subtotal;
+		}
+		if ( cocart_is_field_included( 'items.totals.subtotal_tax', $fields, $exclude_fields ) ) {
+			$subtotal_tax = $cart_item['line_subtotal_tax'];
+
+			/**
+			 * Filter allows the item subtotal tax to be changed.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $subtotal_tax Original Subtotal Tax.
+			 * @param array           $cart_item    The cart item data.
+			 * @param string          $item_key     Generated ID based on the product information when added to the cart.
+			 * @param WP_REST_Request $request      The request object.
+			 */
+			$subtotal_tax = apply_filters( 'cocart_cart_item_subtotal_tax', $subtotal_tax, $cart_item, $item_key, $request );
+
+			$item['totals']['subtotal_tax'] = $subtotal_tax;
+		}
+		if ( cocart_is_field_included( 'items.totals.total', $fields, $exclude_fields ) ) {
+			$total = $cart_item['line_total'];
+
+			/**
+			 * Filter allows the item total to be changed.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $total     Original Total.
+			 * @param array           $cart_item The cart item data.
+			 * @param string          $item_key  Generated ID based on the product information when added to the cart.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$total = apply_filters( 'cocart_cart_item_total', $total, $cart_item, $item_key, $request );
+
+			$item['totals']['total'] = $total;
+		}
+		if ( cocart_is_field_included( 'items.totals.tax', $fields, $exclude_fields ) ) {
+			$tax = $cart_item['line_tax'];
+
+			/**
+			 * Filter allows the item tax to be changed.
+			 *
+			 * @since 3.0.0 Introduced.
+			 * @since 4.0.0 Added the request object as parameter.
+			 *
+			 * @param string          $total     Original Tax.
+			 * @param array           $cart_item The cart item data.
+			 * @param string          $item_key  Generated ID based on the product information when added to the cart.
+			 * @param WP_REST_Request $request   The request object.
+			 */
+			$tax = apply_filters( 'cocart_cart_item_tax', $tax, $cart_item, $item_key, $request );
+
+			$item['totals']['tax'] = $tax;
+		}
+
+		if ( cocart_is_field_included( 'items.slug', $fields, $exclude_fields ) ) {
+			$item['slug'] = $this->get_product_slug( $_product );
+		}
+
+		if ( cocart_is_field_included( 'items.meta', $fields, $exclude_fields ) ) {
+			$item['meta'] = array();
+		}
+		if ( cocart_is_field_included( 'items.meta.product_type', $fields, $exclude_fields ) ) {
+			$item['meta']['product_type'] = $_product->get_type();
+		}
+		if ( cocart_is_field_included( 'items.meta.sku', $fields, $exclude_fields ) ) {
+			$item['meta']['sku'] = $_product->get_sku();
+		}
+		if ( cocart_is_field_included( 'items.meta.dimensions', $fields, $exclude_fields ) ) {
+			$dimensions = $_product->get_dimensions( false );
+
+			$item['meta']['dimensions'] = ! empty( $dimensions ) ? array(
+				'length' => $dimensions['length'],
+				'width'  => $dimensions['width'],
+				'height' => $dimensions['height'],
+				'unit'   => get_option( 'woocommerce_dimension_unit' ),
+			) : array();
+		}
+		if ( cocart_is_field_included( 'items.meta.weight', $fields, $exclude_fields ) ) {
+			$item['meta']['weight'] = wc_get_weight( (float) $_product->get_weight() * (int) $cart_item['quantity'], get_option( 'woocommerce_weight_unit' ) );
+		}
+		if ( cocart_is_field_included( 'items.meta.variation', $fields, $exclude_fields ) ) {
+			$item['meta']['variation'] = isset( $cart_item['variation'] ) ? cocart_format_variation_data( $cart_item['variation'], $_product ) : array();
+		}
+
+		// Backorder notification.
+		if ( cocart_is_field_included( 'items.backorders', $fields, $exclude_fields ) ) {
+			$item['backorders'] = $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ? wp_kses_post( apply_filters( 'cocart_cart_item_backorder_notification', esc_html__( 'Available on backorder', 'cart-rest-api-for-woocommerce' ), $_product->get_id() ) ) : '';
+		}
+
+		/**
+		 * Prepares the remaining cart item data.
+		 *
+		 * Note: This needs to be here so even if the field `cart_item_data` is not requested,
+		 * the data can still be used for extensions further down.
+		 */
+		$cart_item_data = $this->prepare_cart_item_data( $cart_item, $item_key );
+
+		// Returns remaining cart item data.
+		if ( cocart_is_field_included( 'items.cart_item_data', $fields, $exclude_fields ) ) {
+			$item['cart_item_data'] = $cart_item_data;
+		}
+
+		// If thumbnail is requested then add it to each item in cart.
+		if ( cocart_is_field_included( 'items.featured_image', $fields, $exclude_fields ) ) {
+			$item['featured_image'] = $show_thumb ? $this->get_item_thumbnail( $_product, $cart_item, $item_key, $removed_item ) : '';
+		}
+
+		if ( cocart_is_field_included( 'items.extensions', $fields, $exclude_fields ) ) {
+			$additional_information = array();
+
+			/**
+			 * Filter allows plugin extensions to apply additional information.
+			 *
+			 * @since 4.0.0 Introduced.
+			 *
+			 * @param array           $additional_information Additional Information.
+			 * @param array           $cart_item_data         The cart item data.
+			 * @param string          $item_key               Generated ID based on the product information when added to the cart.
+			 * @param WP_REST_Request $request                The request object.
+			 */
+			$item['extensions'] = apply_filters( 'cocart_cart_item_extensions', $additional_information, $cart_item_data, $item_key, $request );
+		}
+
+		return $item;
+	} // END prepare_item_for_cart()
 
 	/**
 	 * Returns cross sells based on the items in the cart.
