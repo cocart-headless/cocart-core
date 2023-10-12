@@ -48,6 +48,13 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	protected $rest_base = 'cart';
 
 	/**
+	 * Schema.
+	 *
+	 * @var array
+	 */
+	protected $schema = array();
+
+	/**
 	 * Register the routes for cart.
 	 *
 	 * @access public
@@ -2805,7 +2812,11 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @return array Public item schema data.
 	 */
 	public function get_public_item_schema() {
-		$schema = array(
+		if ( $this->schema ) {
+			return $this->schema;
+		}
+
+		$this->schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
 			'title'      => 'cocart_cart',
 			'type'       => 'object',
@@ -3521,7 +3532,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 *
 		 * @see cocart_cart_items_schema
 		 */
-		cocart_do_deprecated_filter( 'cocart_cart_schema', '3.1.0', 'cocart_cart_items_schema', __( 'Changed for the purpose of not overriding default properties.', 'cart-rest-api-for-woocommerce' ), array( $schema['properties'] ) );
+		cocart_do_deprecated_filter( 'cocart_cart_schema', '3.1.0', 'cocart_cart_items_schema', __( 'Changed for the purpose of not overriding default properties.', 'cart-rest-api-for-woocommerce' ), array( $this->schema['properties'] ) );
 
 		/**
 		 * Extend the cart schema properties for items.
@@ -3530,9 +3541,9 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 		 *
 		 * @since 3.1.0 Introduced.
 		 */
-		$schema['properties']['items']['properties']['properties'] += apply_filters( 'cocart_cart_items_schema', array() );
+		$this->schema['properties']['items']['properties']['properties'] += apply_filters( 'cocart_cart_items_schema', array() );
 
-		return $schema;
+		return $this->schema;
 	} // END get_public_item_schema()
 
 	/**
