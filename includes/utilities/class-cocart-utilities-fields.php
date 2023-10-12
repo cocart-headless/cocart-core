@@ -176,7 +176,7 @@ class Fields {
 		 * will be added to the list of fields.
 		 */
 		if ( ! empty( $default_fields ) ) {
-			foreach( $requested_fields as $field ) {
+			foreach ( $requested_fields as $field ) {
 				if ( ! in_array( $field, $default_fields ) ) {
 					if ( cocart_is_field_included( $field, $requested_fields ) ) {
 						$fields[] = $field;
@@ -193,7 +193,7 @@ class Fields {
 			if ( in_array( 'id', $fields, true ) ) {
 				$requested_fields[] = 'id';
 			}
-	
+
 			// Always persist 'parent_id' if variations is included without parent product, because it can be needed for add_additional_fields_to_object().
 			if ( in_array( 'parent_id', $fields, true ) && $request['include_variations'] ) {
 				$requested_fields[] = 'parent_id';

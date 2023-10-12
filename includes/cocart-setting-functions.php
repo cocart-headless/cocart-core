@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function cocart_update_setting( $section, $name, $value ) {
-	$settings          = cocart_get_settings();
+	$settings                      = cocart_get_settings();
 	$settings[ $section ][ $name ] = $value;
 
 	update_option( 'cocart_settings', $settings );
@@ -44,7 +44,7 @@ function cocart_update_setting( $section, $name, $value ) {
 function cocart_get_settings( $section = '' ) {
 	$settings = get_option( 'cocart_settings', array() );
 
-	$settings = ! empty( $section ) && isset( $settings[$section] ) ? $settings[$section] : $settings;
+	$settings = ! empty( $section ) && isset( $settings[ $section ] ) ? $settings[ $section ] : $settings;
 
 	return $settings;
 } // END cocart_get_settings()

@@ -226,7 +226,7 @@ final class Core {
 
 		if ( $base ) {
 			$version_parts = explode( '-', $version );
-			$version       = count( $version_parts ) > 1 ? $version_parts[ 0 ] : $version;
+			$version       = count( $version_parts ) > 1 ? $version_parts[0] : $version;
 		}
 
 		return $version;

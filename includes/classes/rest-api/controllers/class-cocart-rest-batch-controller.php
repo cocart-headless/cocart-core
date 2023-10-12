@@ -145,7 +145,7 @@ class CoCart_REST_Batch_Controller {
 				$notice_types = apply_filters( 'cocart_notice_types', array( 'error', 'success', 'notice', 'info' ) );
 
 				$notices = array();
-				$key = 0;
+				$key     = 0;
 
 				// Merge all response notices together if they exist.
 				foreach ( $results['responses'] as $result ) {
