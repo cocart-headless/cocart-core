@@ -585,8 +585,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since   2.1.0 Introduced.
 	 * @version 3.0.6
 	 *
-	 * @param int        $variation_id ID of the variation.
-	 * @param array      $variation    Attribute values.
+	 * @param int        $variation_id The variation ID.
+	 * @param array      $variation    The variation attributes.
 	 * @param WC_Product $product      The product object.
 	 *
 	 * @return array $variation_id ID of the variation and attribute values.
@@ -744,10 +744,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 *
 	 * @deprecated 3.0.0 `$variation_id` parameter is no longer used.
 	 *
-	 * @param int             $product_id   Contains the ID of the product.
-	 * @param int|float       $quantity     Contains the quantity of the item.
-	 * @param null            $variation_id Used to pass the variation id of the product to add to the cart.
-	 * @param array           $variation    Contains the selected attributes.
+	 * @param int             $product_id   The product ID.
+	 * @param int|float       $quantity     The item quantity.
+	 * @param null            $variation_id The variation ID.
+	 * @param array           $variation    The variation attributes.
 	 * @param array           $item_data    Extra cart item data we want to pass into the item.
 	 * @param string          $product_type The product type.
 	 * @param WP_REST_Request $request      The request object.
@@ -801,14 +801,16 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * Filters add to cart validation.
 			 *
 			 * @since 2.1.2 Introduced.
+			 * @since 3.1.0 Added the request object as parameter.
 			 *
-			 * @param bool   true          Default is true to allow the product to pass validation.
-			 * @param int    $product_id   Contains the ID of the product.
-			 * @param int    $quantity     Contains the quantity of the item.
-			 * @param int    $variation_id Used to pass the variation id of the product to add to the cart.
-			 * @param array  $variation    Contains the selected attributes.
-			 * @param object $item_data    Extra cart item data we want to pass into the item.
-			 * @param string $product_type The product type.
+			 * @param bool            true          Default is true to allow the product to pass validation.
+			 * @param int             $product_id   The product ID.
+			 * @param int             $quantity     The item quantity.
+			 * @param int             $variation_id The variation ID.
+			 * @param array           $variation    The variation attributes.
+			 * @param object          $item_data    Extra cart item data we want to pass into the item.
+			 * @param string          $product_type The product type.
+			 * @param WP_REST_Request $request      The request object.
 			 */
 			$passed_validation = apply_filters( 'cocart_add_to_cart_validation', true, $product_id, $quantity, $variation_id, $variation, $item_data, $product_type, $request );
 
@@ -842,11 +844,12 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * Filter allows other plugins to add their own cart item data.
 			 *
 			 * @since 2.1.2 Introduced.
+			 * @since 3.1.0 Added the request object as parameter.
 			 *
 			 * @param array           $item_data    Extra cart item data we want to pass into the item.
-			 * @param int             $product_id   Contains the ID of the product.
-			 * @param null            $variation_id Used to pass the variation id of the product to add to the cart.
-			 * @param int|float       $quantity     Contains the quantity of the item.
+			 * @param int             $product_id   The product ID.
+			 * @param null            $variation_id The variation ID.
+			 * @param int|float       $quantity     The item quantity.
 			 * @param string          $product_type The product type.
 			 * @param WP_REST_Request $request      The request object.
 			 */
@@ -2302,10 +2305,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 	 * @since   3.0.0 Introduced.
 	 * @version 3.1.0
 	 *
-	 * @param int        $product_id     Contains the id of the product to add to the cart.
-	 * @param int        $quantity       Contains the quantity of the item to add.
-	 * @param int        $variation_id   ID of the variation being added to the cart.
-	 * @param array      $variation      Attribute values.
+	 * @param int        $product_id     The product ID.
+	 * @param int        $quantity       The item quantity.
+	 * @param int        $variation_id   The variation ID.
+	 * @param array      $variation      The variation attributes.
 	 * @param array      $cart_item_data Extra cart item data we want to pass into the item.
 	 * @param WC_Product $product_data   The product object.
 	 *
@@ -2342,10 +2345,10 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			 * @since 3.0.0 Introduced.
 			 *
 			 * @param string $item_key       Generated ID based on the product information provided.
-			 * @param int    $product_id     Contains the id of the product to add to the cart.
-			 * @param int    $quantity       Contains the quantity of the item to add.
-			 * @param int    $variation_id   ID of the variation being added to the cart.
-			 * @param array  $variation      Attribute values.
+			 * @param int    $product_id     The product ID.
+			 * @param int    $quantity       The item quantity.
+			 * @param int    $variation_id   The variation ID.
+			 * @param array  $variation      The variation attributes.
 			 * @param array  $cart_item_data Extra cart item data we want to pass into the item.
 			 */
 			do_action( 'cocart_add_to_cart', $item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data );

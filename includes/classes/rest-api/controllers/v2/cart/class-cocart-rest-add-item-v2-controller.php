@@ -254,8 +254,8 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @since   2.1.0 Introduced.
 	 * @version 3.0.0
 	 *
-	 * @param string          $product_id Contains the id of the product to add to the cart.
-	 * @param float           $quantity   Contains the quantity of the item to add to the cart.
+	 * @param string          $product_id The product ID.
+	 * @param float           $quantity   The item quantity.
 	 * @param array           $item_data  Contains extra cart item data we want to pass into the item.
 	 * @param WP_REST_Request $request    The request object.
 	 *
@@ -289,19 +289,19 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 	 * @since   2.1.0 Introduced.
 	 * @version 3.1.0
 	 *
-	 * @param string          $product_id Contains the id of the product to add to the cart.
-	 * @param float           $quantity   Contains the quantity of the item to add to the cart.
-	 * @param null            $deprecated Used to pass the variation id of the product to add to the cart.
-	 * @param array           $variation  Contains the selected attributes of a variation.
-	 * @param array           $item_data  Contains extra cart item data we want to pass into the item.
-	 * @param WP_REST_Request $request    The request object.
+	 * @param string          $product_id   The product ID.
+	 * @param float           $quantity     The item quantity.
+	 * @param null            $variation_id The variation ID.
+	 * @param array           $variation    The variation attributes.
+	 * @param array           $item_data    Contains extra cart item data we want to pass into the item.
+	 * @param WP_REST_Request $request      The request object.
 	 *
 	 * @return bool success or not
 	 */
-	public function add_to_cart_handler_variable( $product_id, $quantity, $deprecated, $variation, $item_data, $request = array() ) {
+	public function add_to_cart_handler_variable( $product_id, $quantity, $variation_id, $variation, $item_data, $request = array() ) {
 		$controller = new CoCart_REST_Cart_v2_Controller();
 
-		$product_to_add = $controller->validate_product( $product_id, $quantity, $deprecated, $variation, $item_data, 'variable', $request );
+		$product_to_add = $controller->validate_product( $product_id, $quantity, $variation_id, $variation, $item_data, 'variable', $request );
 
 		/**
 		 * If validation failed then return error response.
@@ -375,7 +375,7 @@ class CoCart_REST_Add_Item_v2_Controller extends CoCart_Add_Item_Controller {
 				 *
 				 * @param bool  $validate_product Whether to validate the product or not.
 				 * @param array $product_data     Contains the product data of the product to add to cart.
-				 * @param int   $product_id       Contains the id of the product to add to the cart.
+				 * @param int   $product_id       The product ID.
 				 */
 				if ( apply_filters( 'cocart_skip_woocommerce_item_validation', false, $product_data, $product_id ) ) {
 					$item_key = $controller->add_cart_item( $product_id, $quantity, $variation_id, $variation, $item_data, $product_data );
