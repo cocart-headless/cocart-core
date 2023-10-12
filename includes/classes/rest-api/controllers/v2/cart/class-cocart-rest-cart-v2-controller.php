@@ -627,6 +627,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 					/**
 					 * Filters message about invalid variation data.
 					 *
+					 * @since 2.1.0 Introduced.
+					 *
 					 * @param string $message         Message.
 					 * @param string $attribute_label Attribute Label.
 					 * @param array  $attribute       Allowed values.
@@ -648,6 +650,8 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 
 				/**
 				 * Filters message about missing variation data.
+				 *
+				 * @since 2.1.0 Introduced.
 				 *
 				 * @param string $message            Message.
 				 * @param string $missing_attributes Number of missing attributes.
@@ -796,7 +800,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			/**
 			 * Filters add to cart validation.
 			 *
-			 * @since 1.0.0 Introduced.
+			 * @since 2.1.2 Introduced.
 			 *
 			 * @param bool   true          Default is true to allow the product to pass validation.
 			 * @param int    $product_id   Contains the ID of the product.
@@ -837,7 +841,7 @@ class CoCart_REST_Cart_v2_Controller extends CoCart_API_Controller {
 			/**
 			 * Filter allows other plugins to add their own cart item data.
 			 *
-			 * @since 1.0.0 Introduced.
+			 * @since 2.1.2 Introduced.
 			 *
 			 * @param array           $item_data    Extra cart item data we want to pass into the item.
 			 * @param int             $product_id   Contains the ID of the product.
