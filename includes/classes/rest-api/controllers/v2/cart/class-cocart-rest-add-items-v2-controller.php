@@ -388,6 +388,7 @@ class CoCart_REST_Add_Items_v2_Controller extends CoCart_Add_Item_Controller {
 				'required'          => false,
 				'description'       => __( 'Set the customers billing email address.', 'cart-rest-api-for-woocommerce' ),
 				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_email',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
 			'phone'        => array(
