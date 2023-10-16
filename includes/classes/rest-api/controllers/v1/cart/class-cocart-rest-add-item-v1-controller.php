@@ -5,7 +5,7 @@
  * @author  Sébastien Dumont
  * @package CoCart\RESTAPI\v1
  * @since   2.1.0 Introduced.
- * @version 2.7.2
+ * @version 3.10.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -397,14 +397,12 @@ class CoCart_Add_Item_Controller extends CoCart_API_Controller {
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
-			'quantity'       => array(
-				'required'          => true,
-				'default'           => 1,
+			'quantity'    => array(
 				'description'       => __( 'The quantity amount of the item to add to cart.', 'cart-rest-api-for-woocommerce' ),
-				'type'              => 'float',
-				'validate_callback' => function( $value, $request, $param ) {
-					return is_numeric( $value );
-				},
+				'type'              => 'string',
+				'default'           => '1',
+				'required'          => true,
+				'validate_callback' => array( $this, 'rest_validate_quantity_arg' ),
 			),
 			'variation_id'   => array(
 				'required'          => false,

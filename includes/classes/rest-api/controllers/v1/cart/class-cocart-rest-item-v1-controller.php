@@ -5,7 +5,7 @@
  * @author  Sébastien Dumont
  * @package CoCart\RESTAPI\v1
  * @since   2.1.0 Introduced.
- * @version 2.8.4
+ * @version 3.10.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -55,12 +55,11 @@ class CoCart_Item_Controller extends CoCart_API_Controller {
 					'callback'            => array( $this, 'update_item' ),
 					'permission_callback' => '__return_true',
 					'args'                => array(
-						'quantity' => array(
-							'default'           => 1,
-							'type'              => 'float',
-							'validate_callback' => function( $value, $request, $param ) {
-								return is_numeric( $value );
-							},
+						'quantity'      => array(
+							'description'       => __( 'Quantity of this item to update to.', 'cart-rest-api-for-woocommerce' ),
+							'type'              => 'string',
+							'required'          => true,
+							'validate_callback' => array( $this, 'rest_validate_quantity_arg' ),
 						),
 					),
 				),

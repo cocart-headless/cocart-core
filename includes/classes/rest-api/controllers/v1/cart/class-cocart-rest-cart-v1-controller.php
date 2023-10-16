@@ -998,7 +998,7 @@ class CoCart_API_Controller {
 						),
 						'quantity'          => array(
 							'description' => __( 'Quantity of this item in the cart.', 'cart-rest-api-for-woocommerce' ),
-							'type'        => 'float',
+							'type'        => 'string',
 							'context'     => array( 'view' ),
 							'readonly'    => true,
 						),
@@ -1098,5 +1098,27 @@ class CoCart_API_Controller {
 
 		return $params;
 	} // END get_collection_params()
+
+	/**
+	 * Validates the quantity argument.
+	 *
+	 * @access public
+	 *
+	 * @since 3.0.0  Introduced.
+	 * @since 3.10.0 Moved to this controller to share the validation.
+	 *
+	 * @param int|float       $value   Number of quantity to validate.
+	 * @param WP_REST_Request $request The request object.
+	 * @param string          $param   Argument parameters.
+	 *
+	 * @return bool True if the quantity is valid, false otherwise.
+	 */
+	public function rest_validate_quantity_arg( $value, $request, $param ) {
+		if ( is_numeric( $value ) || is_float( $value ) ) {
+			return true;
+		}
+
+		return false;
+	} // END rest_validate_quantity_arg()
 
 } // END class

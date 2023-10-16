@@ -269,8 +269,8 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 	 *
 	 * @access public
 	 *
-	 * @since   3.0.0 Introduced.
-	 * @version 3.1.0
+	 * @since 3.0.0 Introduced.
+	 * @since 4.0.0 Updated quantity parameter to validate any number values.
 	 *
 	 * @return array $params
 	 */
@@ -287,12 +287,10 @@ class CoCart_REST_Update_Item_v2_Controller extends CoCart_REST_Cart_v2_Controll
 				'validate_callback' => 'rest_validate_request_arg',
 			),
 			'quantity'      => array(
-				'description'       => __( 'Set the quantity you wish to update the item to.', 'cart-rest-api-for-woocommerce' ),
-				'default'           => 1,
-				'type'              => 'float',
-				'validate_callback' => function( $value, $request, $param ) {
-					return is_numeric( $value );
-				},
+				'description'       => __( 'Quantity of this item to update to.', 'cart-rest-api-for-woocommerce' ),
+				'type'              => 'string',
+				'required'          => true,
+				'validate_callback' => array( $this, 'rest_validate_quantity_arg' ),
 			),
 			'return_status' => array(
 				'description'       => __( 'Returns a message and quantity value after updating item in cart.', 'cart-rest-api-for-woocommerce' ),
