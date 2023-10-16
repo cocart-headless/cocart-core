@@ -120,7 +120,7 @@ class Authentication {
 	 * @access public
 	 *
 	 * @since 2.9.1 Introduced.
-	 * @since 4.0.0 Checks the user logged in is a customer to prevent persistent cart if not.
+	 * @since 4.0.0 Checks the user logged in is not a customer to prevent persistent cart.
 	 *
 	 * @uses Handler::is_user_customer()
 	 *
@@ -129,6 +129,11 @@ class Authentication {
 	 * @return WP_Error|null|bool
 	 */
 	public function cocart_user_logged_in( $error ) {
+		// Pass through errors from other authentication error checks used before this one.
+		if ( ! empty( $error ) ) {
+			return $error;
+		}
+
 		global $current_user;
 
 		// Set the user last active timestamp to now.
@@ -146,7 +151,7 @@ class Authentication {
 			update_user_meta( $current_user->ID, '_woocommerce_load_saved_cart_after_login', 1 );
 		}
 
-		return $error;
+		return true;
 	} // END cocart_user_logged_in()
 
 	/**
