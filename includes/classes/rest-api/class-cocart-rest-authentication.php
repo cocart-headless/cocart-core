@@ -545,7 +545,7 @@ class Authentication {
 			 * @since 2.5.1 Introduced.
 			 * @since 4.0.0 Added the `$origin_arg` parameter.
 			 *
-			 * @param string $origin Origin URL if allowed, empty string if not.
+			 * @param string $origin     Origin URL if allowed, empty string if not.
 			 * @param string $origin_arg Original origin string passed into is_allowed_http_origin function.
 			 */
 			$origin = apply_filters( 'cocart_allow_origin', $origin, $origin_arg );
@@ -589,7 +589,7 @@ class Authentication {
 
 			// Allow preflight requests and any allowed origins. Preflight requests
 			// are allowed because we'll be unable to validate customer header at that point.
-			if ( $this->is_preflight() || is_allowed_http_origin( $origin ) ) {
+			if ( $this->is_preflight() || ! is_allowed_http_origin( $origin ) ) {
 				$server->send_header( 'Access-Control-Allow-Origin', $origin );
 			}
 
