@@ -368,7 +368,9 @@ final class Core {
 	 *
 	 * @static
 	 *
-	 * @since 2.6.0 Introduced.
+	 * @since 2.6.0  Introduced.
+	 * @since 3.10.0 Added security for added protection.
+	 * @since 4.0.0  Moved REST API classes to load ONLY when the REST API is used.
 	 */
 	public static function load_rest_api() {
 		include_once COCART_ABSPATH . 'includes/classes/rest-api/class-cocart-rest-cart-cache.php';
@@ -379,6 +381,7 @@ final class Core {
 		include_once COCART_ABSPATH . 'includes/classes/rest-api/class-cocart-rest-cart-validation.php';
 		include_once COCART_ABSPATH . 'includes/classes/rest-api/class-cocart-rest-product-validation.php';
 		include_once COCART_ABSPATH . 'includes/classes/rest-api/class-cocart-server.php';
+		include_once COCART_ABSPATH . 'includes/classes/rest-api/class-cocart-security.php';
 	} // END load_rest_api()
 
 	/**
