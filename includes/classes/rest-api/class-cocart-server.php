@@ -91,6 +91,14 @@ class Server {
 	 */
 	public function register_rest_routes() {
 		foreach ( $this->_namespaces as $namespace => $controllers ) {
+			// Register only the route we are using.
+			$default_api = cocart_get_setting( 'general', 'default_api', array( 'cocart/v2' ) );
+			$always_registered = array( 'cocart/settings', 'cocart/shared' );
+
+			if ( ! in_array( $namespace, array_merge( $default_api, $always_registered ) ) ) {
+				continue;
+			}
+
 			foreach ( $controllers as $controller_name => $controller_class ) {
 				if ( class_exists( $controller_class ) ) {
 					$this->_controllers[ $namespace ][ $controller_name ] = new $controller_class();
