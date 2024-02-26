@@ -56,12 +56,12 @@ class CartFormatting {
 	} // END __construct()
 
 	/**
-	 * Returns the cart contents without the cart item key as the parent array.
+	 * Returns the cart items values without the cart item key as the parent array.
 	 *
 	 * @access public
 	 *
 	 * @since   3.0.0 Introduced.
-	 * @version 3.1.0
+	 * @version 3.11.0
 	 *
 	 * @param array $cart The cart data before modifying.
 	 *
@@ -69,26 +69,19 @@ class CartFormatting {
 	 */
 	public function remove_items_parent_item_key( $cart ) {
 		if ( isset( $cart['items'] ) ) {
-			$new_items = array();
-
-			foreach ( $cart['items'] as $item_key => $cart_item ) {
-				$new_items[] = $cart_item;
-			}
-
-			// Override items returned.
-			$cart['items'] = $new_items;
+			$cart['items'] = array_values( $cart['items'] );
 		}
 
 		return $cart;
 	} // END remove_items_parent_item_key()
 
 	/**
-	 * Returns the removed cart contents without the cart item key as the parent array.
+	 * Returns the removed cart items values without the cart item key as the parent array.
 	 *
 	 * @access public
 	 *
 	 * @since   3.0.0 Introduced.
-	 * @version 3.1.0
+	 * @version 3.11.0
 	 *
 	 * @param array $cart The cart data before modifying.
 	 *
@@ -96,14 +89,7 @@ class CartFormatting {
 	 */
 	public function remove_removed_items_parent_item_key( $cart ) {
 		if ( isset( $cart['removed_items'] ) ) {
-			$new_items = array();
-
-			foreach ( $cart['removed_items'] as $item_key => $cart_item ) {
-				$new_items[] = $cart_item;
-			}
-
-			// Override removed items returned.
-			$cart['removed_items'] = $new_items;
+			$cart['removed_items'] = array_values( $cart['removed_items'] );
 		}
 
 		return $cart;
