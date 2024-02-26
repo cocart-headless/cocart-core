@@ -54,11 +54,6 @@ class Server {
 	 * @ignore Function ignored when parsed into Code Reference.
 	 */
 	public function __construct() {
-		// REST API was included starting WordPress 4.4.
-		if ( ! class_exists( 'WP_REST_Server' ) ) {
-			return;
-		}
-
 		// If WooCommerce does not exists then do nothing!
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;
