@@ -100,6 +100,12 @@ class Server {
 			}
 
 			foreach ( $controllers as $controller_name => $controller_class ) {
+				// If controller name is not enabled skip it.
+				$disabled_controllers = cocart_get_setting( 'security', 'disabled_controllers', array() );
+				if ( in_array( $controller_name, $disabled_controllers ) ) {
+					continue;
+				}
+
 				if ( class_exists( $controller_class ) ) {
 					$this->_controllers[ $namespace ][ $controller_name ] = new $controller_class();
 					$this->_controllers[ $namespace ][ $controller_name ]->register_routes();
