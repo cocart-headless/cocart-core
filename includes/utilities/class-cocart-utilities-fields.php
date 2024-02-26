@@ -36,7 +36,7 @@ class Fields {
 	 *
 	 * @return array
 	 */
-	public static function get_response_from_fields( $request ) {
+	public static function get_default_fields_for_response_type( $request ) {
 		$config = ! empty( $request['response'] ) ? trim( $request['response'] ) : '';
 
 		switch ( $config ) {
@@ -73,7 +73,7 @@ class Fields {
 		}
 
 		return $fields;
-	} // END get_response_from_fields()
+	} // END get_default_fields_for_response_type()
 
 	/**
 	 * Return either requested fields or a default set.
@@ -87,11 +87,11 @@ class Fields {
 	 * @param WP_REST_Request $request           The request object.
 	 * @param array           $schema            The public item schema data.
 	 * @param array           $default_fields    An array of fields preset as the default response.
-	 * @param bool            $additional_fields Include registered fields for posts?
+	 * @param array           $additional_fields An array of registered fields for posts, if any.
 	 *
 	 * @return array
 	 */
-	public static function get_fields_for_request( $request, $schema = array(), $default_fields = array(), $additional_fields = false ) {
+	public static function get_fields_requested( $request, $schema = array(), $default_fields = array(), $additional_fields = array() ) {
 		/**
 		 * Parses additional fields on top of the default fields for the response.
 		 *
@@ -106,12 +106,13 @@ class Fields {
 		 *
 		 * @since 4.0.0 Introduced.
 		 *
-		 * @param array $fields Requested fields, if any.
+		 * @param array           $fields  Requested fields, if any.
+		 * @param WP_REST_Request $request The request object.
 		 */
-		$fields = apply_filters( 'cocart_get_fields_for_request', $fields );
+		$fields = apply_filters( 'cocart_get_fields_requested', $fields, $request );
 
 		return $fields;
-	} // END get_fields_for_request()
+	} // END get_fields_requested()
 
 	/**
 	 * Gets an array of fields to be included on the response.
@@ -241,7 +242,7 @@ class Fields {
 	 *
 	 * @return string Fields to be excluded in the response.
 	 */
-	public static function get_excluded_fields_for_response( $request, $schema = array() ) {
+	public static function ignore_excluded_fields( $request, $schema = array() ) {
 		$properties = isset( $schema['properties'] ) ? $schema['properties'] : array();
 
 		$fields = array_unique( array_keys( $properties ) );
@@ -283,6 +284,6 @@ class Fields {
 			},
 			array()
 		);
-	} // END get_excluded_fields_for_response()
+	} // END ignore_excluded_fields()
 
 } // END class
