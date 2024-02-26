@@ -64,9 +64,6 @@ class Server {
 			return;
 		}
 
-		// Do not cache specific routes.
-		$this->do_not_cache();
-
 		// Initialize cart.
 		$this->initialize_cart_session();
 		$this->maybe_load_cart();
@@ -577,25 +574,6 @@ class Server {
 			'#^/cocart/v1/products?#',
 		);
 	} // END allowed_regex_pattern_routes_to_cache()
-
-	/**
-	 * Does not cache specific routes.
-	 *
-	 * @access protected
-	 *
-	 * @since 4.0.0 Introduced.
-	 */
-	protected function do_not_cache() {
-		$regex_path_patterns = $this->allowed_regex_pattern_routes_to_cache();
-
-		foreach ( $regex_path_patterns as $regex_path_pattern ) {
-			if ( ! preg_match( $regex_path_pattern, $_SERVER['REQUEST_URI'] ) ) {
-				if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-					define( 'DONOTCACHEPAGE', true ); // Play nice with WP-Super-Cache plugin (https://wordpress.org/plugins/wp-super-cache/).
-				}
-			}
-		}
-	} // END do_not_cache()
 
 } // END class
 
